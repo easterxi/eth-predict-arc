@@ -184,7 +184,10 @@ async function settleAndPay() {
 
   alert("✅ Payment confirmed (Demo)");
 
-  // Enable PREDICT button with normal style
+  // Disable all controls except PREDICT button
+  disableBetControls();
+
+  // Enable PREDICT button
   const predictBtn = document.getElementById('predictBtn');
   if (predictBtn) {
     predictBtn.disabled = false;
@@ -228,6 +231,29 @@ function startPrediction() {
       endGame();
     }
   }, 1000);
+}
+
+function disableBetControls() {
+  // Disable all option buttons
+  const optionBtns = document.querySelectorAll('.option-btn');
+  optionBtns.forEach(btn => {
+    btn.style.pointerEvents = 'none';
+    btn.style.opacity = '0.5';
+    btn.style.background = '#cccccc';
+    btn.style.color = '#666';
+    btn.style.borderColor = '#999';
+  });
+
+  // Disable Settle button
+  const settleBtn = document.getElementById('settleBtn');
+  if (settleBtn) {
+    settleBtn.disabled = true;
+    settleBtn.style.background = '#cccccc';
+    settleBtn.style.color = '#666';
+    settleBtn.style.cursor = 'not-allowed';
+  }
+
+  // Keep Predict button enabled (handled in settleAndPay)
 }
 
 function disableAllControls() {
@@ -322,24 +348,13 @@ async function revokeAllConnections() {
 }
 
 function resetGame() {
-  // Reset bet to default values
   currentBet = { amount: 1, time: 10, direction: "HIGHER" };
-  
-  // Reset prediction state
   isPredictionStarted = false;
-  
-  // Clear intervals
-  if (countdownInterval) {
-    clearInterval(countdownInterval);
-    countdownInterval = null;
-  }
-  if (livePriceInterval) {
-    clearInterval(livePriceInterval);
-    livePriceInterval = null;
-  }
 
-  // Go back to Screen 2 with fresh default state
-  showScreen2();
+  if (countdownInterval) clearInterval(countdownInterval);
+  if (livePriceInterval) clearInterval(livePriceInterval);
+
+  showScreen2();   // This will restore all buttons to normal state
 }
 
 // ==================== INIT ====================
