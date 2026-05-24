@@ -12,12 +12,17 @@ const BACKEND_URL = "http://localhost:3001";   // Change this when you deploy ba
 // ==================== GET ETH PRICE ====================
 async function getETHPrice() {
   try {
-    const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
+    const res = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT');
     const data = await res.json();
-    return parseFloat(data.ethereum.usd) || 3200;
+    
+    if (data && data.price) {
+      return parseFloat(data.price);
+    } else {
+      throw new Error("Invalid response");
+    }
   } catch (e) {
-    console.warn("Price fetch failed, using fallback");
-    return 3200;
+    console.warn("Binance API failed:", e);
+    return 3200; // fallback price
   }
 }
 
@@ -90,14 +95,14 @@ async function showScreen2() {
   document.getElementById('app').innerHTML = `
     <div class="container">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <h2 style="margin:0">ON ARC</h2>
+        <h2 style="margin:0">ARC TESTNET</h2>
         <div onclick="disconnectWallet()" style="background:#FF8800;color:black;padding:6px 12px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:0.95rem">
           ${shortAddress}
         </div>
       </div>
 
-      <h1>PREDICT ETH PRICES</h1>
-      <h2>ON ARC</h2>
+      <h1>ETH PRICES PREDICTION</h1>
+      <h2></h2>
 
       <h2>BET AMOUNT</h2>
       <div class="flex-row">
@@ -151,21 +156,20 @@ function startLivePriceUpdates() {
 
   const updatePrices = async () => {
     const price = await getETHPrice();
+    console.log("ETH Price:", price, "| Prediction Started:", isPredictionStarted);
 
-    // Textbox 1: Live until PREDICT is pressed
-    if (!isPredictionStarted) {
-      const tb1 = document.getElementById('livePrice1');
-      if (tb1) tb1.value = price.toFixed(2);
+    const tb1 = document.getElementById('livePrice1');
+    const tb2 = document.getElementById('livePrice2');
+
+    if (tb1 && !isPredictionStarted) {
+      tb1.value = price.toFixed(2);
     }
 
-    // Textbox 2: Live only after PREDICT is pressed
-    if (isPredictionStarted) {
-      const tb2 = document.getElementById('livePrice2');
-      if (tb2) tb2.value = price.toFixed(2);
+    if (tb2 && isPredictionStarted) {
+      tb2.value = price.toFixed(2);
     }
   };
 
-  // Initial call + every 1 second
   updatePrices();
   livePriceInterval = setInterval(updatePrices, 1000);
 }
@@ -179,38 +183,52 @@ window.selectDirection = (dir) => { currentBet.direction = dir; showScreen2(); }
 async function settleAndPay() {
   if (!signer) return alert("Wallet not connected");
 
-  const confirmed = confirm(`Pay ${currentBet.amount} USDC?`);
-  if (!confirmed) return;
+  const amount = currentBet.amount;
+  const SYSTEM_WALLET = "0x9068d4a1edcea0e553525e8ca5edbe57dfe900b6";   // ← Replace this!
 
-  alert("✅ Payment confirmed (Demo)");
+  try {
+    // Send native token (USDC on ARC Testnet)
+    const tx = await signer.sendTransaction({
+      to: SYSTEM_WALLET,
+      value: ethers.parseUnits(amount.toString(), 18)   // 18 decimals for USDC
+    });
 
-  // Disable all controls except PREDICT button
-  disableBetControls();
+    alert(`⏳ Sending ${amount} USDC to system wallet...\nTx Hash: ${tx.hash}`);
 
-  // Enable PREDICT button
-  const predictBtn = document.getElementById('predictBtn');
-  if (predictBtn) {
-    predictBtn.disabled = false;
-    predictBtn.style.background = "#FF8800";
-    predictBtn.style.color = "black";
-    predictBtn.style.cursor = "pointer";
+    const receipt = await tx.wait();
+    
+    alert(`✅ Payment Successful!\n${amount} USDC sent to system.\nTransaction: ${receipt.transactionHash}`);
+
+    // Disable other controls and enable PREDICT button
+    disableBetControls();
+
+    const predictBtn = document.getElementById('predictBtn');
+    if (predictBtn) {
+      predictBtn.disabled = false;
+      predictBtn.style.background = "#FF8800";
+      predictBtn.style.color = "black";
+      predictBtn.style.cursor = "pointer";
+    }
+
+  } catch (error) {
+    console.error(error);
+    if (error.code === 4001) {
+      alert("❌ Transaction rejected by user.");
+    } else {
+      alert("❌ Payment failed: " + (error.shortMessage || error.message));
+    }
   }
 }
 
 function startPrediction() {
   isPredictionStarted = true;
+  console.log("🚀 Prediction started - Now updating Textbox 2");
 
-  // Freeze current price in Textbox 1
-  const currentPrice = parseFloat(document.getElementById('livePrice1').value) || 3200;
-  startPrice = currentPrice;
-
+  // Freeze Textbox 1
   const tb1 = document.getElementById('livePrice1');
+  startPrice = parseFloat(tb1.value) || 3200;
   tb1.style.background = "#e0e0e0";
   tb1.style.color = "#444";
-
-  // Enable Textbox 2 for live updates
-  const tb2 = document.getElementById('livePrice2');
-  tb2.style.background = "#fff";
 
   // Show prediction area
   document.getElementById('predictionArea').style.display = 'block';
@@ -218,6 +236,7 @@ function startPrediction() {
   // Disable everything else
   disableAllControls();
 
+  // Start countdown
   let timeLeft = currentBet.time;
   const countdownEl = document.getElementById('countdown');
   countdownEl.value = timeLeft;
@@ -234,17 +253,14 @@ function startPrediction() {
 }
 
 function disableBetControls() {
-  // Disable all option buttons
   const optionBtns = document.querySelectorAll('.option-btn');
   optionBtns.forEach(btn => {
     btn.style.pointerEvents = 'none';
     btn.style.opacity = '0.5';
     btn.style.background = '#cccccc';
     btn.style.color = '#666';
-    btn.style.borderColor = '#999';
   });
 
-  // Disable Settle button
   const settleBtn = document.getElementById('settleBtn');
   if (settleBtn) {
     settleBtn.disabled = true;
@@ -252,8 +268,6 @@ function disableBetControls() {
     settleBtn.style.color = '#666';
     settleBtn.style.cursor = 'not-allowed';
   }
-
-  // Keep Predict button enabled (handled in settleAndPay)
 }
 
 function disableAllControls() {
@@ -367,3 +381,6 @@ window.settleAndPay = settleAndPay;
 window.startPrediction = startPrediction;
 window.claimReward = claimReward;
 window.resetGame = resetGame;
+
+console.log("System Wallet Address:", 
+  new ethers.Wallet("0x123456789123456789123456789123456789123456789123456789").address);
