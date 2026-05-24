@@ -7,7 +7,9 @@ let startPrice = 0;
 let endPrice = 0;
 let countdownInterval = null;
 
-// Get real ETH price
+const BACKEND_URL = "http://localhost:3001";   // Change this when you deploy backend
+
+// ==================== GET ETH PRICE ====================
 async function getETHPrice() {
   try {
     const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
@@ -24,9 +26,9 @@ async function updateLivePrice(textboxId) {
   if (el) el.value = price.toFixed(2);
 }
 
-// ==================== CONNECT WALLET (Already working) ====================
+// ==================== CONNECT WALLET ====================
 async function connectWallet() {
-  if (!window.ethereum) return alert("No wallet found");
+  if (!window.ethereum) return alert("❌ No EVM wallet detected.");
 
   try {
     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -35,7 +37,16 @@ async function connectWallet() {
     const chain = CONFIG.chains[CONFIG.defaultChain];
 
     try {
-      await window.ethereum.request({ method: 'wallet_addEthereumChain', params: [{ ...chain }] });
+      await window.ethereum.request({
+        method: 'wallet_addEthereumChain',
+        params: [{
+          chainId: chain.chainId,
+          chainName: chain.name,
+          rpcUrls: [chain.rpcUrl],
+          nativeCurrency: { name: "USDC", symbol: "USDC", decimals: 6 },
+          blockExplorerUrls: [chain.explorer]
+        }]
+      });
     } catch (e) {}
 
     await window.ethereum.request({
@@ -46,11 +57,11 @@ async function connectWallet() {
     provider = new ethers.BrowserProvider(window.ethereum);
     signer = await provider.getSigner();
 
-    alert(`✅ Connected: ${userAddress.slice(0,8)}...`);
+    alert(`✅ Connected: ${userAddress.slice(0,6)}...${userAddress.slice(-4)}`);
     showScreen2();
   } catch (e) {
     console.error(e);
-    alert("Connection error");
+    alert("Connection failed");
   }
 }
 
@@ -59,23 +70,27 @@ function showScreen1() {
   document.getElementById('app').innerHTML = `
     <div style="height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px;background:rgba(255,255,255,0.95)">
       <h1 style="font-size:3.5rem">PREDICT ETH</h1>
-      <button class="btn" onclick="connectWallet()" style="padding:25px 80px;font-size:1.8rem">CONNECT WALLET</button>
+      
+      <button class="btn" onclick="connectWallet()" style="padding:25px 80px;font-size:1.8rem">
+        CONNECT WALLET
+      </button>
+
+      <button class="btn" onclick="revokeAllConnections()" 
+              style="padding:25px 80px;font-size:1.8rem;background:#FF4444;color:white;">
+        REVOKE ALL CONNECTIONS
+      </button>
     </div>
   `;
 }
 
 async function showScreen2() {
-  const shortAddress = userAddress 
-    ? `${userAddress.slice(0,6)}...${userAddress.slice(-4)}` 
-    : "Not Connected";
+  const shortAddress = userAddress ? `${userAddress.slice(0,6)}...${userAddress.slice(-4)}` : "";
 
   document.getElementById('app').innerHTML = `
     <div class="container">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
         <h2 style="margin:0">ON ARC</h2>
-        <div onclick="disconnectWallet()" 
-             style="background:#FF8800;color:black;padding:8px 14px;border-radius:8px;
-                    font-size:0.95rem;font-weight:bold;cursor:pointer">
+        <div onclick="disconnectWallet()" style="background:#FF8800;color:black;padding:6px 12px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:0.95rem">
           ${shortAddress}
         </div>
       </div>
@@ -83,21 +98,21 @@ async function showScreen2() {
       <h1>PREDICT ETH PRICES</h1>
 
       <h2>BET AMOUNT</h2>
-      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <div class="flex-row">
         <div class="option-btn ${currentBet.amount===1?'active':''}" onclick="selectAmount(1)">1 USDC</div>
         <div class="option-btn ${currentBet.amount===5?'active':''}" onclick="selectAmount(5)">5 USDC</div>
         <div class="option-btn ${currentBet.amount===10?'active':''}" onclick="selectAmount(10)">10 USDC</div>
       </div>
 
       <h2>TIME FRAME</h2>
-      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-        <div class="option-btn ${currentBet.time===10?'active':''}" onclick="selectTime(10)">10 SECONDS</div>
-        <div class="option-btn ${currentBet.time===30?'active':''}" onclick="selectTime(30)">30 SECONDS</div>
-        <div class="option-btn ${currentBet.time===60?'active':''}" onclick="selectTime(60)">60 SECONDS</div>
+      <div class="flex-row">
+        <div class="option-btn ${currentBet.time===10?'active':''}" onclick="selectTime(10)">10s</div>
+        <div class="option-btn ${currentBet.time===30?'active':''}" onclick="selectTime(30)">30s</div>
+        <div class="option-btn ${currentBet.time===60?'active':''}" onclick="selectTime(60)">60s</div>
       </div>
 
       <h2>PREDICTION</h2>
-      <div style="display:flex;gap:12px;justify-content:center">
+      <div class="flex-row">
         <div class="option-btn ${currentBet.direction==='HIGHER'?'active':''}" onclick="selectDirection('HIGHER')">HIGHER</div>
         <div class="option-btn ${currentBet.direction==='LOWER'?'active':''}" onclick="selectDirection('LOWER')">LOWER</div>
       </div>
@@ -106,39 +121,61 @@ async function showScreen2() {
       <input type="text" id="livePrice1" class="readonly" value="Loading..." readonly>
       <input type="text" id="livePrice2" class="readonly" value="0.00" readonly>
 
-      <button class="btn" onclick="settleAndPay()" style="margin:25px 0 10px;width:100%;padding:18px">SETTLE ${currentBet.amount} USDC</button>
+      <button class="btn" onclick="settleAndPay()" style="margin-top:15px">SETTLE ${currentBet.amount} USDC</button>
+      <button id="predictBtn" class="btn" onclick="startPrediction()" disabled>PREDICT</button>
 
-      <div id="predictionArea" style="display:none; text-align:center">
-        <input type="text" id="countdown" class="readonly" value="0" style="font-size:3rem; margin:15px 0">
-        <button id="predictBtn" class="btn" onclick="startPrediction()" disabled style="width:100%">PREDICT NOW</button>
+      <div id="predictionArea" style="display:none; text-align:center; margin-top:15px">
+        <input type="text" id="countdown" class="readonly" value="0" style="font-size:3.2rem;">
       </div>
     </div>
   `;
 
-  // Start live price updates
-  setInterval(() => updateLivePrice('livePrice1'), 4000);
-  updateLivePrice('livePrice1');
+  startLivePriceUpdates();
 }
 
+// Live price updater - refreshes every 1 second
+let livePriceInterval = null;
+
+function startLivePriceUpdates() {
+  if (livePriceInterval) clearInterval(livePriceInterval);
+  
+  const updatePrice = async () => {
+    const price = await getETHPrice();
+    const el = document.getElementById('livePrice1');
+    if (el) el.value = price.toFixed(2);
+  };
+
+  updatePrice(); // immediate update
+  livePriceInterval = setInterval(updatePrice, 1000); // every 1 second
+}
+
+// ==================== BET CONTROLS ====================
 window.selectAmount = (amt) => { currentBet.amount = amt; showScreen2(); };
 window.selectTime = (t) => { currentBet.time = t; showScreen2(); };
 window.selectDirection = (dir) => { currentBet.direction = dir; showScreen2(); };
 
+// ==================== PAYMENT & GAME FLOW ====================
 async function settleAndPay() {
   if (!signer) return alert("Wallet not connected");
 
-  // TODO: Real USDC transfer (demo for now)
-  const confirmed = confirm(`Pay ${currentBet.amount} USDC to place bet?`);
+  const confirmed = confirm(`Pay ${currentBet.amount} USDC?`);
   if (!confirmed) return;
 
-  alert("✅ Payment confirmed (Demo - In real version this will transfer tokens)");
-  document.getElementById('predictionArea').style.display = 'block';
-  document.getElementById('predictBtn').disabled = false;
+  alert("✅ Payment confirmed (Demo)");
+  
+  // Enable PREDICT button after payment
+  const predictBtn = document.getElementById('predictBtn');
+  if (predictBtn) predictBtn.disabled = false;
 }
 
 function startPrediction() {
-  startPrice = parseFloat(document.getElementById('livePrice1').value);
-  document.getElementById('livePrice1').style.background = "#e0e0e0";
+  // Freeze current price into textbox 1
+  const currentPrice = parseFloat(document.getElementById('livePrice1').value) || 3200;
+  startPrice = currentPrice;
+  document.getElementById('livePrice1').style.background = "#ddd";
+
+  // Show countdown area
+  document.getElementById('predictionArea').style.display = 'block';
 
   let timeLeft = currentBet.time;
   const countdownEl = document.getElementById('countdown');
@@ -181,58 +218,68 @@ function showResultScreen(won) {
   `;
 }
 
-window.claimReward = () => {
-  alert("🎉 2x Reward sent to your wallet! (Backend simulation)");
-  resetGame();
-};
+// ==================== CLAIM REWARD (Backend Call) ====================
+async function claimReward() {
+  if (!userAddress) return alert("Wallet not connected");
 
-window.resetGame = () => {
+  try {
+    const response = await fetch(`${BACKEND_URL}/api/claim`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userAddress: userAddress,
+        amount: currentBet.amount
+      })
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      alert(`🎉 2x REWARD SENT!\nTransaction: ${result.txHash}`);
+    } else {
+      alert("❌ Claim failed: " + (result.message || "Unknown error"));
+    }
+  } catch (error) {
+    console.error(error);
+    alert("❌ Cannot connect to backend.\nMake sure backend is running on port 3001");
+  }
+
+  resetGame();
+}
+
+// ==================== DISCONNECT & REVOKE ====================
+async function disconnectWallet() {
+  if (!confirm("Disconnect wallet?")) return;
+  userAddress = null;
+  provider = null;
+  signer = null;
+  if (countdownInterval) clearInterval(countdownInterval);
+  alert("✅ Wallet disconnected");
+  showScreen1();
+}
+
+async function revokeAllConnections() {
+  if (!confirm("Reset all connections?")) return;
+  userAddress = null;
+  provider = null;
+  signer = null;
+  if (countdownInterval) clearInterval(countdownInterval);
+  alert("✅ All connections revoked.");
+  showScreen1();
+}
+
+function resetGame() {
   currentBet = { amount: 1, time: 10, direction: "HIGHER" };
   showScreen2();
-};
+}
 
-// Initialize
+// ==================== INIT ====================
 document.addEventListener('DOMContentLoaded', showScreen1);
 
 window.connectWallet = connectWallet;
-
-// Add this function (replace the old one)
-async function disconnectWallet() {
-  if (!confirm("Disconnect wallet from this app?")) return;
-
-  try {
-    // Best practice: Revoke permissions (works on MetaMask)
-    if (window.ethereum) {
-      await window.ethereum.request({
-        method: 'wallet_revokePermissions',
-        params: [{
-          eth_accounts: {}
-        }]
-      }).catch(() => {}); // Ignore if not supported
-    }
-
-    // Clear all local state
-    userAddress = null;
-    provider = null;
-    signer = null;
-
-    // Clear any intervals
-    if (countdownInterval) {
-      clearInterval(countdownInterval);
-      countdownInterval = null;
-    }
-
-    alert("✅ Wallet disconnected successfully");
-    showScreen1(); // Return to connect screen
-
-  } catch (error) {
-    console.error("Disconnect error:", error);
-    // Fallback: just clear state and reload
-    userAddress = null;
-    provider = null;
-    signer = null;
-    location.reload();
-  }
-}
-
 window.disconnectWallet = disconnectWallet;
+window.revokeAllConnections = revokeAllConnections;
+window.settleAndPay = settleAndPay;
+window.startPrediction = startPrediction;
+window.claimReward = claimReward;
+window.resetGame = resetGame;

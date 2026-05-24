@@ -4,7 +4,7 @@ body {
   background: white;
   color: black;
   height: 100vh;
-  overflow: hidden;
+  overflow: auto;
   position: relative;
 }
 
@@ -15,47 +15,46 @@ body::before {
   background: url('https://upload.wikimedia.org/wikipedia/commons/0/05/Ethereum_logo_2014.svg') center center no-repeat;
   opacity: 0.08;
   z-index: 0;
-  background-size: 60%;
+  background-size: 50%;
 }
 
 .container {
   position: relative;
   z-index: 1;
-  max-width: 600px;
+  max-width: 620px;
   margin: 0 auto;
-  padding: 20px;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
+  padding: 15px;
+  min-height: 100vh;
 }
 
-h1 { font-size: 2.2rem; text-align: center; margin: 20px 0; }
-h2 { font-size: 1.4rem; margin: 15px 0 8px; }
+h1 { font-size: 2.1rem; text-align: center; margin: 10px 0; }
+h2 { font-size: 1.25rem; margin: 12px 0 6px; font-weight: bold; }
 
 .btn {
   background: #FF8800;
   color: black;
   border: none;
-  padding: 14px 24px;
+  padding: 14px;
   font-size: 1.1rem;
   font-weight: bold;
   text-transform: uppercase;
   border-radius: 8px;
   cursor: pointer;
+  width: 100%;
   margin: 8px 0;
 }
-
-.btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .option-btn {
   background: white;
   border: 3px solid #FF8800;
-  padding: 12px;
-  margin: 6px 0;
+  padding: 10px 12px;
+  margin: 4px;
   text-align: center;
   font-weight: bold;
   cursor: pointer;
   border-radius: 8px;
+  flex: 1;
+  min-width: 90px;
 }
 
 .option-btn.active {
@@ -65,11 +64,18 @@ h2 { font-size: 1.4rem; margin: 15px 0 8px; }
 
 .readonly {
   background: transparent;
-  border: none;
-  font-size: 1.3rem;
+  border: 2px solid #ddd;
+  font-size: 1.5rem;
   text-align: center;
-  padding: 8px;
+  padding: 10px;
   width: 100%;
+  margin: 6px 0;
+  border-radius: 8px;
 }
 
-.warning { color: red; font-weight: bold; text-align: center; }
+.flex-row {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
