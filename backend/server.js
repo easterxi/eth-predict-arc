@@ -14,24 +14,43 @@ console.log("✅ System wallet loaded:", systemWallet.address);
 
 // ========== PAYOUT ENDPOINT ==========
 app.post('/api/claim', async (req, res) => {
-  const { userAddress, amount } = req.body;
+  const { userAddress, amount } = req.body;   // amount = user's original bet
 
   if (!userAddress || !amount) {
     return res.status(400).json({ success: false, message: "Missing data" });
   }
 
   try {
+    const betAmount = ethers.parseUnits(amount.toString(), 18);
+    const fullPayout = betAmount * 180n / 100n;     // 1.8x (2x - 10% fee)
+    const originalBet = betAmount;                  // 1x refund if insufficient
+
+    // Check system wallet balance
+    const systemBalance = await provider.getBalance(systemWallet.address);
+
+    let payoutAmount;
+    let message;
+
+    if (systemBalance >= fullPayout) {
+      payoutAmount = fullPayout;
+      message = `You won 2x - 10% fee = ${ethers.formatUnits(payoutAmount, 18)} USDC`;
+    } else {
+      payoutAmount = originalBet;
+      message = `System has insufficient funds. You receive only your original bet: ${amount} USDC (no profit)`;
+    }
+
     const tx = await systemWallet.sendTransaction({
       to: userAddress,
-      value: ethers.parseUnits((amount * 2).toString(), 6) // 2x reward (USDC decimals = 6 on ARC)
+      value: payoutAmount
     });
 
     await tx.wait();
 
     res.json({
       success: true,
-      message: "Reward sent successfully",
-      txHash: tx.hash
+      message: message,
+      txHash: tx.hash,
+      amountSent: ethers.formatUnits(payoutAmount, 18)
     });
 
   } catch (error) {

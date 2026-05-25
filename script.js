@@ -95,14 +95,20 @@ async function showScreen2() {
   document.getElementById('app').innerHTML = `
     <div class="container">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <h2 style="margin:0">ARC TESTNET</h2>
+        <h2 style="margin:0">ON ARC</h2>
         <div onclick="disconnectWallet()" style="background:#FF8800;color:black;padding:6px 12px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:0.95rem">
           ${shortAddress}
         </div>
       </div>
 
-      <h1>ETH PRICES PREDICTION</h1>
-      <h2></h2>
+<!-- USER BALANCE with Loading State -->
+      <div style="text-align:center; margin-bottom:12px; font-weight:bold;">
+        Your Balance: 
+        <span id="userBalance" style="color:#888;">Loading...</span>
+      </div>
+
+      <h1>PREDICT ETH PRICES</h1>
+      <h2>ON ARC</h2>
 
       <h2>BET AMOUNT</h2>
       <div class="flex-row">
@@ -130,7 +136,6 @@ async function showScreen2() {
 
       <button class="btn" id="settleBtn" onclick="settleAndPay()">SETTLE ${currentBet.amount} USDC</button>
       
-      <!-- PREDICT BUTTON - Default Disabled -->
       <button id="predictBtn" class="btn" onclick="startPrediction()" 
               style="background:#cccccc; color:#666; cursor:not-allowed;" disabled>
         PREDICT
@@ -146,6 +151,8 @@ async function showScreen2() {
   `;
 
   startLivePriceUpdates();
+  updateUserBalance();                    // Initial balance
+  balanceInterval = setInterval(updateUserBalance, 8000);  // Update every 8 seconds
 }
 
 let livePriceInterval = null;
@@ -184,22 +191,33 @@ async function settleAndPay() {
   if (!signer) return alert("Wallet not connected");
 
   const amount = currentBet.amount;
-  const SYSTEM_WALLET = "0x9068d4a1edcea0e553525e8ca5edbe57dfe900b6";   // ← Replace this!
+  const SYSTEM_WALLET = "0x9068d4a1edcea0e553525e8ca5edbe57dfe900b6";   // ← Put your real address
 
   try {
-    // Send native token (USDC on ARC Testnet)
+    // === 1. Check User Balance First ===
+    const balance = await provider.getBalance(userAddress);
+    const requiredAmount = ethers.parseUnits(amount.toString(), 18);
+    
+    console.log(`Balance: ${ethers.formatUnits(balance, 18)} | Required: ${amount}`);
+
+    if (balance < requiredAmount) {
+      alert(`❌ Insufficient USDC!\n\nYou have: ${ethers.formatUnits(balance, 18)} USDC\nYou need: ${amount} USDC`);
+      return;
+    }
+
+    // === 2. Send Payment ===
     const tx = await signer.sendTransaction({
       to: SYSTEM_WALLET,
-      value: ethers.parseUnits(amount.toString(), 18)   // 18 decimals for USDC
+      value: requiredAmount
     });
 
-    alert(`⏳ Sending ${amount} USDC to system wallet...\nTx Hash: ${tx.hash}`);
+    alert(`⏳ Sending ${amount} USDC...\nTx Hash: ${tx.hash}`);
 
     const receipt = await tx.wait();
     
-    alert(`✅ Payment Successful!\n${amount} USDC sent to system.\nTransaction: ${receipt.transactionHash}`);
+    alert(`✅ Payment Successful!\n${amount} USDC sent to system wallet.\n\nTransaction Hash:\n${receipt.transactionHash}`);
 
-    // Disable other controls and enable PREDICT button
+    // Enable Predict and disable other controls
     disableBetControls();
 
     const predictBtn = document.getElementById('predictBtn');
@@ -297,15 +315,22 @@ async function endGame() {
 }
 
 function showResultScreen(won) {
+  const warning = won ? `
+    <p style="color:#d00; font-size:1rem; max-width:320px; text-align:center; margin:15px 0;">
+      Note: If system balance was low, you may receive only your original bet (no profit)
+    </p>
+  ` : "";
+
   document.getElementById('app').innerHTML = `
-    <div style="height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px">
+    <div style="height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px">
       <h1 style="font-size:4.5rem;color:${won ? 'green' : 'red'}">
         ${won ? "YOU WON!" : "YOU LOSE"}
       </h1>
       <p style="font-size:1.3rem">Bet: ${currentBet.amount} USDC | ${currentBet.direction}</p>
+      ${warning}
       <button class="btn" onclick="${won ? 'claimReward()' : 'resetGame()'}" 
               style="padding:20px 70px;font-size:1.4rem">
-        ${won ? 'CLAIM 2x REWARD' : 'PLAY AGAIN'}
+        ${won ? 'CLAIM REWARD' : 'PLAY AGAIN'}
       </button>
     </div>
   `;
@@ -314,6 +339,8 @@ function showResultScreen(won) {
 // ==================== CLAIM REWARD (Backend Call) ====================
 async function claimReward() {
   if (!userAddress) return alert("Wallet not connected");
+
+  const loadingMsg = alert("Checking system balance and processing reward...");
 
   try {
     const response = await fetch(`${BACKEND_URL}/api/claim`, {
@@ -328,13 +355,13 @@ async function claimReward() {
     const result = await response.json();
 
     if (result.success) {
-      alert(`🎉 2x REWARD SENT!\nTransaction: ${result.txHash}`);
+      alert(`🎉 ${result.message}\n\nTransaction Hash:\n${result.txHash}`);
     } else {
-      alert("❌ Claim failed: " + (result.message || "Unknown error"));
+      alert("❌ Claim failed: " + result.message);
     }
   } catch (error) {
     console.error(error);
-    alert("❌ Cannot connect to backend.\nMake sure backend is running on port 3001");
+    alert("❌ Cannot connect to backend. Make sure backend is running.");
   }
 
   resetGame();
@@ -367,8 +394,9 @@ function resetGame() {
 
   if (countdownInterval) clearInterval(countdownInterval);
   if (livePriceInterval) clearInterval(livePriceInterval);
+  if (balanceInterval) clearInterval(balanceInterval);
 
-  showScreen2();   // This will restore all buttons to normal state
+  showScreen2();
 }
 
 // ==================== INIT ====================
@@ -381,6 +409,24 @@ window.settleAndPay = settleAndPay;
 window.startPrediction = startPrediction;
 window.claimReward = claimReward;
 window.resetGame = resetGame;
+
+let balanceInterval = null;
+
+async function updateUserBalance() {
+  if (!provider || !userAddress) return;
+
+  try {
+    const balance = await provider.getBalance(userAddress);
+    const formattedBalance = parseFloat(ethers.formatUnits(balance, 18)).toFixed(4);
+    
+    const balanceEl = document.getElementById('userBalance');
+    if (balanceEl) {
+      balanceEl.textContent = `${formattedBalance} USDC`;
+    }
+  } catch (e) {
+    console.warn("Balance fetch failed", e);
+  }
+}
 
 console.log("System Wallet Address:", 
   new ethers.Wallet("0x123456789123456789123456789123456789123456789123456789").address);
