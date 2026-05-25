@@ -7,7 +7,7 @@ let startPrice = 0;
 let endPrice = 0;
 let countdownInterval = null;
 
-const BACKEND_URL = "http://127.0.0.1:3001";   // Change this when you deploy backend
+const BACKEND_URL = "https://fictional-broccoli-v6v5gxr7wpp7hwq59-3001.app.github.dev";  // Change this when you deploy backend
 
 // ==================== GET ETH PRICE ====================
 async function getETHPrice() {

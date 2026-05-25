@@ -4,7 +4,13 @@ const { ethers } = require('ethers');
 require('dotenv').config();
 
 const app = express();
-app.use(cors({ origin: process.env.FRONTEND_URL }));
+
+// Allow frontend to connect (more permissive for development)
+app.use(cors({
+  origin: "*", 
+  methods: ["GET", "POST"]
+}));
+
 app.use(express.json());
 
 const provider = new ethers.JsonRpcProvider(process.env.ARC_RPC);
@@ -12,9 +18,9 @@ const systemWallet = new ethers.Wallet(process.env.SYSTEM_PRIVATE_KEY, provider)
 
 console.log("✅ System wallet loaded:", systemWallet.address);
 
-// ========== PAYOUT ENDPOINT ==========
+// Claim Reward Endpoint
 app.post('/api/claim', async (req, res) => {
-  const { userAddress, amount } = req.body;   // amount = user's original bet
+  const { userAddress, amount } = req.body;
 
   if (!userAddress || !amount) {
     return res.status(400).json({ success: false, message: "Missing data" });
@@ -22,21 +28,16 @@ app.post('/api/claim', async (req, res) => {
 
   try {
     const betAmount = ethers.parseUnits(amount.toString(), 18);
-    const fullPayout = betAmount * 180n / 100n;     // 1.8x (2x - 10% fee)
-    const originalBet = betAmount;                  // 1x refund if insufficient
+    const fullPayout = betAmount * 180n / 100n; // 1.8x (2x - 10%)
 
-    // Check system wallet balance
     const systemBalance = await provider.getBalance(systemWallet.address);
 
-    let payoutAmount;
-    let message;
+    let payoutAmount = fullPayout;
+    let message = `You won 2x - 10% fee`;
 
-    if (systemBalance >= fullPayout) {
-      payoutAmount = fullPayout;
-      message = `You won 2x - 10% fee = ${ethers.formatUnits(payoutAmount, 18)} USDC`;
-    } else {
-      payoutAmount = originalBet;
-      message = `System has insufficient funds. You receive only your original bet: ${amount} USDC (no profit)`;
+    if (systemBalance < fullPayout) {
+      payoutAmount = betAmount;
+      message = `System balance low. You receive only your original bet`;
     }
 
     const tx = await systemWallet.sendTransaction({
