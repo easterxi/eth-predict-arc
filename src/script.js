@@ -1,7 +1,21 @@
-import CONFIG from './config.js';
+import { Buffer } from "buffer";
+
+window.Buffer = Buffer;
+
+import process from "process";
+
+window.process = process;
+
+import CONFIG from "@/config";
+import "@/index.css";
+
 import { ethers } from "ethers";
+import { getArcAdapter } from "./arcAdapter.js";
 
 let provider, signer, userAddress;
+
+let arcAdapter;
+
 let currentBet = { amount: 1, time: 10, direction: "HIGHER" };
 let startPrice = 0;
 let endPrice = 0;
@@ -9,6 +23,11 @@ let countdownInterval = null;
 
 let hargawisfix = 0;
 let hargaisehjalan = 0;
+
+const USDC_ABI = [
+  "function transfer(address to, uint amount) returns (bool)",
+  "function balanceOf(address owner) view returns (uint256)"
+];
 
 const BACKEND_URL = "https://eth-predict-arc-production.up.railway.app";  // Change this when you deploy backend
 
@@ -66,7 +85,11 @@ async function connectWallet() {
     provider = new ethers.BrowserProvider(window.ethereum);
     signer = await provider.getSigner();
 
-    alert(`✅ Wallet connected ∼ ${userAddress.slice(0,6)}...${userAddress.slice(-4)}.`);
+    arcAdapter = await getArcAdapter();
+
+    console.log("Arc Adapter:", arcAdapter);
+
+    alert(`✅ Wallet connected: ${userAddress.slice(0,6)}...${userAddress.slice(-4)}.`);
     showScreen2();
   } catch (e) {
     console.error(e);
@@ -76,10 +99,10 @@ async function connectWallet() {
 
 // ==================== SCREENS ====================
 function showScreen1() {
-  document.getElementById('app').innerHTML = `
+  document.getElementById('root').innerHTML = `
     <div style="height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:0px;background:transparent;padding:0px"; padding-top:40px>
 
-      <img src="logo/arc_mascot_title.png"
+      <img src="/logo/arc_mascot_title.png"
            alt="arcdicted_mascot" 
            style="width:480px; height:auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));">
       
@@ -122,7 +145,7 @@ function updatePriceTitle() {
   const titleEl = document.getElementById('priceTitle');
   if (titleEl) {
     /*titleEl.textContent = `🔵 ${currentBet.asset}/USDT Live Price`;*/
-    titleEl.innerHTML  = `${currentBet.asset} &bull; USDT Live Price`;
+    titleEl.innerHTML  = `${currentBet.asset} &#9679; USDT Live Price`;
   }
 }
 
@@ -131,10 +154,10 @@ async function showScreen2() {
   const userBal = await getUserBalance();
   const systemBal = await getSystemBalance();
 
-  document.getElementById('app').innerHTML = `
+  document.getElementById('root').innerHTML = `
     <div class="container">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <div style="margin:0" class="readonly2">arcDicted &bull; on ARC</div>
+        <div style="margin:0" class="readonly2">arcDicted ○ on ARC</div>
         <div onclick="disconnectWallet()" class="btn_smol">
           ${shortAddress}
         </div>
@@ -142,53 +165,53 @@ async function showScreen2() {
 
       <!-- ARC Logo - Centered under disconnect button -->
       <div style="display:flex;justify-content:center;margin:15px 0 20px 0;">
-        <img src="logo/arc_logo_small2.png" 
+        <img src="/logo/arc_logo_small2.png" 
              alt="arc_logo" 
              style="width:64px; height:auto; filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.6));">
       </div>
 
       <div class="readonly3" style="display:flex; justify-content:space-between; align-items:center;">
-        Treasury's &bull; USDC balance ∼ <span id="systemBalanceDisplay"> ${systemBal} &bull; USDC</span>
+        ○ treasury's &#9679; USDC balance • <span id="systemBalanceDisplay"> ${systemBal} &#9679; USDC</span>
       </div>
 
       <div class="readonly3" style="display:flex; justify-content:space-between; align-items:center;">
-        Your &bull; USDC balance ∼ <span id="userBalanceDisplay"> ${userBal} &bull; USDC</span>
+        ○ your &#9679; USDC balance • <span id="userBalanceDisplay"> ${userBal} &#9679; USDC</span>
       </div>
 
 <hr>
 
       <div class="readonly2"">
-        🔵 Which coin's you want to predict its future price?</span>
+        1. at which coin you want to put your prediction on?</span>
       </div>
 
 <div class="flex-row">
   <div class="option-btn-circle ${currentBet.asset==='BTC'?'active':''}" onclick="selectAsset('BTC')">
-    <img src="logo/btc_logo_small.png" alt="btc_logo" width="32" height="32" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));>
+    <img src="/logo/btc_logo_small.png" alt="btc_logo" width="32" height="32" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));>
     
   </div>
 
   <div class="option-btn-circle ${currentBet.asset==='ETH'?'active':''}" onclick="selectAsset('ETH')">
-    <img src="logo/eth_logo_small.png" alt="eth_logo"width="32" height="32" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));>
+    <img src="/logo/eth_logo_small.png" alt="eth_logo"width="32" height="32" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));>
     
   </div>
 
   <div class="option-btn-circle ${currentBet.asset==='SOL'?'active':''}" onclick="selectAsset('SOL')">
-    <img src="logo/sol_logo_small.png" alt="sol_logo" width="32" height="32" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));>
+    <img src="/logo/sol_logo_small.png" alt="sol_logo" width="32" height="32" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));>
     
   </div>
 </div>
 
       <div class="readonly2"">
-        🔵 How many • USDC you're willing to bet?</span>
+        2. for how many ● USDC?</span>
       </div>
       <div class="flex-row">
-        <div class="option-btn ${currentBet.amount===1?'active':''}" onclick="selectAmount(1)">1 &bull; USDC</div>
-        <div class="option-btn ${currentBet.amount===5?'active':''}" onclick="selectAmount(5)">5 &bull; USDC</div>
-        <div class="option-btn ${currentBet.amount===10?'active':''}" onclick="selectAmount(10)">10 &bull; USDC</div>
+        <div class="option-btn ${currentBet.amount===1?'active':''}" onclick="selectAmount(1)">1 &#9679; USDC</div>
+        <div class="option-btn ${currentBet.amount===5?'active':''}" onclick="selectAmount(5)">5 &#9679; USDC</div>
+        <div class="option-btn ${currentBet.amount===10?'active':''}" onclick="selectAmount(10)">10 &#9679; USDC</div>
       </div>
 
       <div class="readonly2"">
-        🔵 How many seconds ahead you want to predict?</span>
+        3. how many seconds ahead you want to put your prediction on?</span>
       </div>
       <div class="flex-row">
         <div class="option-btn ${currentBet.time===10?'active':''}" onclick="selectTime(10)">10 seconds</div>
@@ -197,15 +220,15 @@ async function showScreen2() {
       </div>
 
       <div class="readonly2"">
-        🔵 What's your prediction? HIGHER? LOWER?</span>
+        4. HIGHER? LOWER?</span>
       </div>
       <div class="flex-row">
 
   <div class="option-btn-circle ${currentBet.direction==='HIGHER'?'active':''}" onclick="selectDirection('HIGHER')">
-    <img src="logo/up_logo_small.png" alt="higher_logo" width="48" height="48" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));>
+    <img src="/logo/up_logo_small.png" alt="higher_logo" width="48" height="48" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));>
   </div>
   <div class="option-btn-circle ${currentBet.direction==='LOWER'?'active':''}" onclick="selectDirection('LOWER')">
-   <img src="logo/down_logo_small.png" alt="lower_logo" width="48" height="48" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));>
+   <img src="/logo/down_logo_small.png" alt="lower_logo" width="48" height="48" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));>
   </div>
 
       </div>
@@ -224,7 +247,7 @@ async function showScreen2() {
       
       <div style="display:flex; align-items:center; gap:10px; margin:10px 0 6px 0;">
         <div class="readonly2" style="flex: 50%; text-align:left;" margin-left: 120px;>
-         Your prediction marked price ∼
+         ○ your prediction marked price •
         </div>
         <input type="text" id="livePrice1" class="readonly_txt2" value="Loading..." readonly style="flex:1; text-align:right;" border-radius: 0px; margin-left: margin-right: 120px;>
       </div>
@@ -239,12 +262,12 @@ async function showScreen2() {
 <hr>
 
       <div class="readonly2"">
-        🔵 Settle your • USDC bet.</span>
+        5. settle your bet.</span>
       </div>
-      <button class="btn" id="settleBtn" onclick="settleAndPay()">settle ${currentBet.amount} &bull; USDC</button>
+      <button class="btn" id="settleBtn" onclick="settleAndPay()">settle ${currentBet.amount} &#9679; USDC</button>
       
       <button id="predictBtn" class="btn_hide" onclick="startPrediction()" 
-        const predictBtn = document.getElementById('predictBtn');
+        const predictBtn = document.getElementById('predictBtn')
               style="opacity: 0.6; cursor: not-allowed;" disabled>
         predict
       </button>
@@ -275,8 +298,8 @@ function startLivePriceUpdates() {
 
   const updatePrices = async () => {
     const price = await getPrice(currentBet.asset);
-    const pricefixed = hargawisfix; //await getPrice(currentBet.asset);
-    const pricerun = await getPrice(currentBet.asset);
+    let pricefixed = hargawisfix; //await getPrice(currentBet.asset);
+    let pricerun = await getPrice(currentBet.asset);
 
     const tb1 = document.getElementById('livePrice1');
     const tb2 = document.getElementById('livePrice2');
@@ -296,7 +319,7 @@ function startLivePriceUpdates() {
       // Dynamic Color Logic
       if (pricerun > pricefixed) {
         tb2.style.background = "#22C55E";        // Green
-      } else if (price2 < price1) {
+      } else if (pricerun > pricefixed) {
         tb2.style.background = "#EF4444";        // Red
       } else {
         tb2.style.background = "#000000";        // Default greyish
@@ -374,29 +397,43 @@ window.selectDirection = (dir) => { currentBet.direction = dir; showScreen2(); }
 async function settleAndPay() {
   if (!signer) return alert("❌ Wallet not connected.");
 
+const chain = CONFIG.chains[CONFIG.defaultChain];
+
+const usdc = new ethers.Contract(
+  chain.usdcAddress,
+  USDC_ABI,
+  signer
+);
+
   const amount = currentBet.amount;
   const SYSTEM_WALLET = "0x9068d4a1edcea0e553525e8ca5edbe57dfe900b6";   // ← Make sure this is correct
 
   try {
     // Check balance first
-    const balance = await provider.getBalance(userAddress);
-    const required = ethers.parseUnits(amount.toString(), 18);
+    const balancenative = await provider.getBalance(userAddress);
+    const balance = await usdc.balanceOf(userAddress);
+    const required = ethers.parseUnits(amount.toString(), 6);
 
     if (balance < required) {
-      alert(`❌ Insufficient • USDC!!!\n\nYou have ∼ ${ethers.formatUnits(balance, 18)} • USDC.`);
+      alert(`❌ Insufficient ● USDC!!!\n\nYou have:  ${ethers.formatUnits(balance, 18)} ● USDC.`);
       return;
     }
 
     // Send payment
-    const tx = await signer.sendTransaction({
-      to: SYSTEM_WALLET,
-      value: required
-    });
+    //const tx = await signer.sendTransaction({
+    //  to: SYSTEM_WALLET,
+    //  value: required
+    //});
 
-    alert(`⏳ Sending ${amount} • USDC...\n\nTx ∼ ${tx.hash}.`);
+const tx = await usdc.transfer(
+  SYSTEM_WALLET,
+  required
+);
+
+    alert(`⏳ Sending ${amount} ● USDC...\n\nTx: ${tx.hash}.`);
 
     const receipt = await tx.wait();
-    alert(`✅ Payment Successful!\n\n${amount} • USDC sent.`);
+    alert(`✅ Payment Successful!\n\n${amount} ● USDC sent.`);
 
     // Disable controls and enable Predict button
     disableBetControls();
@@ -419,7 +456,7 @@ async function settleAndPay() {
     if (error.code === 4001) {
       alert("❌ Transaction rejected by user.");
     } else {
-      alert("❌ Payment failed ∼ " + (error.shortMessage || error.message) +".");
+      alert("❌ Payment failed: " + (error.shortMessage || error.message) +".");
     }
   }
 }
@@ -503,7 +540,7 @@ function disableBetControls() {
 
 function disableAllControls() {
   // Disable buttons
-  const buttons = document.querySelectorAll('.btn, .option-btn', option-btn-circle, option-btn-circle2);
+  const buttons = document.querySelectorAll('.btn, .option-btn, option-btn-circle, option-btn-circle2');
   buttons.forEach(btn => {
     btn.disabled = true;
     btn.style.pointerEvents = 'none';
@@ -520,7 +557,7 @@ async function endGame() {
   endPrice = await getETHPrice();
   document.getElementById('livePrice2').value = hargaisehjalan; //endPrice.toFixed(2);
 
-  //alert("hargaisehjalan: " + hargaisehjalan + "hargawisfix: " + hargawisfix);
+  alert("xxxxx hargaisehjalan: " + hargaisehjalan + "hargawisfix: " + hargawisfix);
   const isHigher = hargaisehjalan > hargawisfix //endPrice > startPrice;
   const userWon = (currentBet.direction === "HIGHER" && isHigher) || 
                   (currentBet.direction === "LOWER" && !isHigher);
@@ -556,7 +593,7 @@ async function getSystemBalance() {
 async function showResultScreen(won) {
   const systemBalance = await getSystemBalance();
 
-  document.getElementById('app').innerHTML = `
+  document.getElementById('root').innerHTML = `
     <div style="height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px">
       <h1 style="font-size:4.5rem;color:${won ? 'green' : 'red'}">
         ${won ? "YOU WON!" : "YOU LOSE"}
@@ -600,7 +637,14 @@ async function claimReward() {
     const result = await response.json();
 
     if (result.success) {
-      alert(`🎉 ${result.message}\n\nTransaction Hash:\n${result.txHash}`);
+      //alert(`🎉 ${result.message}\n\nTransaction Hash:\n${result.txHash}`);
+
+alert(
+  `🎉 ${result.message}\n\n` +
+  `Tx: ${result.txHash}\n\n` +
+  `Explorer:\n${result.explorerUrl}`
+);
+
     } else {
       alert("❌ Claim failed: " + result.message + ".");
     }
@@ -709,7 +753,7 @@ async function updateUserBalance() {
       balanceEl.textContent = `${formattedBalance} USDC`;
     }
   } catch (e) {
-    console.warn("❌ • USDC balance fetch failed. ", e);
+    console.warn("❌ ● USDC balance fetch failed. ", e);
   }
 }
 
@@ -717,16 +761,20 @@ async function updateBalances() {
   // Update User Balance
   const userBal = await getUserBalance();
   const userEl = document.getElementById('userBalanceDisplay');
-  if (userEl) userEl.innerHTML = `${userBal} &bull; USDC`;
+  if (userEl) userEl.innerHTML = `${userBal} &#9679; USDC`;
 
   // Update System Balance
   const systemBal = await getSystemBalance();
   const systemEl = document.getElementById('systemBalanceDisplay');
-  if (systemEl) systemEl.innerHTML = `${systemBal} &bull; USDC`;
+  if (systemEl) systemEl.innerHTML = `${systemBal} &#9679; USDC`;
 }
 
 async function autoClaimReward() {
   alert("⏳ Processing your reward...");
+
+console.log("Calling claim endpoint...");
+console.log("User:", userAddress);
+console.log("Amount:", currentBet.amount);
 
   try {
     const response = await fetch(`${BACKEND_URL}/api/claim`, {
@@ -740,10 +788,12 @@ async function autoClaimReward() {
 
     const result = await response.json();
 
+    console.log("Claim Result:", result);
+    
     if (result.success) {
-      alert(`🎉 ${result.message}.\n\nTx ∼ ${result.txHash}.`);
+      alert(`🎉 ${result.message}.\n\nTx: ${result.txHash}.`);
     } else {
-      alert("❌ Claim failed ∼ " + result.message + ".");
+      alert("❌ Claim failed: " + result.message + ".");
     }
   } catch (e) {
     alert("❌ Backend not found.");
@@ -771,5 +821,5 @@ async function switchWallet() {
 
 window.switchWallet = switchWallet;
 
-console.log("System Wallet Address:", 
-  new ethers.Wallet("0x123456789123456789123456789123456789123456789123456789").address);
+//console.log("System Wallet Address:", 
+  //new ethers.Wallet("0x123456789123456789123456789123456789123456789123456789").address);
