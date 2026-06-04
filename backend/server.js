@@ -75,6 +75,7 @@ function getSystemWallet() {
   return new ethers.Wallet(process.env.SYSTEM_PRIVATE_KEY, provider);
 }
 
+/*
 const chainConfig = CHAINS[chain];
 if (!chainConfig) {
   return res.status(400).json({
@@ -102,6 +103,7 @@ const kit = new AppKit();
 const adapter = createEthersAdapterFromPrivateKey({
   privateKey: process.env.SYSTEM_PRIVATE_KEY
 });
+*/
 
 // Claim endpoint with logging
 app.post('/api/claim', async (req, res) => {
