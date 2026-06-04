@@ -297,7 +297,47 @@ app.get('/api/supported-chains', async (req, res) => {
     console.error(e);
 
     res.status(500).json({
-      error: e.message
+      error: e.message,
+      stack: e.stack
+    });
+
+  }
+
+});
+
+app.get('/api/test-estimate2', async (req, res) => {
+
+  try {
+
+    const adapter =
+      createEthersAdapterFromPrivateKey({
+        privateKey: process.env.SYSTEM_PRIVATE_KEY
+      });
+
+    const result = await kit.estimateBridge({
+
+      from: {
+        adapter,
+        chain: "Arc_Testnet"
+      },
+
+      to: {
+        chain: "Arc_Testnet"
+      },
+
+      amount: "1"
+
+    });
+
+    res.json(result);
+
+  } catch (e) {
+
+    console.error(e);
+
+    res.status(500).json({
+      error: e.message,
+      stack: e.stack
     });
 
   }
