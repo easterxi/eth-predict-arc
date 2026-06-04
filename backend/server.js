@@ -158,17 +158,25 @@ app.post('/api/claim', async (req, res) => {
 */
 
 app.get('/api/system-balance', async (req, res) => {
+
   try {
 
     const provider = new ethers.JsonRpcProvider(process.env.ARC_RPC);
 
-    const code = await provider.getCode(
-      "0x3600000000000000000000000000000000000000"
+    const treasuryAddress =
+      "0x9068D4A1edCea0e553525E8Ca5edbE57DfE900b6";
+
+    const usdc = new ethers.Contract(
+      "0x3600000000000000000000000000000000000000",
+      ["function balanceOf(address) view returns (uint256)"],
+      provider
     );
 
+    const balance = await usdc.balanceOf(treasuryAddress);
+
     res.json({
-      codeLength: code.length,
-      usdcContract: "0x3600000000000000000000000000000000000000"
+      treasuryAddress,
+      balance: balance.toString()
     });
 
   } catch (e) {
@@ -176,11 +184,28 @@ app.get('/api/system-balance', async (req, res) => {
     console.error(e);
 
     res.status(500).json({
-      error: e.message,
-      stack: e.stack
+      error: e.message
     });
 
   }
+
+});
+
+app.get('/api/debug-wallet', async (req, res) => {
+
+  const provider =
+    new ethers.JsonRpcProvider(process.env.ARC_RPC);
+
+  const wallet =
+    new ethers.Wallet(
+      process.env.SYSTEM_PRIVATE_KEY,
+      provider
+    );
+
+  res.json({
+    address: wallet.address
+  });
+
 });
 
 app.get('/ping', (req, res) => {
