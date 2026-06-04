@@ -164,6 +164,17 @@ app.get('/ping', (req, res) => {
   });
 });
 
+app.get('/ping', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Backend alive'
+  });
+});
+
+app.get('/', (req, res) => {
+  res.send('ROOT WORKS');
+});
+
 const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {
