@@ -24,12 +24,18 @@ let countdownInterval = null;
 let hargawisfix = 0;
 let hargaisehjalan = 0;
 
+let selectedChain = CONFIG.defaultChain;
+//let selectedChain = "arc-testnet";   // default
+let jenengechain = "MBOH";
+
 const USDC_ABI = [
   "function transfer(address to, uint amount) returns (bool)",
   "function balanceOf(address owner) view returns (uint256)"
 ];
 
-const BACKEND_URL = "https://eth-predict-arc-production.up.railway.app";  // Change this when you deploy backend
+const BACKEND_URL = "https://lucid-cooperation-production-5f8d.up.railway.app";  // Change this when you deploy backend
+
+const SYSTEM_WALLET_X = "0x9068d4a1edcea0e553525e8ca5edbe57dfe900b6"; 
 
 // ==================== GET ETH PRICE ====================
 async function getETHPrice() {
@@ -62,7 +68,8 @@ async function connectWallet() {
     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
     userAddress = accounts[0];
 
-    const chain = CONFIG.chains[CONFIG.defaultChain];
+    //const chain = CONFIG.chains[CONFIG.defaultChain];
+    const chain = CONFIG.chains[selectedChain];
 
     try {
       await window.ethereum.request({
@@ -117,6 +124,8 @@ function showScreen1() {
         </button>
       </div>
 
+      <div style="height:200px;"></div>
+
 <!-- GitHub Icon - Centered at the very bottom -->
       <a href="https://github.com/kaduanganu" 
          target="_blank"
@@ -140,6 +149,51 @@ window.selectAsset = (asset) => {
   showScreen2();   // This will restart everything cleanly
 };
 
+window.changeChain = async function(chainKey) {
+
+  selectedChain = chainKey;
+
+  const chain = CONFIG.chains[chainKey];
+
+  try {
+
+    // Add chain to wallet if needed
+    await window.ethereum.request({
+      method: "wallet_addEthereumChain",
+      params: [{
+        chainId: chain.chainId,
+        chainName: chain.name,
+        rpcUrls: [chain.rpcUrl],
+        nativeCurrency: {
+          name: "ETH",
+          symbol: "ETH",
+          decimals: 18
+        },
+        blockExplorerUrls: [chain.explorer]
+      }]
+    });
+
+    // Switch wallet to selected chain
+    await window.ethereum.request({
+      method: "wallet_switchEthereumChain",
+      params: [{ chainId: chain.chainId }]
+    });
+
+    // Refresh ethers provider
+    provider = new ethers.BrowserProvider(window.ethereum);
+    signer = await provider.getSigner();
+
+    jenengechain = chain.name;
+    alert(`✅ Switched to ${chain.name}.`);
+
+    showScreen2();
+
+  } catch (err) {
+    console.error(err);
+    alert("❌ Chain switch failed.");
+  }
+};
+
 // Dynamic price title
 function updatePriceTitle() {
   const titleEl = document.getElementById('priceTitle');
@@ -157,18 +211,55 @@ async function showScreen2() {
   document.getElementById('root').innerHTML = `
     <div class="container">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <div style="margin:0" class="readonly2">arcDicted ○ on ARC</div>
+        <div style="margin:0" class="readonly3">arcDicted ○ with arc app kits</div>
         <div onclick="disconnectWallet()" class="btn_smol">
           ${shortAddress}
         </div>
       </div>
 
-      <!-- ARC Logo - Centered under disconnect button -->
-      <div style="display:flex;justify-content:center;margin:15px 0 20px 0;">
-        <img src="/logo/arc_logo_small2.png" 
-             alt="arc_logo" 
-             style="width:64px; height:auto; filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.6));">
+      <div class="readonly2"">
+        0. pick the chain you want to use.</span>
       </div>
+
+<div class="flex-row" style="justify-content:center; display:flex; gap:12px; margin-bottom:20px; width:70%; align-items:center; margin:0 auto;">
+
+  <div
+    class="option-btn-circle-tenanan ${selectedChain==='arc-testnet' ? 'active' : ''}"
+    onclick="changeChain('arc-testnet')"
+  >
+    <img src="/logo/arc_logo_small2_opaq.png"
+         width="32">
+  </div>
+
+  <div
+    class="option-btn-circle-tenanan ${selectedChain==='base-sepolia' ? 'active' : ''}"
+    onclick="changeChain('base-sepolia')"
+  >
+    <img src="/logo/base_logo_small.png"
+         width="32">
+  </div>
+
+  <div
+    class="option-btn-circle-tenanan ${selectedChain==='eth-sepolia' ? 'active' : ''}"
+    onclick="changeChain('eth-sepolia')"
+  >
+    <img src="/logo/eth_logo_small.png"
+         width="32">
+  </div>
+
+  <div
+    class="option-btn-circle-tenanan ${selectedChain==='arbitrum-sepolia' ? 'active' : ''}"
+    onclick="changeChain('arbitrum-sepolia')"
+  >
+    <img src="/logo/arb_logo_small.png"
+         width="32">
+  </div>
+
+</div>
+
+<div style="height:20px;"></div>
+
+<hr>
 
       <div class="readonly3" style="display:flex; justify-content:space-between; align-items:center;">
         ○ treasury's &#9679; USDC balance • <span id="systemBalanceDisplay"> ${systemBal} &#9679; USDC</span>
@@ -397,16 +488,28 @@ window.selectDirection = (dir) => { currentBet.direction = dir; showScreen2(); }
 async function settleAndPay() {
   if (!signer) return alert("❌ Wallet not connected.");
 
-const chain = CONFIG.chains[CONFIG.defaultChain];
+//const chain = CONFIG.chains[CONFIG.defaultChain];
+const amount = currentBet.amount;
+const chainKey = selectedChain;                    // ← Use selected chain
+const chainConfig = CONFIG.chains[chainKey];
 
 const usdc = new ethers.Contract(
-  chain.usdcAddress,
+  //chain.usdcAddress,
+  chainConfig.usdcAddress, //CONFIG.chains[selectedChain].usdcAddress,
   USDC_ABI,
   signer
 );
 
-  const amount = currentBet.amount;
-  const SYSTEM_WALLET = "0x9068d4a1edcea0e553525e8ca5edbe57dfe900b6";   // ← Make sure this is correct
+    //const balance = await usdc.balanceOf(userAddress);
+    //const required = ethers.parseUnits(amount.toString(), 6);
+
+    //if (balance < required) {
+      //alert(`❌ Insufficient ● USDC on ${chainKey}!!!\n\nYou have:  ${ethers.formatUnits(balance, 18)} ● USDC.`);
+      //return;
+    //}
+
+  //const amount = currentBet.amount;
+  const SYSTEM_WALLET = SYSTEM_WALLET_X;   // ← Make sure this is correct
 
   try {
     // Check balance first
@@ -414,8 +517,9 @@ const usdc = new ethers.Contract(
     const balance = await usdc.balanceOf(userAddress);
     const required = ethers.parseUnits(amount.toString(), 6);
 
+    //alert(balance + " - " + required);
     if (balance < required) {
-      alert(`❌ Insufficient ● USDC!!!\n\nYou have:  ${ethers.formatUnits(balance, 18)} ● USDC.`);
+      alert(`❌ Insufficient ● USDC on ${jenengechain}!!!\n\nYou have:  ${ethers.formatUnits(balance, 18)} ● USDC.`);
       return;
     }
 
@@ -430,11 +534,22 @@ const tx = await usdc.transfer(
   required
 );
 
-    alert(`⏳ Sending ${amount} ● USDC...\n\nTx: ${tx.hash}.`);
+    alert(`⏳ Sending ${amount} ● USDC on ${jenengechain} to Treasury...\n\nTx: ${tx.hash}.`);
 
     const receipt = await tx.wait();
-    alert(`✅ Payment Successful!\n\n${amount} ● USDC sent.`);
+    alert(`✅ Payment Successful on ${jenengechain}!\n\n${amount} ● USDC sent.`);
 
+    // 2. Notify backend
+    await fetch(`${BACKEND_URL}/api/settle`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userAddress,
+        amount,
+        chain: chainKey
+      })
+    });
+    
     // Disable controls and enable Predict button
     disableBetControls();
 
@@ -452,6 +567,10 @@ const tx = await usdc.transfer(
     await updateBalances();
 
   } catch (error) {
+    alert(error)
+    const balance = await usdc.balanceOf(userAddress);
+    const required = ethers.parseUnits(amount.toString(), 6);
+    alert(balance + " - " + required);
     console.error(error);
     if (error.code === 4001) {
       alert("❌ Transaction rejected by user.");
@@ -529,12 +648,28 @@ function disableBetControls() {
     btn.style.cursor = "not-allowed";
   });
 
+  const optionBtns4 = document.querySelectorAll('.option-btn-circle-tenanan');
+  optionBtns4.forEach(btn => {
+    btn.disabled = true;
+    btn.style.pointerEvents = 'none';
+    btn.style.opacity = "0.6";
+    btn.style.cursor = "not-allowed";
+  });
+  
   const settleBtn = document.getElementById('settleBtn');
   if (settleBtn) {
     settleBtn.disabled = true;
     settleBtn.style.pointerEvents = 'none';
     settleBtn.style.opacity = "0.6";
     settleBtn.style.cursor = "not-allowed";
+  }
+
+  const chainSelector = document.getElementById('chainSelector');
+  if (chainSelector) {
+    chainSelector.disabled = true;
+    chainSelector.style.pointerEvents = 'none';
+    chainSelector.style.opacity = "0.6";
+    chainSelector.style.cursor = "not-allowed";
   }
 }
 
@@ -572,17 +707,54 @@ async function endGame() {
 
 async function getUserBalance() {
   if (!provider || !userAddress) return "0.0000";
+
   try {
-    const bal = await provider.getBalance(userAddress);
-    return parseFloat(ethers.formatUnits(bal, 18)).toFixed(4);
-  } catch(e) {
+
+    const usdc = new ethers.Contract(
+      CONFIG.chains[selectedChain].usdcAddress,
+      USDC_ABI,
+      provider
+    );
+
+    const balance = await usdc.balanceOf(userAddress);
+
+    return parseFloat(
+      ethers.formatUnits(balance, 6)
+    ).toFixed(4);
+
+  } catch (e) {
+    console.error(e);
+    return "0.0000";
+  }
+}
+
+async function getSystemBalanceFront() {
+  if (!provider || !SYSTEM_WALLET_X) return "0.0000";
+
+  try {
+
+    const usdc = new ethers.Contract(
+      CONFIG.chains[selectedChain].usdcAddress,
+      USDC_ABI,
+      provider
+    );
+
+    const balance = await usdc.balanceOf(SYSTEM_WALLET_X);
+
+    return parseFloat(
+      ethers.formatUnits(balance, 6)
+    ).toFixed(4);
+
+  } catch (e) {
+    console.error(e);
     return "0.0000";
   }
 }
 
 async function getSystemBalance() {
   try {
-    const response = await fetch(`${BACKEND_URL}/api/system-balance`);
+    //const response = await fetch(`${BACKEND_URL}/api/system-balance`);
+    const response = await fetch(`${BACKEND_URL}/api/system-balance?chain=${selectedChain}`);
     const data = await response.json();
     return parseFloat(data.balance).toFixed(4);
   } catch(e) {
@@ -628,10 +800,13 @@ async function claimReward() {
     const response = await fetch(`${BACKEND_URL}/api/claim`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        userAddress: userAddress,
-        amount: currentBet.amount
-      })
+
+body: JSON.stringify({
+  userAddress,
+  amount: currentBet.amount,
+  chain: selectedChain
+})
+
     });
 
     const result = await response.json();
@@ -780,10 +955,13 @@ console.log("Amount:", currentBet.amount);
     const response = await fetch(`${BACKEND_URL}/api/claim`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        userAddress: userAddress,
-        amount: currentBet.amount
-      })
+
+  body: JSON.stringify({
+  userAddress,
+  amount: currentBet.amount,
+  chain: selectedChain
+})
+
     });
 
     const result = await response.json();

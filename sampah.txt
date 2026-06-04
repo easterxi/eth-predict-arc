@@ -73,3 +73,52 @@ function showScreen1() {
 
       let hargawisfix = 0;
       let hargaisehjalan = 0;
+
+
+  <div style="margin-bottom:20px;text-align:center;">
+  <select
+    id="chainSelector" class="rounded-select" 
+    onchange="
+    console.log('dropdown value=', this.value);
+    changeChain(this.value)"
+    style="width:220px;"
+  >
+  <div style="margin-bottom:20px;text-align:center;">
+    <option value="arc-testnet"
+      ${selectedChain==="arc-testnet" ? "selected" : ""}>
+      <img src="/logo/btc_logo_small.png" alt="" />
+      ARC Testnet
+    </option>
+
+    <option value="base-sepolia"
+      ${selectedChain==="base-sepolia" ? "selected" : ""}>
+      <img src="/logo/eth_logo_small.png" alt="" />
+      Base Sepolia
+    </option>
+
+    <!-- <option value="base-mainnet" -->
+      <!-- ${selectedChain==="base-mainnet" ? "selected" : ""}> -->
+      <!-- Base Mainnet -->
+    <!-- </option> -->
+
+    <option value="eth-sepolia"
+      ${selectedChain==="eth-sepolia" ? "selected" : ""}>
+      <img src="/logo/eth_logo_small.png" alt="eth_logo" />
+      ETH Sepolia
+    </option>
+
+    <option value="arbitrum-sepolia"
+      ${selectedChain==="arbitrum-sepolia" ? "selected" : ""}>
+      <img src="/logo/arbitrum_logo_small.png" alt="arbitrum_logo" />
+      Arbitrum Sepolia
+    </option>
+    </div>
+  </select>
+</div>
+
+      <!-- ARC Logo - Centered under disconnect button -->
+      <div style="display:flex;justify-content:center;margin:15px 0 20px 0;">
+        <img src="/logo/arc_logo_small2.png" 
+             alt="arc_logo" 
+             style="width:64px; height:auto; filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.6));">
+      </div>

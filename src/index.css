@@ -332,6 +332,73 @@ h2 { font-size: 1.25rem; margin: 12px 0 6px; font-weight: bold; }
   cursor: not-allowed;
 }
 
+.option-btn-circle-tenanan {
+  
+  background: white;
+  color: rgb(0, 100, 200);
+  text-shadow: 1px 1px 2px black, 0 0 1px black;
+  /*
+  color: rgb(255, 255, 255);
+  text-shadow: 1px 2px rgba(0, 0, 0, 0.5);
+  border: none;
+  */
+
+  width: 64px;                /* Define only one dimension */
+  aspect-ratio: 1 / 1;        /* Forces a perfect 1:1 square */
+  border-radius: 50%;         /* Morphs the square into a circle */
+  
+  display: grid;              /* Centers content (text or icon) */
+  place-items: center;        /* Perfect vertical and horizontal alignment */
+
+  font-size:2.4rem;
+  
+  border: 3px solid transparent;
+  background: 
+    linear-gradient(#ffffff, #ffffff) padding-box, /* Inner background color */
+    linear-gradient(to right, #FF8800, #ffffff) border-box; /* Border gradient */
+
+  filter: drop-shadow(1px 1px 2px black, 0 0 1px black, 0 0 1px black);
+
+  padding: 10px 12px;
+  margin: 0px;
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+  flex: 1;
+  min-width: 64px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+.option-btn-circle-tenanan.active {
+  background: #FF8800;
+
+  color: rgb(255, 255, 255);
+  text-shadow: 1px 1px 2px black, 0 0 1px black, 0 0 1px black;
+  /*
+  color: rgb(255, 255, 255);
+  text-shadow: 1px 2px rgba(0, 0, 0, 0.5);
+  border: none;
+  */
+
+  width: 64px;                /* Define only one dimension */
+  aspect-ratio: 1 / 1;        /* Forces a perfect 1:1 square */
+  border-radius: 50%;         /* Morphs the square into a circle */
+  
+  display: grid;              /* Centers content (text or icon) */
+  place-items: center;        /* Perfect vertical and horizontal alignment */
+
+  border: 3px solid transparent;
+  background: 
+    linear-gradient(#FF8800, #FF8800) padding-box, /* Inner background color */
+    linear-gradient(to right, #FF8800, #ffffff) border-box; /* Border gradient */
+    
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+.option-btn-circle-tenanan:hover {box-shadow: 0 8px 16px 0 rgba(0, 255, 255, 0.6);}
+.option-btn-circle-tenanan.disabledbtn {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .option-btn_old {
   background: white;
   border: 3px solid #FF8800;
@@ -350,6 +417,34 @@ h2 { font-size: 1.25rem; margin: 12px 0 6px; font-weight: bold; }
   background: #FF8800;
   color: black;
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+/* Rounded Select */
+select.rounded-select {
+  padding: 14px 20px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  border-radius: 9999px;           /* Fully rounded (pill shape) */
+
+  border: 3px solid transparent;
+  background: 
+    linear-gradient(#FF8800, #FF8800) padding-box, /* Inner background color */
+    linear-gradient(to right, #FF8800, #ffffff) border-box; /* Border gradient */
+
+  background: rgb(0, 100, 200);
+  color: rgb(255, 255, 255);;
+  text-shadow: 1px 1px 2px black, 0 0 1px black, 0 0 1px black;
+  cursor: pointer;
+  outline: none;
+  width: 100%;
+  max-width: 320px;
+  appearance: none;                /* Remove default browser arrow */
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+select.rounded-select:hover {
+  /* border-color: #1E40AF; */
+  box-shadow: 0 8px 16px 0 rgba(0, 255, 255, 0.6);
 }
 
 .readonly {
