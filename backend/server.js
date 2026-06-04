@@ -10,6 +10,11 @@ const { createEthersAdapterFromPrivateKey } = require("@circle-fin/adapter-ether
 const { ethers } = require('ethers');
 require('dotenv').config();
 
+app.use((req, res, next) => {
+  console.log(req.method, req.url);
+  next();
+});
+
 console.log("SERVER STARTING...");
 
 app.get('/', (req, res) => {
@@ -205,6 +210,8 @@ app.listen(PORT, () => {
 */
 
 const PORT = process.env.PORT || 3000;
+
+console.log("PORT =", process.env.PORT);
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Backend running on port ${PORT}`);
