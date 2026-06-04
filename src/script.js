@@ -33,7 +33,9 @@ const USDC_ABI = [
   "function balanceOf(address owner) view returns (uint256)"
 ];
 
-const BACKEND_URL = '/api';  // Change this when you deploy backend
+//const BACKEND_URL = "https://lucid-cooperation-production-511a.up.railway.app";  // Change this when you deploy backend
+const BACKEND_URL =
+import.meta.env.VITE_BACKEND_URL;
 
 const SYSTEM_WALLET_X = "0x9068d4a1edcea0e553525e8ca5edbe57dfe900b6"; 
 
@@ -503,10 +505,29 @@ async function settleAndPay() {
       return;
     }
 
-    const tx = await usdc.transfer(SYSTEM_WALLET_X, required);
-    await tx.wait();
+const response = await fetch(
+  `${BACKEND_URL}/api/settle`,
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      userAddress,
+      amount,
+      chain: selectedChain
+    })
+  }
+);
 
-    alert(`✅ Payment successful on ${chainKey}`);
+const result = await response.json();
+
+if (!result.success) {
+  throw new Error(result.message);
+}
+
+
+alert(`✅ Payment successful on ${chainKey}`);
 
     disableBetControls();
 

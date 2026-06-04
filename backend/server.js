@@ -1,4 +1,7 @@
 const { AppKit } = require("@circle-fin/app-kit");
+
+const kit = new AppKit();
+
 const { createEthersAdapterFromPrivateKey } = require("@circle-fin/adapter-ethers-v6");
 
 const express = require('express');
@@ -9,24 +12,16 @@ const app = express();
 
 const cors = require('cors');
 
-// === STRONGEST CORS FOR CODESPACES + RAILWAY ===
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');           // Allow all
-  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.header('Access-Control-Allow-Headers', '*');
-  res.header('Access-Control-Allow-Credentials', 'true');
+console.log("SERVER STARTING...");
 
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(200);
-  }
-  next();
+app.listen(PORT, () => {
+  console.log(`🚀 Backend running on port ${PORT}`);
 });
 
+const cors = require("cors");
+
 app.use(cors({
-  origin: "*",
-  methods: ["GET", "POST", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true
+  origin: "*"
 }));
 
 app.use(express.json());
@@ -53,17 +48,59 @@ function getTreasuryWallet() {
 
 // Settle Bet (User pays on their chain to Arc Treasury address)
 app.post('/api/settle', async (req, res) => {
-  const { userAddress, amount, chain } = req.body;
 
-  if (!userAddress || !amount || !chain) {
-    return res.status(400).json({ success: false, message: "Missing data" });
+  try {
+
+    const {
+      userAddress,
+      amount,
+      chain
+    } = req.body;
+
+    const adapter =
+      createEthersAdapterFromPrivateKey({
+        privateKey: process.env.SYSTEM_PRIVATE_KEY
+      });
+
+    const ARC_CHAIN_MAP = {
+      "arc-testnet": "Arc_Testnet",
+      "base-sepolia": "Base_Sepolia",
+      "eth-sepolia": "Ethereum_Sepolia",
+      "arbitrum-sepolia": "Arbitrum_Sepolia"
+    };
+
+    const result = await kit.bridge({
+
+      from: {
+        adapter,
+        chain: ARC_CHAIN_MAP[chain]
+      },
+
+      to: {
+        recipientAddress: process.env.ARC_TREASURY,
+        chain: DEFAULTCHAIN
+      },
+
+      amount: amount.toString()
+
+    });
+
+    return res.json({
+      success: true,
+      txHash: result.txHash
+    });
+
+  } catch(error) {
+
+    console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      message: error.message
+    });
+
   }
 
-  res.json({
-    success: true,
-    message: `Bet of ${amount} USDC received on ${chain}. Funds sent to Arc Treasury.`,
-    chain: chain
-  });
 });
 
 // Claim Reward (Payout from Arc Treasury to user chain)
@@ -79,16 +116,17 @@ app.post('/api/claim', async (req, res) => {
 
     const fullPayout = ethers.parseUnits(amount.toString(), 6) * 180n / 100n;
 
-    const result = await kit.send({
-      from: {
-        adapter: createEthersAdapterFromPrivateKey({ privateKey: process.env.SYSTEM_PRIVATE_KEY }),
-        chain: "Arc_Testnet"
-      },
-      to: userAddress,
-      amount: ethers.formatUnits(fullPayout, 6),
-      token: "USDC",
-      destinationChain: chain   // Bridge to user selected chain
-    });
+  const result = await kit.bridge({
+  from: {
+    adapter,
+    chain: DEFAULTCHAIN
+  },
+  to: {
+    recipientAddress: userAddress,
+    chain: destinationChain
+  },
+  amount: payoutAmount
+});
 
     res.json({
       success: true,
@@ -123,6 +161,13 @@ app.get('/api/system-balance', async (req, res) => {
     console.error(e);
     res.json({ balance: "0" });
   }
+});
+
+app.get('/ping', (req, res) => {
+  res.json({
+    success: true,
+    message: "Backend alive"
+  });
 });
 
 const PORT = process.env.PORT || 3001;
