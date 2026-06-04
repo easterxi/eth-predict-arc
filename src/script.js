@@ -33,7 +33,7 @@ const USDC_ABI = [
   "function balanceOf(address owner) view returns (uint256)"
 ];
 
-const BACKEND_URL = "https://lucid-cooperation-production-511a.up.railway.app";  // Change this when you deploy backend
+const BACKEND_URL = '/api';  // Change this when you deploy backend
 
 const SYSTEM_WALLET_X = "0x9068d4a1edcea0e553525e8ca5edbe57dfe900b6"; 
 
