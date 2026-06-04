@@ -7,6 +7,8 @@ require('dotenv').config();
 
 const app = express();
 
+const cors = require('cors');
+
 // Strong Preflight Handler - Replace your current one with this
 app.use((req, res, next) => {
   const origin = req.headers.origin;
@@ -21,6 +23,13 @@ app.use((req, res, next) => {
   
   next();
 });
+
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
+}));
 
 app.use(express.json());
 app.use((req, res, next) => {
