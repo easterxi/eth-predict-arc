@@ -75,22 +75,22 @@ function getSystemWallet() {
   return new ethers.Wallet(process.env.SYSTEM_PRIVATE_KEY, provider);
 }
 
-//const chainConfig = CHAINS[chain];
-//if (!chainConfig) {
-  //return res.status(400).json({
-    //success: false,
-    //message: "❌ Chain not supported."
-  //});
-//}
+const chainConfig = CHAINS[chain];
+if (!chainConfig) {
+  return res.status(400).json({
+    success: false,
+    message: "❌ Chain not supported."
+  });
+}
 
-//const provider = new ethers.JsonRpcProvider(
-  //chainConfig.rpc
-//);
+const provider = new ethers.JsonRpcProvider(
+  chainConfig.rpc
+);
 
-//const systemWallet = new ethers.Wallet(
-  //process.env.SYSTEM_PRIVATE_KEY,
-  //provider
-//);
+const systemWallet = new ethers.Wallet(
+  process.env.SYSTEM_PRIVATE_KEY,
+  provider
+);
 
 //const provider = new ethers.JsonRpcProvider(process.env.ARC_RPC);
 //const systemWallet = new ethers.Wallet(process.env.SYSTEM_PRIVATE_KEY, provider);

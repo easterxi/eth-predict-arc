@@ -490,6 +490,9 @@ async function settleAndPay() {
 
 //const chain = CONFIG.chains[CONFIG.defaultChain];
 const amount = currentBet.amount;
+
+const chain = selectedChain;
+
 const chainKey = selectedChain;                    // ← Use selected chain
 const chainConfig = CONFIG.chains[chainKey];
 
@@ -546,7 +549,7 @@ const tx = await usdc.transfer(
       body: JSON.stringify({
         userAddress,
         amount,
-        chain: chainKey
+        chain: chain
       })
     });
     
