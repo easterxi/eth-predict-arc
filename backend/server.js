@@ -246,6 +246,44 @@ app.get('/api/test-bridge2', async (req, res) => {
 
 });
 
+app.get('/api/appkit-inspect', async (req, res) => {
+
+  try {
+
+    res.json({
+      methods: Object.getOwnPropertyNames(
+        Object.getPrototypeOf(kit)
+      )
+    });
+
+  } catch (e) {
+
+    res.status(500).json({
+      error: e.message
+    });
+
+  }
+
+});
+
+app.get('/api/appkit-dump', async (req, res) => {
+
+  try {
+
+    res.json({
+      keys: Object.keys(kit)
+    });
+
+  } catch (e) {
+
+    res.status(500).json({
+      error: e.message
+    });
+
+  }
+
+});
+
 app.get('/api/appkit-version', async (req, res) => {
 
   res.json({
