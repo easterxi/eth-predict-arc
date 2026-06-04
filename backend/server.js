@@ -1,9 +1,9 @@
 const express = require('express');
 const app = express();
 
-//const { AppKit } = require("@circle-fin/app-kit");
+const { AppKit } = require("@circle-fin/app-kit");
 
-//const kit = new AppKit();
+const kit = new AppKit();
 
 const { createEthersAdapterFromPrivateKey } = require("@circle-fin/adapter-ethers-v6");
 
@@ -61,7 +61,6 @@ function getTreasuryWallet() {
   return new ethers.Wallet(process.env.SYSTEM_PRIVATE_KEY, provider);
 }
 
-/*
 // Settle Bet (User pays on their chain to Arc Treasury address)
 app.post('/api/settle', async (req, res) => {
 
@@ -157,7 +156,6 @@ app.post('/api/claim', async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 });
-*/
 
 // System Balance (Always show Arc Testnet Treasury)
 app.get('/api/system-balance', async (req, res) => {
