@@ -157,10 +157,10 @@ app.post('/api/claim', async (req, res) => {
 });
 */
 
-// System Balance (Always show Arc Testnet Treasury)
 app.get('/api/system-balance', async (req, res) => {
   try {
     const treasuryWallet = getTreasuryWallet();
+
     const usdc = new ethers.Contract(
       CHAINS["arc-testnet"].usdc,
       ["function balanceOf(address) view returns (uint256)"],
@@ -169,14 +169,18 @@ app.get('/api/system-balance', async (req, res) => {
 
     const balance = await usdc.balanceOf(treasuryWallet.address);
 
-res.json({
-  wallet: treasuryWallet.address,
-  usdcContract: CHAINS["arc-testnet"].usdc,
-  balance: ethers.formatUnits(balance, 6)
-});
+    res.json({
+      wallet: treasuryWallet.address,
+      usdcContract: CHAINS["arc-testnet"].usdc,
+      balance: ethers.formatUnits(balance, 6)
+    });
+
   } catch (e) {
     console.error(e);
-    res.json({ balance: "0123" });
+
+    res.status(500).json({
+      error: e.message
+    });
   }
 });
 
