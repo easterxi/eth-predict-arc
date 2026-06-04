@@ -17,16 +17,9 @@ app.use((req, res, next) => {
 
 console.log("SERVER STARTING...");
 
-app.get('/', (req, res) => {
-  res.send('SERVER WORKING');
-});
-
-app.get('/ping', (req, res) => {
-  res.json({
-    success: true,
-    message: 'Backend alive'
-  });
-});
+//app.get('/', (req, res) => {
+  //res.send('SERVER WORKING');
+//});
 
 process.on('uncaughtException', (err) => {
   console.error('UNCAUGHT EXCEPTION:', err);
@@ -124,6 +117,7 @@ app.post('/api/settle', async (req, res) => {
 });
 
 // Claim Reward (Payout from Arc Treasury to user chain)
+/*
 app.post('/api/claim', async (req, res) => {
   const { userAddress, amount, chain } = req.body;
 
@@ -161,6 +155,7 @@ app.post('/api/claim', async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 });
+*/
 
 // System Balance (Always show Arc Testnet Treasury)
 app.get('/api/system-balance', async (req, res) => {
@@ -181,13 +176,6 @@ app.get('/api/system-balance', async (req, res) => {
     console.error(e);
     res.json({ balance: "0" });
   }
-});
-
-app.get('/ping', (req, res) => {
-  res.json({
-    success: true,
-    message: "Backend alive"
-  });
 });
 
 app.get('/ping', (req, res) => {
