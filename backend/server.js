@@ -83,14 +83,14 @@ function getSystemWallet() {
   //});
 //}
 
-const provider = new ethers.JsonRpcProvider(
-  chainConfig.rpc
-);
+//const provider = new ethers.JsonRpcProvider(
+  //chainConfig.rpc
+//);
 
-const systemWallet = new ethers.Wallet(
-  process.env.SYSTEM_PRIVATE_KEY,
-  provider
-);
+//const systemWallet = new ethers.Wallet(
+  //process.env.SYSTEM_PRIVATE_KEY,
+  //provider
+//);
 
 //const provider = new ethers.JsonRpcProvider(process.env.ARC_RPC);
 //const systemWallet = new ethers.Wallet(process.env.SYSTEM_PRIVATE_KEY, provider);
