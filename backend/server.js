@@ -7,11 +7,8 @@ const kit = new AppKit();
 
 const { createEthersAdapterFromPrivateKey } = require("@circle-fin/adapter-ethers-v6");
 
-const express = require('express');
 const { ethers } = require('ethers');
 require('dotenv').config();
-
-const app = express();
 
 console.log("SERVER STARTING...");
 
