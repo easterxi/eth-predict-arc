@@ -158,27 +158,29 @@ app.post('/api/claim', async (req, res) => {
 */
 
 app.get('/api/system-balance', async (req, res) => {
-
   try {
 
-    const treasuryWallet = getTreasuryWallet();
+    const provider = new ethers.JsonRpcProvider(process.env.ARC_RPC);
+
+    const code = await provider.getCode(
+      "0x3600000000000000000000000000000000000000"
+    );
 
     res.json({
-      treasuryAddress: treasuryWallet.address,
-      arcRpc: process.env.ARC_RPC,
-      usdcContract: CHAINS["arc-testnet"].usdc
+      codeLength: code.length,
+      usdcContract: "0x3600000000000000000000000000000000000000"
     });
 
-  } catch(e) {
+  } catch (e) {
 
     console.error(e);
 
     res.status(500).json({
-      error: e.message
+      error: e.message,
+      stack: e.stack
     });
 
   }
-
 });
 
 app.get('/ping', (req, res) => {
