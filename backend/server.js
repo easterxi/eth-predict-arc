@@ -3,6 +3,11 @@ const app = express();
 
 const { AppKit } = require("@circle-fin/app-kit");
 
+console.log("kit.estimateBridge =", typeof kit.estimateBridge);
+console.log("kit.bridge =", kit.bridge);
+console.log(require("@circle-fin/app-kit/package.json").version);
+console.log(typeof kit.estimateBridge);
+
 const kit = new AppKit();
 
 const { createEthersAdapterFromPrivateKey } = require("@circle-fin/adapter-ethers-v6");
