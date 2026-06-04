@@ -14,6 +14,17 @@ export default defineConfig({
     },
   },
 
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://lucid-cooperation-production-511a.up.railway.app',
+        changeOrigin: true,
+        secure: true,
+        rewrite: (path) => path.replace(/^\/api/, '/api')
+      }
+    }
+  }
+  
   // Optional: Set base if deploying to subfolder later
   // base: '/',
 })
