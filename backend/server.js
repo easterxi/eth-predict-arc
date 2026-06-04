@@ -158,30 +158,27 @@ app.post('/api/claim', async (req, res) => {
 */
 
 app.get('/api/system-balance', async (req, res) => {
+
   try {
+
     const treasuryWallet = getTreasuryWallet();
 
-    const usdc = new ethers.Contract(
-      CHAINS["arc-testnet"].usdc,
-      ["function balanceOf(address) view returns (uint256)"],
-      treasuryWallet.provider
-    );
-
-    const balance = await usdc.balanceOf(treasuryWallet.address);
-
     res.json({
-      wallet: treasuryWallet.address,
-      usdcContract: CHAINS["arc-testnet"].usdc,
-      balance: ethers.formatUnits(balance, 6)
+      treasuryAddress: treasuryWallet.address,
+      arcRpc: process.env.ARC_RPC,
+      usdcContract: CHAINS["arc-testnet"].usdc
     });
 
-  } catch (e) {
+  } catch(e) {
+
     console.error(e);
 
     res.status(500).json({
       error: e.message
     });
+
   }
+
 });
 
 app.get('/ping', (req, res) => {
