@@ -3,12 +3,26 @@ const app = express();
 
 const { AppKit } = require("@circle-fin/app-kit");
 
+const kit = new AppKit();
+
 console.log("kit.estimateBridge =", typeof kit.estimateBridge);
 console.log("kit.bridge =", kit.bridge);
 console.log(require("@circle-fin/app-kit/package.json").version);
 console.log(typeof kit.estimateBridge);
 
-const kit = new AppKit();
+app.get('/api/debug-context', async (req, res) => {
+  try {
+    res.json(kit.context);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+console.log(JSON.stringify(kit.context, null, 2));
+
+console.log(kit.estimateBridge.toString());
+
+console.log(kit.bridge.toString());
 
 const { createEthersAdapterFromPrivateKey } = require("@circle-fin/adapter-ethers-v6");
 
@@ -394,8 +408,13 @@ app.get('/api/test-estimate', async (req, res) => {
 
       from: {
         adapter,
-        chain: "Ethereum_Sepolia"
+        chain: "Arc_Testnet"
       },
+
+        to: {
+    chain: "Arc_Testnet",
+    address: "0x8c7265922029899ec69755c96c7c83363c197e90"
+  },
 
       amount: "1"
 
