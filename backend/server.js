@@ -333,6 +333,55 @@ app.listen(PORT, () => {
 });
 */
 
+app.get('/api/test-bridge-base-to-arc', async (req, res) => {
+  try {
+
+    const adapter = createEthersAdapterFromPrivateKey({
+      privateKey: process.env.SYSTEM_PRIVATE_KEY
+    });
+
+    const result = await kit.bridge({
+
+      from: {
+        adapter,
+        chain: "Base_Sepolia"
+      },
+
+      to: {
+        adapter,
+        chain: "Arc_Testnet",
+        recipientAddress: process.env.ARC_TREASURY
+      },
+
+      amount: "1",
+      token: "USDC"
+
+    });
+
+    res.send(
+      JSON.stringify(
+        result,
+        (_, v) =>
+          typeof v === "bigint"
+            ? v.toString()
+            : v,
+        2
+      )
+    );
+
+  } catch (e) {
+
+    console.error(e);
+
+    res.status(500).json({
+      error: e.message,
+      cause: e.cause,
+      stack: e.stack
+    });
+
+  }
+});
+
 const PORT = process.env.PORT || 3000;
 
 console.log("PORT =", process.env.PORT);
