@@ -88,11 +88,11 @@ console.log("BRIDGE PARAMS:");
 
 console.dir({
   from: {
-    chain: SOURCE_CHAIN
+    chain: CHAIN_MAP[chain]
   },
   to: {
-    chain: DEST_CHAIN,
-    recipientAddress: userAddress
+    chain: DEFAULTCHAIN,
+    recipientAddress: process.env.ARC_TREASURY
   },
   amount
 }, {
@@ -108,7 +108,7 @@ console.dir({
 
       to: {
         adapter,
-        chain: "Arc_Testnet",
+        chain: DEFAULTCHAIN,
         recipientAddress: process.env.ARC_TREASURY
       },
 
@@ -155,11 +155,11 @@ console.log("BRIDGE PARAMS:");
 
 console.dir({
   from: {
-    chain: SOURCE_CHAIN
+    chain: CHAIN_MAP[chain]
   },
   to: {
-    chain: DEST_CHAIN,
-    recipientAddress: userAddress
+    chain: DEFAULTCHAIN,
+    recipientAddress: process.env.ARC_TREASURY
   },
   amount
 }, {
@@ -170,7 +170,7 @@ console.dir({
 
       from: {
         adapter,
-        chain: "Arc_Testnet"
+        chain: DEFAULTCHAIN
       },
 
       to: {
