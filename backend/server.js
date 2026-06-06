@@ -299,6 +299,12 @@ app.listen(PORT, () => {
 });
 */
 
+app.get("/version", (req, res) => {
+  res.json({
+    version: "2026-06-06-v1"
+  });
+});
+
 app.get('/api/test-bridge-base-to-arc', async (req, res) => {
   try {
 
