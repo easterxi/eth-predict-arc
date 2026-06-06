@@ -10,12 +10,12 @@ console.log("kit.bridge =", kit.bridge);
 console.log(require("@circle-fin/app-kit/package.json").version);
 console.log(typeof kit.estimateBridge);
 
-app.get('/api/debug-context', async (req, res) => {
-  try {
-    res.json(kit.context);
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
+app.get('/api/debug-context', (req, res) => {
+  res.json({
+    context: kit.context,
+    actions: kit.context?.actions,
+    bridge: kit.context?.actions?.bridge
+  });
 });
 
 console.log(JSON.stringify(kit.context, null, 2));
