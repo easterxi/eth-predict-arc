@@ -544,6 +544,43 @@ app.get("/api/system-balance", async (req, res) => {
 
 });
 
+app.get("/api/user-balance", async (req, res) => {
+
+  try {
+
+    const { chain, address } = req.query;
+
+    const provider =
+      new ethers.JsonRpcProvider(
+        CHAIN_CONFIG[chain].rpcUrl
+      );
+
+    const usdc = new ethers.Contract(
+      CHAIN_CONFIG[chain].usdcAddress,
+      USDC_ABI,
+      provider
+    );
+
+    const balance =
+      await usdc.balanceOf(address);
+
+    res.json({
+      success: true,
+      balance:
+        ethers.formatUnits(balance, 6)
+    });
+
+  } catch (e) {
+
+    res.status(500).json({
+      success: false,
+      message: e.message
+    });
+
+  }
+
+});
+
 app.get('/ping', (req, res) => {
 res.json(
   jsonBigInt({

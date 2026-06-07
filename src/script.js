@@ -30,7 +30,9 @@ let jenengechain = "MBOH";
 
 const USDC_ABI = [
   "function transfer(address to, uint amount) returns (bool)",
-  "function balanceOf(address owner) view returns (uint256)"
+  "function balanceOf(address owner) view returns (uint256)",
+  "function symbol() view returns (string)",
+  "function decimals() view returns (uint8)"
 ];
 
 //const BACKEND_URL = "https://lucid-cooperation-production-511a.up.railway.app";  // Change this when you deploy backend
@@ -817,6 +819,10 @@ async function getUserBalance() {
       "USDC =",
       CONFIG.chains[selectedChain].usdcAddress
     );
+console.log(
+  "RPC =",
+  CONFIG.chains[selectedChain].rpcUrl
+);
 
     const usdc = new ethers.Contract(
       CONFIG.chains[selectedChain].usdcAddress,
@@ -829,13 +835,34 @@ async function getUserBalance() {
       userAddress
     );
 
+const rpcProvider = new ethers.JsonRpcProvider(
+  CONFIG.chains[selectedChain].rpcUrl
+);
+
+const code = await rpcProvider.getCode(
+  CONFIG.chains[selectedChain].usdcAddress
+);
+
+console.log("Contract code:", code);
+console.log("Code length:", code.length);
+
+console.log(
+  "Symbol:",
+  await usdc.symbol()
+);
+
+console.log(
+  "Decimals:",
+  await usdc.decimals()
+);
+
     const balance = await usdc.balanceOf(userAddress);
 
     console.log(
       "Balance raw =",
       balance.toString()
     );
-    
+
     return parseFloat(
       ethers.formatUnits(balance, 6)
     ).toFixed(4);
