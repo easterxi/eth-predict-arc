@@ -483,7 +483,7 @@ async function getPrice(asset) {
       throw new Error("Invalid response");
     }
   } catch (e) {
-    console.warn(`❌ Failed fetching ${asset} price from Binance.`, e);
+    console.warn(`❌ Failed fetching ${asset} price from Binance. `, e);
     
     // Fallback prices
     if (asset === 'BTC') return 99999;
@@ -527,7 +527,7 @@ async function settleAndPay() {
     );
 
     if (balance < required) {
-      alert("❌ Insufficient USDC");
+      alert("❌ Insufficient ● USDC.");
       return;
     }
 
@@ -536,7 +536,7 @@ async function settleAndPay() {
     // USER PAYS TREASURY
     //
 
-    alert("Please approve the USDC transfer.");
+    alert("▶️ Do approve the ● USDC transfer on your wallet.");
 
     disableBetControls();
 
@@ -609,7 +609,7 @@ if (chainKey !== "arc-testnet") {
 }
 
 alert(
-  "✅ Payment received."
+  "✅ Bet settled. Countdown starting..."
 );
 
 //disableBetControls();
@@ -623,8 +623,7 @@ startPrediction();
   enableBetControls();
 
     alert(
-      "Payment failed: " +
-      error.message
+      "❌ Bet failed: " + error.message + "."
     );
 
   }
@@ -803,7 +802,7 @@ async function endGame() {
   if (userWon) {
     await autoClaimReward();     // Automatic payout from Arc Treasury
   } else {
-    alert("You LOSE.");
+    alert("😂 You lose.");
     resetGame();
   }
 }
@@ -1062,9 +1061,9 @@ async function autoClaimReward() {
     console.log("Backend Response:", result);   // ← See this in console
 
     if (result.success) {
-      alert(`🎉 Success!\n\n${result.message}\n\nTx: ${result.txHash}`);
+      alert(`🎉 Reward sent!\n\n${result.message}\nTx: ${result.txHash}`);
     } else {
-      alert("❌ Claim failed: " + (result.message || "Unknown error"));
+      alert("❌ Claim failed: " + (result.message || "Unknown error") + ".");
     }
   } catch (error) {
     console.error("Fetch Error:", error);
