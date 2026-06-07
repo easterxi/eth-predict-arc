@@ -810,6 +810,19 @@ async function endGame() {
 }
 
 async function getUserBalance() {
+
+  const response = await fetch(
+    `${BACKEND_URL}/api/user-balance?chain=${selectedChain}&address=${userAddress}`
+  );
+
+  const data = await response.json();
+
+  return parseFloat(
+    data.balance
+  ).toFixed(4);
+}
+
+async function getUserBalanceLama() {
   if (!provider || !userAddress) return "0.0000";
 
   try {
