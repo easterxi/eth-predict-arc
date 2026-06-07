@@ -35,7 +35,7 @@ const CONFIG = {
 
     "eth-sepolia": {
       chainId: "0xaa36a7",
-      rpcUrl: "https://rpc.sepolia.org",
+      rpcUrl: "https://ethereum-sepolia-rpc.publicnode.com",
       name: "Ethereum Sepolia",
       explorer: "https://sepolia.etherscan.io",
       usdcAddress: "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238"
