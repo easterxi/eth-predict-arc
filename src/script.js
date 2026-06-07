@@ -1061,7 +1061,8 @@ async function autoClaimReward() {
     console.log("Backend Response:", result);   // ← See this in console
 
     if (result.success) {
-      alert(`🎉 Reward sent!\n\n${result.message}\nTx: ${result.txHash}`);
+      //alert(`🎉 Reward sent!\n\n${result.message}\nTx: ${result.txHash}`);
+      alert(`🥂 Reward sent!`);
     } else {
       alert("❌ Claim failed: " + (result.message || "Unknown error") + ".");
     }
