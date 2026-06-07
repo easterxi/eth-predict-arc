@@ -379,6 +379,17 @@ async function showScreen2() {
 
   startLivePriceUpdates();
   updateBalances();
+
+if (balanceInterval) {
+  clearInterval(balanceInterval);
+}
+
+balanceInterval =
+  setInterval(
+    updateBalances,
+    3000
+  );
+
   updatePriceTitle();
 }
 
@@ -559,21 +570,49 @@ async function settleAndPay() {
       }
     );
 
-    const result = await response.json();
+  const result = await response.json();
 
-    if (!result.success) {
-      throw new Error(
-        result.message || "Bridge failed"
-      );
+if (!result.success) {
+  throw new Error(
+    result.message || "Settlement failed"
+  );
+}
+
+// Skip bridge if already on Arc
+if (chainKey !== "arc-testnet") {
+
+  console.log("Calling bridge-to-arc...");
+
+  const bridgeResponse = await fetch(
+    `${BACKEND_URL}/api/bridge-to-arc`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        chain: chainKey,
+        amount
+      })
     }
+  );
 
-    alert(
-      `✅ Payment received.\nBridge queued by treasury.`
-    );
+  const bridgeResult =
+    await bridgeResponse.json();
 
-    disableBetControls();
+  console.log(
+    "Bridge result:",
+    bridgeResult
+  );
+}
 
-    startPrediction();
+alert(
+  "✅ Payment received."
+);
+
+disableBetControls();
+
+startPrediction();
 
   } catch (error) {
 

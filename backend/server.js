@@ -238,6 +238,10 @@ app.post('/api/bridge-to-arc', async (req, res) => {
       amount
     } = req.body;
 
+    console.log("BRIDGE REQUEST:");
+    console.log("chain =", chain);
+    console.log("amount =", amount);
+
     // Skip bridge if already on Arc
     if (chain === "arc-testnet") {
 
@@ -248,6 +252,8 @@ app.post('/api/bridge-to-arc', async (req, res) => {
     }
 
     const adapter = getAdapter();
+
+    console.log("calling kit.bridge()");
 
     const result = await kit.bridge({
 
@@ -268,6 +274,9 @@ app.post('/api/bridge-to-arc', async (req, res) => {
 
     });
 
+    console.log("BRIDGE SUCCESS");
+    console.dir(result, { depth: null });
+
     res.send(
       JSON.stringify(
         result,
@@ -279,6 +288,9 @@ app.post('/api/bridge-to-arc', async (req, res) => {
     );
 
   } catch (e) {
+
+    console.error("BRIDGE FAILED:");
+    console.error(e);
 
     res.status(500).json({
       error: e.message
