@@ -382,7 +382,7 @@ app.post('/api/claim', async (req, res) => {
       amount
     } = req.body;
 
-    const payout = Number(amount) * 2;
+    const payout = (Number(amount) * 1.8).toFixed(6);
 
 //
 // ARC USER
@@ -439,7 +439,7 @@ if (chain === "arc-testnet") {
           userAddress
       },
 
-      amount: amount.toString(),
+      amount: payout,
       token: "USDC"
 
     });
