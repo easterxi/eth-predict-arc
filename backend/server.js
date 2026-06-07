@@ -444,15 +444,22 @@ if (chain === "arc-testnet") {
 
     });
 
-    res.send(
-      JSON.stringify(
-        result,
-        (_, v) =>
-          typeof v === "bigint"
-            ? v.toString()
-            : v
-      )
-    );
+res.send(
+  JSON.stringify(
+    {
+      success: true,
+      txHash:
+        result.transactionHash ||
+        result.txHash ||
+        null,
+      bridgeResult: result
+    },
+    (_, v) =>
+      typeof v === "bigint"
+        ? v.toString()
+        : v
+  )
+);
 
   } catch (e) {
 
