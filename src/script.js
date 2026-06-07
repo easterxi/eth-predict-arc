@@ -812,14 +812,30 @@ async function getUserBalance() {
 
   try {
 
+    console.log("CHAIN =", selectedChain);
+    console.log(
+      "USDC =",
+      CONFIG.chains[selectedChain].usdcAddress
+    );
+
     const usdc = new ethers.Contract(
       CONFIG.chains[selectedChain].usdcAddress,
       USDC_ABI,
       provider
     );
 
+    console.log(
+      "Reading balance for",
+      userAddress
+    );
+
     const balance = await usdc.balanceOf(userAddress);
 
+    console.log(
+      "Balance raw =",
+      balance.toString()
+    );
+    
     return parseFloat(
       ethers.formatUnits(balance, 6)
     ).toFixed(4);

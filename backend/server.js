@@ -483,11 +483,6 @@ app.get('/api/balance', async (req, res) => {
         CHAINS[chain].rpc
       );
 
-console.log(
-  "USDC ADDRESS:",
-  chainConfig.usdcAddress
-);
-
     const usdc =
       new ethers.Contract(
         CHAINS[chain].usdc,
