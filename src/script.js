@@ -485,7 +485,7 @@ async function getPrice(asset) {
       throw new Error("Invalid response");
     }
   } catch (e) {
-    console.warn(`❌ Failed fetching ${asset} price from Binance. `, e);
+    console.warn(`❌ Fail fetching ${asset} price from Binance. `, e);
     
     // Fallback prices
     if (asset === 'BTC') return 99999;
@@ -1140,10 +1140,10 @@ async function switchWallet() {
     });
     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
     userAddress = accounts[0];
-    alert("Wallet switched successfully");
+    alert("✅ Wallet switched.");
     showScreen2();
   } catch (e) {
-    alert("Failed to switch wallet");
+    alert("❌ Fail to switch wallet.");
   }
 }
 
