@@ -349,7 +349,7 @@ async function showScreen2() {
       </div>
       
       <div style="display:flex; align-items:center; gap:10px; margin:10px 0 6px 0;">
-        <div class="readonly2" style="flex: 50%; text-align:left;" margin-left: 120px;>
+        <div class="readonly3" style="flex: 50%; text-align:left;" margin-left: 120px;>
          ○ marked price •
         </div>
         <input type="text" id="livePrice1" class="readonly_txt22" value="Loading..." readonly style="flex:1; text-align:right;" border-radius: 0px; margin-left: margin-right: 120px;>
