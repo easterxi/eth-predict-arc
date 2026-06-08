@@ -216,7 +216,8 @@ async function showScreen2() {
   document.getElementById('root').innerHTML = `
     <div class="container">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <div style="margin:0" class="readonly3">arcDicted ○ with arc app kits</div>
+        <div style="margin:0" class="readonly33">arcDicted</div>
+        <div style="margin:0" class="readonly3">○ with arc app kits</div>
         <div onclick="disconnectWallet()" class="btn_smol">
           ${shortAddress}
         </div>
@@ -271,11 +272,11 @@ async function showScreen2() {
 <hr>
 
       <div class="readonly3" style="display:flex; justify-content:space-between; align-items:center;">
-        ○ treasury's &#9679; USDC balance • <span id="systemBalanceDisplay"> ${systemBal} &#9679; USDC</span>
+        ○ treasury • <span id="systemBalanceDisplay"> ${systemBal} &#9679; USDC</span>
       </div>
 
       <div class="readonly3" style="display:flex; justify-content:space-between; align-items:center;">
-        ○ your &#9679; USDC balance • <span id="userBalanceDisplay"> ${userBal} &#9679; USDC</span>
+        ○ your wallet • <span id="userBalanceDisplay"> ${userBal} &#9679; USDC</span>
       </div>
 
 <hr>
