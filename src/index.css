@@ -331,6 +331,10 @@ h2 { font-size: 1.25rem; margin: 12px 0 6px; font-weight: bold; }
   flex: 1;
   min-width: 90px;
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  
+  .option-container {
+    flex-direction: column;
+  }
 }
 .option-btn-circle.active {
   background: #FF8800;
