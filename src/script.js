@@ -112,8 +112,7 @@ async function connectWallet() {
 // ==================== SCREENS ====================
 function showScreen1() {
   document.getElementById('root').innerHTML = `
-    <div style="height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:0px;background:transparent;padding:0px"; padding-top:40px>
-
+     <div class="container">
       <img src="/logo/arc_mascot_title2_fit.png"
            alt="arcdicted_mascot" 
            style="margin-top:40px; margin-bottom:30px; max-width:480px; width:90%;; height:auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));">
