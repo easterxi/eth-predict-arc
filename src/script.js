@@ -226,10 +226,10 @@ async function showScreen2() {
         0. pick the chain you want to use.</span>
       </div>
 
-<div class="flex-row" style="justify-content:center; display:flex; gap:12px; margin-bottom:20px; width:70%; align-items:center; margin:0 auto;">
+<div class="flex-row" style="justify-content:center; display:flex; gap:12px; margin-bottom:20px; width:100%; align-items:center; margin:0 auto;">
 
   <div
-    class="option-btn-circle-tenanan ${selectedChain==='arc-testnet' ? 'active' : ''}"
+    class="option-btn-circle ${selectedChain==='arc-testnet' ? 'active' : ''}"
     onclick="changeChain('arc-testnet')"
   >
     <img src="/logo/arc_logo_small2_opaq.png"
@@ -253,7 +253,7 @@ async function showScreen2() {
   </div>
 
   <div
-    class="option-btn-circle-tenanan ${selectedChain==='arbitrum-sepolia' ? 'active' : ''}"
+    class="option-btn-circle ${selectedChain==='arbitrum-sepolia' ? 'active' : ''}"
     onclick="changeChain('arbitrum-sepolia')"
   >
     <img src="/logo/arb_logo_small.png"
@@ -282,7 +282,7 @@ async function showScreen2() {
 
 <div class="flex-row">
   <div class="option-btn-circle ${currentBet.asset==='BTC'?'active':''}" onclick="selectAsset('BTC')">
-    <img src="/logo/btc_logo_small.png" alt="btc_logo" width="32" height="32" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));>
+    <img src="/logo/btc_logo_small_coloradjusted.png" alt="btc_logo" width="32" height="32" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));>
     
   </div>
 
@@ -360,6 +360,25 @@ async function showScreen2() {
       <div class="readonly2"">
         5. settle your bet.</span>
       </div>
+
+<div style="width:100%; display:flex; gap:10px; margin-bottom:10px;">
+  <button
+    class="btn_green"
+    style="flex:1;"
+    onclick="selectDirection('HIGHER'); settleAndPay();">
+    <img src="/logo/up_logo_small_white.png" alt="higher_logo" width="48" height="48" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));>
+    
+  </button>
+
+  <button
+    class="btn_red"
+    style="flex:1;"
+    onclick="selectDirection('LOWER'); settleAndPay();">
+    <img src="/logo/down_logo_small_white.png" alt="higher_logo" width="48" height="48" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));>
+
+  </button>
+</div>
+
       <button class="btn" id="settleBtn" onclick="settleAndPay()">settle ${currentBet.amount} &#9679; USDC</button>
       
       <button id="predictBtn" class="btn_hide" onclick="startPrediction()" 
@@ -425,9 +444,9 @@ function startLivePriceUpdates() {
 
       // Dynamic Color Logic
       if (pricerun > pricefixed) {
-        tb2.style.background = "#22C55E";        // Green
+        tb2.style.background = "#009b00";        // Green
       } else if (pricerun < pricefixed) {
-        tb2.style.background = "#EF4444";        // Red
+        tb2.style.background = "#ff0000";        // Red
       } else {
         tb2.style.background = "#000000";        // Default greyish
       }
@@ -451,9 +470,9 @@ function startLivePriceUpdates() {
 
       // Dynamic Color Logic
       if (price2 > price1) {
-        tb2.style.background = "#22C55E";        // Green
+        tb2.style.background = "#009b00";        // Green
       } else if (price2 < price1) {
-        tb2.style.background = "#EF4444";        // Red
+        tb2.style.background = "#ff0000";        // Red
       } else {
         tb2.style.background = "#000000";        // Default greyish
       }
@@ -707,6 +726,22 @@ function disableBetControls() {
     btn.style.cursor = "not-allowed";
   });
   
+  const optionBtns5 = document.querySelectorAll('.btn_green');
+  optionBtns5.forEach(btn => {
+    btn.disabled = true;
+    btn.style.pointerEvents = 'none';
+    btn.style.opacity = "0.6";
+    btn.style.cursor = "not-allowed";
+  });
+
+  const optionBtns6 = document.querySelectorAll('.btn_red');
+  optionBtns6.forEach(btn => {
+    btn.disabled = true;
+    btn.style.pointerEvents = 'none';
+    btn.style.opacity = "0.6";
+    btn.style.cursor = "not-allowed";
+  });
+
   const settleBtn = document.getElementById('settleBtn');
   if (settleBtn) {
     settleBtn.disabled = true;
@@ -760,6 +795,22 @@ function enableBetControls() {
     document.querySelectorAll('.option-btn-circle-tenanan');
 
   optionBtns4.forEach(btn => {
+    btn.disabled = false;
+    btn.style.pointerEvents = 'auto';
+    btn.style.opacity = "1";
+    btn.style.cursor = "pointer";
+  });
+
+  const optionBtns5 = document.querySelectorAll('.btn_green');
+  optionBtns5.forEach(btn => {
+    btn.disabled = false;
+    btn.style.pointerEvents = 'auto';
+    btn.style.opacity = "1";
+    btn.style.cursor = "pointer";
+  });
+
+  const optionBtns6 = document.querySelectorAll('.btn_red');
+  optionBtns6.forEach(btn => {
     btn.disabled = false;
     btn.style.pointerEvents = 'auto';
     btn.style.opacity = "1";

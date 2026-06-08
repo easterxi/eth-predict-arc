@@ -88,6 +88,78 @@ h2 { font-size: 1.25rem; margin: 12px 0 6px; font-weight: bold; }
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
 }
 
+.btn_green {
+  background: #009b00;
+  color: rgb(255, 255, 255);
+  text-shadow: 1px 1px 2px black, 0 0 1px black, 0 0 1px black;
+  /*
+  color: rgb(255, 255, 255);
+  text-shadow: 1px 2px rgba(0, 0, 0, 0.5);
+  border: none;
+  */
+
+  border: 3px solid transparent;
+  border-radius: 3px;
+  background: 
+    linear-gradient(#009b00, #009b00) padding-box, /* Inner background color */
+    linear-gradient(to right, #009b00, #ffffff) border-box; /* Border gradient */
+
+  padding: 14px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-transform: none;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  margin: 8px 0;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+.btn_green:hover {box-shadow: 0 8px 16px 0 rgba(0, 255, 255, 0.6);}
+.btn_green.disabledbtn {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.btn_green:active {
+  transform: scale(1.01);
+}
+
+.btn_red {
+  background: #ff0000;
+  color: rgb(255, 255, 255);
+  text-shadow: 1px 1px 2px black, 0 0 1px black, 0 0 1px black;
+  /*
+  color: rgb(255, 255, 255);
+  text-shadow: 1px 2px rgba(0, 0, 0, 0.5);
+  border: none;
+  */
+
+  border: 3px solid transparent;
+  border-radius: 3px;
+  background: 
+    linear-gradient(#ff0000, #ff0000) padding-box, /* Inner background color */
+    linear-gradient(to left, #ff0000, #ffffff) border-box; /* Border gradient */
+
+  padding: 14px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-transform: none;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  margin: 8px 0;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+.btn_red:hover {box-shadow: 0 8px 16px 0 rgba(0, 255, 255, 0.6);}
+.btn_red.disabledbtn {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.btn_red:active {
+  transform: scale(1.01);
+}
+
 .btn_rev {
   background: #FF8800;
   color: rgb(255, 255, 255);
@@ -547,7 +619,7 @@ select.rounded-select:hover {
   flex-wrap: wrap;
 }
 
-.btn, .btn-grad, .option-btn, .option-btn.active, .btn_rev, .btn_smol {
+.btn, .btn-grad, .option-btn, .option-btn.active, .btn_rev, .btn_smol, .btn_green, .btn_red {
   border-radius: 9999px;   /* Fully rounded */
 }
 
