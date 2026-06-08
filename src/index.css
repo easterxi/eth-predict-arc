@@ -697,28 +697,28 @@ input[readonly_txt2] {
 
 @media (max-width: 768px) {
   .readonly {
-    font-size: 14px;
+    font-size: 16px;
   }
   .readonly2 {
-    font-size: 14px;
+    font-size: 16px;
   }  .readonly {
-    font-size: 14px;
+    font-size: 16px;
   }
   .readonly3 {
-    font-size: 14px;
+    font-size: 16px;
   }
   .readonly_txt {
-    font-size: 14px;
+    font-size: 16px;
   }
   .readonly_txt2 {
-    font-size: 14px;
+    font-size: 16px;
   }
   .readonly_txt22 {
-    font-size: 14px;
+    font-size: 16px;
   }
 
   .txtxt {
-    font-size: 14px;
+    font-size: 16px;
   }
 
   .flex-row {
