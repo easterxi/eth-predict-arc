@@ -211,14 +211,6 @@ h2 { font-size: 1.25rem; margin: 12px 0 6px; font-weight: bold; }
   color: rgb(0, 100, 200);
 }
 
-@media (max-width: 768px) {
-
-  .txtxt {
-    font-size: 16px;
-  }
-
-}
-
 .btn_smol {
   background: #FF8800;
   color: rgb(255, 255, 255);
@@ -643,27 +635,6 @@ select.rounded-select:hover {
   outline: none;                  /* Remove focus outline */
 }
 
-@media (max-width: 768px) {
-
-  .readonly {
-    font-size: 16px;
-  }
-  .readonly2 {
-    font-size: 16px;
-  }  .readonly {
-    font-size: 16px;
-  }
-  .readonly3 {
-    font-size: 16px;
-  }
-  .readonly_txt {
-    font-size: 16px;
-  }
-  .readonly_txt2 {
-    font-size: 16px;
-  }
-}
-
 .flex-row {
   display: flex;
   gap: 8px;
@@ -671,27 +642,11 @@ select.rounded-select:hover {
   flex-wrap: wrap;
 }
 
-@media (max-width: 768px) {
-
-  .flex-row {
-    flex-direction: column;
-  }
-
-}
-
 .flex-row2 {
   display: flex;
   gap: 8px;
   justify-content: center;
   flex-wrap: wrap;
-}
-
-@media (max-width: 768px) {
-
-  .flex-row2 {
-    flex-direction: column;
-  }
-
 }
 
 .btn, .btn-grad, .option-btn, .option-btn.active, .btn_rev, .btn_smol, .btn_green, .btn_red {
@@ -716,4 +671,42 @@ input[readonly_txt2] {
   pointer-events: none !important;
   user-select: none !important;
   cursor: default !important;
+}
+
+@media (max-width: 768px) {
+  .btn {
+    font-size: 16px;
+  }
+  .btn_rev {
+    font-size: 16px;
+  }
+
+  .readonly {
+    font-size: 12px;
+  }
+  .readonly2 {
+    font-size: 12px;
+  }  .readonly {
+    font-size: 12px;
+  }
+  .readonly3 {
+    font-size: 12px;
+  }
+  .readonly_txt {
+    font-size: 12px;
+  }
+  .readonly_txt2 {
+    font-size: 12px;
+  }
+
+  .txtxt {
+    font-size: 12px;
+  }
+
+  .flex-row {
+    flex-direction: column;
+  }
+  .flex-row2 {
+    flex-direction: column;
+  }
 }
