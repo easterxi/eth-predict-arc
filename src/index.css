@@ -211,6 +211,14 @@ h2 { font-size: 1.25rem; margin: 12px 0 6px; font-weight: bold; }
   color: rgb(0, 100, 200);
 }
 
+@media (max-width: 768px) {
+
+  .txtxt {
+    font-size: 16px;
+  }
+
+}
+
 .btn_smol {
   background: #FF8800;
   color: rgb(255, 255, 255);
@@ -619,6 +627,27 @@ select.rounded-select:hover {
   -ms-user-select: none;
   cursor: default;                /* Show normal cursor */
   outline: none;                  /* Remove focus outline */
+}
+
+@media (max-width: 768px) {
+
+  .readonly {
+    font-size: 16px;
+  }
+  .readonly2 {
+    font-size: 16px;
+  }  .readonly {
+    font-size: 16px;
+  }
+  .readonly3 {
+    font-size: 16px;
+  }
+  .readonly_txt {
+    font-size: 16px;
+  }
+  .readonly_txt2 {
+    font-size: 16px;
+  }
 }
 
 .flex-row {
