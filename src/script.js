@@ -271,11 +271,11 @@ async function showScreen2() {
 <hr>
 
       <div class="readonly3" style="display:flex; justify-content:space-between; align-items:center;">
-        ○ treasury's • <span id="systemBalanceDisplay"> ${systemBal} &#9679; USDC</span>
+        ○ treasury • <span id="systemBalanceDisplay"> ${systemBal} &#9679; USDC</span>
       </div>
 
       <div class="readonly3" style="display:flex; justify-content:space-between; align-items:center;">
-        ○ yours • <span id="userBalanceDisplay"> ${userBal} &#9679; USDC</span>
+        ○ your wallet • <span id="userBalanceDisplay"> ${userBal} &#9679; USDC</span>
       </div>
 
 <hr>
