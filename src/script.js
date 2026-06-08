@@ -114,9 +114,9 @@ function showScreen1() {
   document.getElementById('root').innerHTML = `
     <div style="height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:0px;background:transparent;padding:0px"; padding-top:40px>
 
-      <img src="/logo/arc_mascot_title2.png"
+      <img src="/logo/arc_mascot_title2_fit.png"
            alt="arcdicted_mascot" 
-           style="width:480px; height:auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));">
+           style="margin-top:40px; margin-bottom:30px; width:480px; height:auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));">
       
       <div style="display:flex;flex-direction:column;gap:0px;width:100%;max-width:320px;margin-top:0px">
         <button class="btn" onclick="connectWallet()" style="padding:22px 60px;font-size:1.8rem">
@@ -132,7 +132,7 @@ function showScreen1() {
       <div style="height:200px;"></div>
 
 <!-- GitHub Icon - Centered at the very bottom -->
-      <a href="https://github.com/kaduanganu" 
+      <a href="https://github.com/kaduanganu/eth-predict-arc" 
          target="_blank"
          style="position:absolute; bottom:35px; left:50%; transform:translateX(-50%); 
                 color:#555; text-decoration:none; font-size:0.9rem; 
@@ -232,24 +232,27 @@ async function showScreen2() {
     class="option-btn-circle ${selectedChain==='arc-testnet' ? 'active' : ''}"
     onclick="changeChain('arc-testnet')"
   >
-    <img src="/logo/arc_logo_small2_opaq.png"
-         width="32">
+    <img src="/logo/arc_logo_small2_opaq2.png"
+         width="32"
+         style="position: relative; top: 1px;">
   </div>
 
   <div
-    class="option-btn-circle-tenanan ${selectedChain==='base-sepolia' ? 'active' : ''}"
+    class="option-btn-circle ${selectedChain==='base-sepolia' ? 'active' : ''}"
     onclick="changeChain('base-sepolia')"
   >
     <img src="/logo/base_logo_small.png"
-         width="32">
+         width="32"
+         style="position: relative; top: 1px;">
   </div>
 
   <div
-    class="option-btn-circle-tenanan ${selectedChain==='ink-sepolia' ? 'active' : ''}"
+    class="option-btn-circle ${selectedChain==='ink-sepolia' ? 'active' : ''}"
     onclick="changeChain('ink-sepolia')"
   >
     <img src="/logo/ink_logo_small.png"
-         width="32">
+         width="32"
+         style="position: relative; top: 1px;">
   </div>
 
   <div
@@ -257,7 +260,8 @@ async function showScreen2() {
     onclick="changeChain('arbitrum-sepolia')"
   >
     <img src="/logo/arb_logo_small.png"
-         width="32">
+         width="32"
+         style="position: relative; top: 1px;">
   </div>
 
 </div>
@@ -277,22 +281,25 @@ async function showScreen2() {
 <hr>
 
       <div class="readonly2"">
-        1. at which coin you want to put your prediction on?</span>
+        1. choose the coin you want to bet on.</span>
       </div>
 
 <div class="flex-row">
   <div class="option-btn-circle ${currentBet.asset==='BTC'?'active':''}" onclick="selectAsset('BTC')">
-    <img src="/logo/btc_logo_small_coloradjusted.png" alt="btc_logo" width="32" height="32" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));>
+    <img src="/logo/btc_logo_small_coloradjusted.png" alt="btc_logo" width="32" height="32" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+    style="position: relative; top: 1px;">
     
   </div>
 
   <div class="option-btn-circle ${currentBet.asset==='ETH'?'active':''}" onclick="selectAsset('ETH')">
-    <img src="/logo/eth_logo_small.png" alt="eth_logo"width="32" height="32" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));>
-    
+    <img src="/logo/eth_logo_small.png" alt="eth_logo"width="32" height="32" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+    style="position: relative; top: 1px;">
+
   </div>
 
   <div class="option-btn-circle ${currentBet.asset==='SOL'?'active':''}" onclick="selectAsset('SOL')">
-    <img src="/logo/sol_logo_small.png" alt="sol_logo" width="32" height="32" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));>
+    <img src="/logo/sol_logo_small.png" alt="sol_logo" width="32" height="32" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+    style="position: relative; top: 1px;">
     
   </div>
 </div>
@@ -307,7 +314,7 @@ async function showScreen2() {
       </div>
 
       <div class="readonly2"">
-        3. how many seconds ahead you want to put your prediction on?</span>
+        3. set your bet time windows.</span>
       </div>
       <div class="flex-row">
         <div class="option-btn ${currentBet.time===10?'active':''}" onclick="selectTime(10)">10 seconds</div>
@@ -315,15 +322,15 @@ async function showScreen2() {
         <div class="option-btn ${currentBet.time===60?'active':''}" onclick="selectTime(60)">60 seconds</div>
       </div>
 
-      <div class="readonly2"">
+      <div style="display:none; class="readonly2"">
         4. HIGHER? LOWER?</span>
       </div>
       <div class="flex-row">
 
-  <div class="option-btn-circle ${currentBet.direction==='HIGHER'?'active':''}" onclick="selectDirection('HIGHER')">
+  <div style="display:none; class="option-btn-circle ${currentBet.direction==='HIGHER'?'active':''}" onclick="selectDirection('HIGHER')">
     <img src="/logo/up_logo_small.png" alt="higher_logo" width="48" height="48" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));>
   </div>
-  <div class="option-btn-circle ${currentBet.direction==='LOWER'?'active':''}" onclick="selectDirection('LOWER')">
+  <div style="display:none; class="option-btn-circle ${currentBet.direction==='LOWER'?'active':''}" onclick="selectDirection('LOWER')">
    <img src="/logo/down_logo_small.png" alt="lower_logo" width="48" height="48" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));>
   </div>
 
@@ -343,7 +350,7 @@ async function showScreen2() {
       
       <div style="display:flex; align-items:center; gap:10px; margin:10px 0 6px 0;">
         <div class="readonly2" style="flex: 50%; text-align:left;" margin-left: 120px;>
-         ○ your prediction marked price •
+         ○ marked price •
         </div>
         <input type="text" id="livePrice1" class="readonly_txt2" value="Loading..." readonly style="flex:1; text-align:right;" border-radius: 0px; margin-left: margin-right: 120px;>
       </div>
@@ -358,7 +365,7 @@ async function showScreen2() {
 <hr>
 
       <div class="readonly2"">
-        5. settle your bet.</span>
+        4. settle your bet. HIGHER? LOWER?</span>
       </div>
 
 <div style="width:100%; display:flex; gap:10px; margin-bottom:10px;">
@@ -366,7 +373,8 @@ async function showScreen2() {
     class="btn_green"
     style="flex:1;"
     onclick="selectDirection('HIGHER'); settleAndPay();">
-    <img src="/logo/up_logo_small_white.png" alt="higher_logo" width="48" height="48" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));>
+    <img src="/logo/up_logo_small_white.png" alt="higher_logo" width="48" height="48" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+    style="position: relative; top: 1px;">
     
   </button>
 
@@ -374,12 +382,13 @@ async function showScreen2() {
     class="btn_red"
     style="flex:1;"
     onclick="selectDirection('LOWER'); settleAndPay();">
-    <img src="/logo/down_logo_small_white.png" alt="higher_logo" width="48" height="48" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));>
+    <img src="/logo/down_logo_small_white.png" alt="higher_logo" width="48" height="48" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+    style="position: relative; top: 1px;">
 
   </button>
 </div>
 
-      <button class="btn" id="settleBtn" onclick="settleAndPay()">settle ${currentBet.amount} &#9679; USDC</button>
+      <button style="display:none; class="btn" id="settleBtn" onclick="settleAndPay()">settle ${currentBet.amount} &#9679; USDC</button>
       
       <button id="predictBtn" class="btn_hide" onclick="startPrediction()" 
         const predictBtn = document.getElementById('predictBtn')
@@ -517,7 +526,8 @@ async function getPrice(asset) {
 // ==================== BET CONTROLS ====================
 window.selectAmount = (amt) => { currentBet.amount = amt; showScreen2(); };
 window.selectTime = (t) => { currentBet.time = t; showScreen2(); };
-window.selectDirection = (dir) => { currentBet.direction = dir; showScreen2(); };
+//window.selectDirection = (dir) => { currentBet.direction = dir; showScreen2(); };
+window.selectDirection = (dir) => { currentBet.direction = dir;};
 
 // ==================== PAYMENT & GAME FLOW ====================
 async function settleAndPay() {
@@ -855,7 +865,7 @@ async function endGame() {
   if (userWon) {
     await autoClaimReward();     // Automatic payout from Arc Treasury
   } else {
-    alert("😂 You lose.");
+    alert("😂 You LOSE.");
     resetGame();
   }
 }
@@ -1144,7 +1154,7 @@ async function updateBalances() {
 }
 
 async function autoClaimReward() {
-  alert("⏳ Processing reward...");
+  alert("🎉 You WON.\n\n⏳ Processing reward now...\n*This reward are charged with 10% reward fee.");
 
   try {
     console.log("Sending to backend:", {
