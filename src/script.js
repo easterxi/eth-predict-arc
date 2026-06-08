@@ -116,7 +116,7 @@ function showScreen1() {
 
       <img src="/logo/arc_mascot_title2_fit.png"
            alt="arcdicted_mascot" 
-           style="margin-top:40px; margin-bottom:30px; width:480px; height:auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));">
+           style="margin-top:40px; margin-bottom:30px; max-width:480px; width:100%;; height:auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));">
       
       <div style="display:flex;flex-direction:column;gap:0px;width:100%;max-width:320px;margin-top:0px">
         <button class="btn" onclick="connectWallet()" style="padding:22px 60px;font-size:1.8rem">
