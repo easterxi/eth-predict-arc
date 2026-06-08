@@ -357,6 +357,14 @@ h2 { font-size: 1.25rem; margin: 12px 0 6px; font-weight: bold; }
   cursor: not-allowed;
 }
 
+@media (max-width: 768px) {
+
+  .option-btn-circle {
+    flex-direction: column;
+  }
+
+}
+
 .option-btn-circle2 {
   
   background: white;
