@@ -211,22 +211,46 @@ res.json(
 */
 
 app.get("/api/price", async (req, res) => {
-
+  try {
   const symbol = req.query.symbol;
+  const asset = req.query.asset;
 
-  console.log("Requested symbol:", symbol);
+    const pairMap = {
+      BTC: "BTC-USD",
+      ETH: "ETH-USD",
+      SOL: "SOL-USD"
+    };
+
+  const pair = pairMap[asset];
+
+  console.log("???:", pair);
 
   const r = await fetch(
-    `https://api.binance.com/api/v3/ticker/price?symbol=${symbol}`
+    //`https://api.binance.com/api/v3/ticker/price?symbol=${symbol}`
+    //`https://api.coingecko.com/api/v3/simple/price?ids=${coin}&vs_currencies=usd`
+    `https://api.coinbase.com/v2/prices/${pair}/spot`
   );
 
-  console.log("Binance status:", r.status);
+  console.log("Status:", r.status);
 
   const data = await r.json();
 
-  console.log("Binance response:", data);
+  console.log("Response:", data);
 
-  res.json(data);
+res.json({
+  price: Number(data.data.amount)
+});
+
+  } catch (e) {
+
+    console.error(e);
+
+    res.status(500).json({
+      error: e.message
+    });
+
+  }
+  
 });
 
 app.post('/api/settle', async (req, res) => {
@@ -251,7 +275,7 @@ app.post('/api/settle', async (req, res) => {
   } catch (e) {
 
     console.error("Backend error:", e);
-    
+
     res.status(500).json({
       success: false,
       message: e.message

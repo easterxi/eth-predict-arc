@@ -513,18 +513,34 @@ async function getPrice(asset) {
     //const res = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol}`);
     //const data = await res.json();
 
+    //const response = await fetch(
+      //`${BACKEND_URL}/api/price?symbol=${symbol}`
+    //);
+
     const response = await fetch(
-      `${BACKEND_URL}/api/price?symbol=${symbol}`
+      `${BACKEND_URL}/api/price?asset=${asset}`
     );
+
+    console.log("Response status:", response.status);
+
     const data = await response.json();
 
+    console.log("Price data:", data);
+
+    //if (data && data.price) {
+      //return parseFloat(data.price);
+    //} else {
+      //throw new Error("Invalid response");
+    //}
+
     if (data && data.price) {
-      return parseFloat(data.price);
-    } else {
-      throw new Error("Invalid response");
+      return Number(data.price);
     }
+
+    throw new Error("Invalid response");
+
   } catch (e) {
-    console.warn(`❌ Fail fetching ${asset} price from Binance. `, e);
+    console.warn(`❌ Fail fetching ${asset} price. `, e);
     
     // Fallback prices
     if (asset === 'BTC') return 123456.789;
