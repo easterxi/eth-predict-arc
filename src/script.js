@@ -525,7 +525,7 @@ const data = await response.json();
       throw new Error("Invalid response");
     }
   } catch (e) {
-    console.warn(`❌ Fail fetching ${asset} price from Binance. `, e);
+    console.warn(`❌ Fail fetching ${asset} price.. `, e);
     
     // Fallback prices
     if (asset === 'BTC') return 123456.789;
