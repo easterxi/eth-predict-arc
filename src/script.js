@@ -351,7 +351,7 @@ async function showScreen2() {
         <div class="readonly3" style="flex: 50%; text-align:left;" margin-left: 120px;>
          ○ marked price •
         </div>
-        <input type="text" id="livePrice1" class="readonly_txt22" value="Loading..." readonly style="flex:1; text-align:right; border-radius: 0px; margin-left: margin-right: 120px;">
+        <input type="text" id="livePrice1" class="readonly_txt22" value="Loading..." readonly style="flex:33%; text-align:center; border-radius: 0px; margin-left: margin-right: 120px;">
       </div>
 
       <!-- COUNTDOWN + WARNING will be inserted here by JS when PREDICT is clicked -->
@@ -463,7 +463,7 @@ function startLivePriceUpdates() {
       } else if (pricerun < pricefixed) {
         tb2.style.background = "#ff0000";        // Red
       } else {
-        tb2.style.background = "#000000";        // Default greyish
+        tb2.style.background = "rgb(0, 100, 200)";        // Default greyish
       }
 
     if (tb2 && isPredictionStarted) {
@@ -489,7 +489,7 @@ function startLivePriceUpdates() {
       } else if (price2 < price1) {
         tb2.style.background = "#ff0000";        // Red
       } else {
-        tb2.style.background = "#000000";        // Default greyish
+        tb2.style.background = "rgb(0, 100, 200)";        // Default greyish
       }
     }
 
@@ -522,9 +522,9 @@ async function getPrice(asset) {
     console.warn(`❌ Fail fetching ${asset} price from Binance. `, e);
     
     // Fallback prices
-    if (asset === 'BTC') return 99999;
-    if (asset === 'ETH') return 999;
-    if (asset === 'SOL') return 9;
+    if (asset === 'BTC') return 123456.789;
+    if (asset === 'ETH') return 12345.6789;
+    if (asset === 'SOL') return 123.456789;
     return 0;
   }
 }

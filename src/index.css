@@ -531,7 +531,7 @@ select.rounded-select:hover {
 .readonly {
   background: transparent; /*#f8f8f8;*/
   border: none; /*2px solid #ddd*/
-  font-size: 1.5rem;
+  font-size: 2.5rem;
   text-align: center;
   padding: 10px;
   width: 100%;
@@ -585,7 +585,7 @@ select.rounded-select:hover {
 }
 
 .readonly_txt {
-  background: rgba(0, 0, 0, 0.6); /*#f8f8f8;*/
+  background: rgb(0, 100, 200); /*rgba(0, 0, 0, 0.6); #f8f8f8;*/
   border: 2px solid rgb(255, 255, 255);
   font-size: 1.5rem;
   text-align: center;
@@ -596,7 +596,7 @@ select.rounded-select:hover {
   text-shadow: 1px 1px 2px black, 0 0 1px black, 0 0 1px black;
 
   background: 
-    linear-gradient(#000000, #000000) padding-box, /* Inner background color */
+    linear-gradient(rgb(0, 100, 200), rgb(0, 100, 200)) padding-box, /* Inner background color */
     linear-gradient(to right, #ffffff, #ffffff) border-box; /* Border gradient */
 
   color: rgb(255, 255, 255);
@@ -635,8 +635,8 @@ select.rounded-select:hover {
   outline: none;                  /* Remove focus outline */
 }
 .readonly_txt22 {
-  background: transparent; /*#f8f8f8;*/
-  border: none; /*2px solid #ddd*/
+  background: rgb(0, 100, 200);
+  border: 2px solid #ffffff;
   font-size: 1.3rem;
   text-align: center;
   padding: 10px;
@@ -645,7 +645,9 @@ select.rounded-select:hover {
   border-radius: 0px;
   text-shadow: 1px 1px 2px black, 0 0 1px black;
 
-  color: rgb(0, 100, 200);
+  color: rgb(255, 255, 255);
+
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
 
 /* Make it completely non-interactive */
   pointer-events: none;           /* Disable all mouse events */
