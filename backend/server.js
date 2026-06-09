@@ -212,30 +212,15 @@ res.json(
 
 app.get("/api/price", async (req, res) => {
 
-  const asset = req.query.asset;
-
-  const coinMap = {
-    BTC: "bitcoin",
-    ETH: "ethereum",
-    SOL: "solana"
-  };
-
-  const coin = coinMap[asset];
-
-  if (!coin) {
-    return res.status(400).json({
-      error: "Unsupported asset"
-    });
-  }
+  const symbol = req.query.symbol;
 
   const r = await fetch(
-    `https://api.coingecko.com/api/v3/simple/price?ids=${coin}&vs_currencies=usd`
+    `https://api.binance.com/api/v3/ticker/price?symbol=${symbol}`
   );
 
   const data = await r.json();
 
   res.json(data);
-
 });
 
 app.post('/api/settle', async (req, res) => {
