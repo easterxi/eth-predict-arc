@@ -510,7 +510,13 @@ async function getPrice(asset) {
     else if (asset === 'ETH') symbol = 'ETHUSDT';
     else if (asset === 'SOL') symbol = 'SOLUSDT';
 
-    const res = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol}`);
+    //const res = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol}`);
+    const response = await fetch(
+    `${BACKEND_URL}/api/price`
+    );
+
+const data = await response.json();
+
     const data = await res.json();
 
     if (data && data.price) {
