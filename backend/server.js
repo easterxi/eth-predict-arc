@@ -212,7 +212,7 @@ res.json(
 
 app.get("/api/price", async (req, res) => {
   try {
-  //const symbol = req.query.symbol;
+  const symbol = req.query.symbol;
   const asset = req.query.asset;
 
     const pairMap = {
@@ -223,7 +223,9 @@ app.get("/api/price", async (req, res) => {
 
   const pair = pairMap[asset];
 
-  console.log("???:", pair);
+console.log("asset =", asset);
+console.log("symbol =", symbol);
+console.log("pair =", pair);
 
   const r = await fetch(
     //`https://api.binance.com/api/v3/ticker/price?symbol=${symbol}`
