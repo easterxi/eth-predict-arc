@@ -387,6 +387,11 @@ async function showScreen2() {
   </button>
 </div>
 
+  <div id="loadingScreen">
+  <div class="loader"></div>
+  <div>Loading...</div>
+  </div>
+
       <button style="display:none; class="btn" id="settleBtn" onclick="settleAndPay()">settle ${currentBet.amount} &#9679; USDC</button>
       
       <button id="predictBtn" class="btn_hide" onclick="startPrediction()" 
@@ -397,6 +402,8 @@ async function showScreen2() {
     </div>
   `;
 
+  hideLoading();
+  
     // Disable Predict Button
   const predictBtn = document.getElementById('predictBtn');
   if (predictBtn) {
@@ -528,8 +535,18 @@ window.selectTime = (t) => { currentBet.time = t; showScreen2(); };
 //window.selectDirection = (dir) => { currentBet.direction = dir; showScreen2(); };
 window.selectDirection = (dir) => { currentBet.direction = dir;};
 
+function showLoading() {
+  document.getElementById('loadingScreen').style.display = 'flex';
+}
+
+function hideLoading() {
+  document.getElementById('loadingScreen').style.display = 'none';
+}
+
 // ==================== PAYMENT & GAME FLOW ====================
 async function settleAndPay() {
+  showLoading();
+  try {
 
   if (!signer) {
     return alert("❌ Wallet not connected.");
@@ -657,6 +674,15 @@ startPrediction();
     );
 
   }
+
+    } catch(error) {
+
+    console.error(error);
+
+  } finally {
+    hideLoading();
+  }
+
 }
 
 function startPrediction() {
@@ -766,6 +792,8 @@ function disableBetControls() {
     chainSelector.style.opacity = "0.6";
     chainSelector.style.cursor = "not-allowed";
   }
+
+  //showLoading();
 }
 
 function enableBetControls() {
@@ -836,6 +864,7 @@ function enableBetControls() {
     settleBtn.style.cursor = "pointer";
   }
 
+  //hideLoading();
 }
 
 function disableAllControls() {
@@ -854,6 +883,9 @@ function disableAllControls() {
 }
 
 async function endGame() {
+  //showLoading();
+  //try {
+  
   endPrice = await getETHPrice();
   document.getElementById('livePrice2').value = hargaisehjalan;
 
@@ -862,11 +894,22 @@ async function endGame() {
                   (currentBet.direction === "LOWER" && !isHigher);
 
   if (userWon) {
+      showLoading();
+      try {
+
     await autoClaimReward();     // Automatic payout from Arc Treasury
+
+      } finally {
+      hideLoading();
+      }
   } else {
     alert("😂 You LOSE.");
     resetGame();
   }
+
+  //} finally {
+  //  hideLoading();
+  //}
 }
 
 async function getUserBalance() {
