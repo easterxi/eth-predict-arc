@@ -214,16 +214,18 @@ app.get("/api/price", async (req, res) => {
 
   const symbol = req.query.symbol;
 
-  alert(symbol)
-  alert(r.status)
-  alert(data)
+console.log("Requested symbol:", symbol);
 
   const r = await fetch(
     `https://api.binance.com/api/v3/ticker/price?symbol=${symbol}`
   );
 
+      console.log("Binance status:", r.status);
+
   const data = await r.json();
 
+      console.log("Binance response:", data);
+      
   res.json(data);
 });
 

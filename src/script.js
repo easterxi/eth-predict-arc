@@ -519,6 +519,9 @@ const data = await response.json();
 
 //const data = await res.json();
 
+alert(response.status)
+alert(data)
+
 if (data && data.price) {
   return parseFloat(data.price);
 } else {
