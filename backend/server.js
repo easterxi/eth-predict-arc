@@ -214,11 +214,17 @@ app.get("/api/price", async (req, res) => {
 
   const symbol = req.query.symbol;
 
+  console.log("Requested symbol:", symbol);
+
   const r = await fetch(
     `https://api.binance.com/api/v3/ticker/price?symbol=${symbol}`
   );
 
+  console.log("Binance status:", r.status);
+
   const data = await r.json();
+
+  console.log("Binance response:", data);
 
   res.json(data);
 });
@@ -244,6 +250,8 @@ app.post('/api/settle', async (req, res) => {
 
   } catch (e) {
 
+    console.error("Backend error:", e);
+    
     res.status(500).json({
       success: false,
       message: e.message
