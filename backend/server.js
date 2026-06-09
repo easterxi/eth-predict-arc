@@ -212,7 +212,7 @@ res.json(
 
 app.get("/api/price", async (req, res) => {
   try {
-  const symbol = req.query.symbol;
+  //const symbol = req.query.symbol;
   const asset = req.query.asset;
 
     const pairMap = {
@@ -250,7 +250,7 @@ res.json({
     });
 
   }
-  
+
 });
 
 app.post('/api/settle', async (req, res) => {
