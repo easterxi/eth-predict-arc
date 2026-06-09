@@ -209,6 +209,18 @@ res.json(
 
 });
 */
+
+app.get("/api/price", async (req, res) => {
+
+  const r = await fetch(
+    "https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT"
+  );
+
+  const data = await r.json();
+
+  res.json(data);
+});
+
 app.post('/api/settle', async (req, res) => {
 
   try {
