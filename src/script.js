@@ -388,8 +388,8 @@ async function showScreen2() {
 </div>
 
   <div id="loadingScreen">
-  <div class="loader"></div>
-  <div>Loading...</div>
+  <img src="/logo/usdc_logo.png" width="120">
+  <div></div>
   </div>
 
       <button style="display:none; class="btn" id="settleBtn" onclick="settleAndPay()">settle ${currentBet.amount} &#9679; USDC</button>
@@ -707,6 +707,12 @@ function startPrediction() {
   // Show countdown between textbox 1 and 2
   document.getElementById('predictionArea').style.display = 'block';
 
+  document
+  .getElementById("predictionArea")
+  .scrollIntoView({
+    behavior: "smooth"
+  });
+  
   // Show textbox 2
   const tb2 = document.getElementById('livePrice2');
   tb2.style.display = 'block';
