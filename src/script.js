@@ -693,7 +693,7 @@ function startPrediction() {
 
   startPrice = parseFloat(tb1.value) || 0;
   hargawisfix = startPrice
-  tb1.style.background = "#ffffff00"; /*"#e0e0e0";*/
+  tb1.style.background = "#e0e0e0"; /*"#e0e0e0";*/
 
   // Disable Predict Button
   const predictBtn = document.getElementById('predictBtn');
