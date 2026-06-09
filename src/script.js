@@ -505,28 +505,51 @@ function startLivePriceUpdates() {
 
 async function getPrice(asset) {
   try {
+    /*
     let symbol;
     if (asset === 'BTC') symbol = 'BTCUSDT';
     else if (asset === 'ETH') symbol = 'ETHUSDT';
     else if (asset === 'SOL') symbol = 'SOLUSDT';
 
     //const res = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol}`);
+    const response = await fetch(
+      `${BACKEND_URL}/api/price?symbol=${symbol}`
+    );
+    */
+
 const response = await fetch(
-  `${BACKEND_URL}/api/price?symbol=${symbol}`
+  `${BACKEND_URL}/api/price?asset=${asset}`
 );
 
 const data = await response.json();
 
 //const data = await res.json();
 
-alert(response.status)
-alert(data)
+console.log("Response status:", response.status);
+console.log("Price data:", data);
 
+/*
 if (data && data.price) {
   return parseFloat(data.price);
 } else {
   throw new Error("Invalid response");
 }
+  */
+
+if (asset === "BTC") {
+  return data.bitcoin.usd;
+}
+
+if (asset === "ETH") {
+  return data.ethereum.usd;
+}
+
+if (asset === "SOL") {
+  return data.solana.usd;
+}
+
+throw new Error("Invalid response");
+
   } catch (e) {
     console.warn(`❌ Fail fetching ${asset} price.. `, e);
     
