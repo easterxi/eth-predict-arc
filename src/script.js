@@ -113,7 +113,7 @@ async function connectWallet() {
 function showScreen1() {
   document.getElementById('root').innerHTML = `
     <div class="container" style="display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:0px;background:transparent;padding:0px"; padding-top:40px>
-      <img src="/logo/arc_mascot_title2_fit.png"
+      <img src="/logo/arc_mascot_title22_fit.png"
            alt="arcdicted_mascot" 
            style="margin-top:40px; margin-bottom:30px; max-width:480px; width:90%;; height:auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));">
       
@@ -222,7 +222,7 @@ async function showScreen2() {
       </div>
 
       <div class="readonly2"">
-        0. pick the chain you want to use.</span>
+        🔵 what chain you want to use?</span>
       </div>
 
 <div class="flex-row">
@@ -280,7 +280,7 @@ async function showScreen2() {
 <hr>
 
       <div class="readonly2"">
-        1. choose the coin you want to bet on.</span>
+        🔵 choose the asset you want to bet on.</span>
       </div>
 
 <div class="flex-row">
@@ -304,7 +304,7 @@ async function showScreen2() {
 </div>
 
       <div class="readonly2"">
-        2. for how many ● USDC?</span>
+        🔵 for how many ● USDC?</span>
       </div>
       <div class="flex-row">
         <div class="option-btn ${currentBet.amount===1?'active':''}" onclick="selectAmount(1)">1 &#9679; USDC</div>
@@ -313,7 +313,7 @@ async function showScreen2() {
       </div>
 
       <div class="readonly2"">
-        3. set your bet time windows.</span>
+        🔵 set your bet time frame.</span>
       </div>
       <div class="flex-row">
         <div class="option-btn ${currentBet.time===10?'active':''}" onclick="selectTime(10)">10 seconds</div>
@@ -322,7 +322,7 @@ async function showScreen2() {
       </div>
 
       <div style="display:none; class="readonly2"">
-        4. HIGHER? LOWER?</span>
+        5. HIGHER? LOWER?</span>
       </div>
       <div class="flex-row">
 
@@ -351,7 +351,7 @@ async function showScreen2() {
         <div class="readonly3" style="flex: 50%; text-align:left;" margin-left: 120px;>
          ○ marked price •
         </div>
-        <input type="text" id="livePrice1" class="readonly_txt22" value="Loading..." readonly style="flex:20%; text-align:center; border-radius: 0px; margin-left: margin-right: 120px;">
+        <input type="text" id="livePrice1" class="readonly_txt22" value="Loading..." readonly style="flex:25%; text-align:center; border-radius: 0px; margin-left: margin-right: 120px;">
       </div>
 
       <!-- COUNTDOWN + WARNING will be inserted here by JS when PREDICT is clicked -->
@@ -364,7 +364,7 @@ async function showScreen2() {
 <hr>
 
       <div class="readonly2"">
-        4. settle your bet. HIGHER? LOWER?</span>
+        🔵 settle your bet. HIGHER? LOWER?</span>
       </div>
 
 <div class="flex-row2" style="width:100%;">
@@ -423,7 +423,7 @@ if (balanceInterval) {
 balanceInterval =
   setInterval(
     updateBalances,
-    3000
+    1000
   );
 
   updatePriceTitle();
@@ -500,7 +500,7 @@ function startLivePriceUpdates() {
   };
 
   updatePrices();                    // Immediate update
-  livePriceInterval = setInterval(updatePrices, 1000); // 0.1 second
+  livePriceInterval = setInterval(updatePrices, 1000); // 1 second
 }
 
 async function getPrice(asset) {
