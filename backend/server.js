@@ -215,11 +215,13 @@ let lastUpdate = 0;
 
 async function refreshPrices() {
 
-  const assets = {
-    BTC: "BTC-USD",
-    ETH: "ETH-USD",
-    SOL: "SOL-USD"
-  };
+  try {
+
+    const assets = {
+      BTC: "BTC-USD",
+      ETH: "ETH-USD",
+      SOL: "SOL-USD"
+    };
 
   for (const [key, pair] of Object.entries(assets)) {
 
@@ -227,9 +229,33 @@ async function refreshPrices() {
       `https://api.coinbase.com/v2/prices/${pair}/spot`
     );
 
+    console.log(pair, "status =", r.status);
+    
+      if (!r.ok) {
+
+        const text = await r.text();
+
+        console.error(
+          "Coinbase error:",
+          pair,
+          r.status
+        );
+
+        console.error(
+          text.substring(0, 200)
+        );
+
+        continue;
+      }
+
     const data = await r.json();
 
     priceCache[key] = Number(data.data.amount);
+
+    console.log(
+      "Price cache updated:",
+      priceCache
+    );
 
   }
 
@@ -240,6 +266,15 @@ async function refreshPrices() {
   new Date().toLocaleTimeString(),
   priceCache
   );
+
+  } catch (e) {
+
+    console.error(
+      "refreshPrices failed:",
+      e
+    );
+
+  }
 
 }
 
