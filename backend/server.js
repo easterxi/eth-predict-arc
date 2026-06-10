@@ -235,6 +235,12 @@ async function refreshPrices() {
 
   lastUpdate = Date.now();
 
+  console.log(
+  "Cache updated:",
+  new Date().toLocaleTimeString(),
+  priceCache
+  );
+
 }
 
 refreshPrices();

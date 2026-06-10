@@ -542,6 +542,7 @@ async function getPrice(asset) {
     const data = await response.json();
 
     console.log("Price data:", data);
+    console.log("Price:", JSON.stringify(data));
 
     //if (data && data.price) {
       //return parseFloat(data.price);
