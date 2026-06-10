@@ -241,7 +241,7 @@ refreshPrices();
 
 setInterval(
   refreshPrices,
-  5000 // every 5 seconds
+  2750 // every 2.75 seconds
 );
 
 app.get("/api/price", (req, res) => {
