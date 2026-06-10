@@ -1,3 +1,13 @@
+let priceCache = {
+  BTC: 0,
+  ETH: 0,
+  SOL: 0
+};
+
+let lastUpdate = 0;
+
+const WebSocket = require('ws');
+
 const USDC_ABI = [
   "function balanceOf(address owner) view returns (uint256)",
   "function transfer(address to,uint256 amount) returns (bool)",
@@ -210,6 +220,7 @@ res.json(
 });
 */
 
+/*
 let priceCache = {};
 let lastUpdate = 0;
 
@@ -243,14 +254,131 @@ setInterval(
   refreshPrices,
   2750 // every 2.75 seconds
 );
+*/
+
+function connectCoinbaseWS() {
+
+  const ws = new WebSocket(
+    "wss://advanced-trade-ws.coinbase.com"
+  );
+
+  ws.on("open", () => {
+
+    console.log(
+      "✅ Coinbase WebSocket connected"
+    );
+
+    ws.send(JSON.stringify({
+
+      type: "subscribe",
+
+      product_ids: [
+        "BTC-USD",
+        "ETH-USD",
+        "SOL-USD"
+      ],
+
+      channel: "ticker"
+
+    }));
+
+  });
+
+  ws.on("message", (data) => {
+
+    try {
+
+      const msg =
+        JSON.parse(data.toString());
+
+      if (
+        msg.events &&
+        msg.events.length > 0
+      ) {
+
+        const ticker =
+          msg.events[0].tickers?.[0];
+
+        if (!ticker) return;
+
+        const product =
+          ticker.product_id;
+
+        const price =
+          Number(ticker.price);
+
+        if (
+          product === "BTC-USD"
+        ) {
+          priceCache.BTC = price;
+        }
+
+        if (
+          product === "ETH-USD"
+        ) {
+          priceCache.ETH = price;
+        }
+
+        if (
+          product === "SOL-USD"
+        ) {
+          priceCache.SOL = price;
+        }
+
+        lastUpdate = Date.now();
+
+        console.log(priceCache);
+      }
+
+    } catch (e) {
+
+      console.error(
+        "WS Parse Error:",
+        e
+      );
+
+    }
+
+  });
+
+  ws.on("close", () => {
+
+    console.log(
+      "⚠️ Coinbase disconnected"
+    );
+
+    setTimeout(
+      connectCoinbaseWS,
+      5000
+    );
+
+  });
+
+  ws.on("error", (e) => {
+
+    console.error(
+      "Coinbase WS Error:",
+      e.message
+    );
+
+  });
+
+}
+
+connectCoinbaseWS();
 
 app.get("/api/price", (req, res) => {
 
-  const asset = req.query.asset;
+  const asset =
+    req.query.asset;
 
   res.json({
-    price: priceCache[asset],
+
+    price:
+      priceCache[asset],
+
     lastUpdate
+
   });
 
 });
