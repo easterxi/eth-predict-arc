@@ -500,7 +500,7 @@ function startLivePriceUpdates() {
   };
 
   updatePrices();                    // Immediate update
-  livePriceInterval = setInterval(updatePrices, 100); // 1 second
+  livePriceInterval = setInterval(updatePrices, 1000); // 1 second
 }
 
 async function getPrice(asset) {
@@ -542,7 +542,6 @@ async function getPrice(asset) {
     const data = await response.json();
 
     console.log("Price data:", data);
-    console.log("Price:", JSON.stringify(data));
 
     //if (data && data.price) {
       //return parseFloat(data.price);
