@@ -586,8 +586,8 @@ async function settleBetBackend(
 
   console.log({
   betId: currentBet.betId,
-  finalPrice: hargawisfix,
-  won: didWin
+  endPrice: hargawisfix,
+  //won: userwon
 });
 
   const response =
@@ -638,6 +638,8 @@ async function settleBetOnChain(
         won
       );
 
+      console.log("TX SENT:", tx.hash);
+      
     await tx.wait();
 
     console.log(
@@ -1576,7 +1578,7 @@ console.log(
   {
     betId: currentBet.betId,
     price: hargawisfix,
-    didWin
+    //userWon
   }
 );
 

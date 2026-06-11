@@ -1030,6 +1030,8 @@ console.log(
           won
         );
 
+              console.log("TX SENT:", tx.hash);
+              
       await tx.wait();
 
       res.json({
