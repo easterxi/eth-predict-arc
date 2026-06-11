@@ -970,11 +970,21 @@ console.log(
 );
 */
 
-      const wallet =
-        new ethers.Wallet(
-          process.env.SYSTEM_PRIVATE_KEY.trim(),
-          provider
-        );
+const pk = process.env.SYSTEM_PRIVATE_KEY;
+
+console.log("PK RAW:", JSON.stringify(pk));
+console.log("Length:", pk?.length);
+
+const wallet = new ethers.Wallet(
+  pk.trim(),
+  provider
+);
+
+      //const wallet =
+        //new ethers.Wallet(
+          //process.env.SYSTEM_PRIVATE_KEY.trim(),
+          //provider
+        //);
 
 //const pk = process.env.SYSTEM_PRIVATE_KEY.trim();
 
