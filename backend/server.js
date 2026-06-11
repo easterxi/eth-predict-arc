@@ -1,6 +1,16 @@
 console.log("SERVER STARTED");
 console.log("PK length:", process.env.SYSTEM_PRIVATE_KEY?.length);
 
+const pk = process.env.SYSTEM_PRIVATE_KEY.trim();
+
+console.log("Length:", pk.length);
+console.log("Starts with 0x:", pk.startsWith("0x"));
+
+console.log(
+  "Hex only:",
+  /^0x[0-9a-fA-F]{64}$/.test(pk)
+);
+
 let priceCache = {
   BTC: 0,
   ETH: 0,
