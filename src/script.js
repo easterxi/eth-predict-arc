@@ -1,6 +1,6 @@
 // smart_contract
 const BET_RECORDER_ADDRESS =
-  "0x418287d8d98E85b07A22E7574e99DA1522E0885B";
+  "0xa45EEE463D60fAea777a4516BB5Af1A828F2cE8c";
 
 const BET_RECORDER_ABI = [
   {
@@ -255,6 +255,11 @@ const BET_RECORDER_ABI = [
   },
   {
     "inputs": [
+      {
+        "internalType": "address",
+        "name": "player",
+        "type": "address"
+      },
       {
         "internalType": "string",
         "name": "asset",
@@ -1960,6 +1965,32 @@ async function switchWallet() {
 }
 
 window.switchWallet = switchWallet;
+
+window.readBet = async function(betId) {
+
+  const contract = new ethers.Contract(
+    BET_RECORDER_ADDRESS,
+    BET_RECORDER_ABI,
+    signer
+  );
+
+  const bet = await contract.getBet(betId);
+
+  console.log({
+    betId: Number(bet.betId),
+    player: bet.player,
+    asset: bet.asset,
+    higher: bet.higher,
+    amount: Number(bet.amount),
+    startPrice: Number(bet.startPrice) / 100,
+    duration: Number(bet.duration),
+    timestamp: Number(bet.timestamp),
+    settled: bet.settled,
+    endPrice: Number(bet.endPrice) / 100,
+    won: bet.won
+  });
+
+};
 
 //console.log("System Wallet Address:", 
   //new ethers.Wallet("0x123456789123456789123456789123456789123456789123456789").address);
