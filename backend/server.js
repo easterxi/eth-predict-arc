@@ -1021,6 +1021,8 @@ console.log(
   typeof won
 );
 
+console.log("BEFORE settleBet");
+
       const tx =
         await contract.settleBet(
           betId,
@@ -1030,9 +1032,11 @@ console.log(
           won
         );
 
-              console.log("TX SENT:", tx.hash);
-              
+      console.log("TX SENT:", tx.hash);
+
       await tx.wait();
+
+      console.log("TX CONFIRMED");
 
       res.json({
         success: true,
