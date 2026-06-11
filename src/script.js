@@ -584,6 +584,12 @@ async function settleBetBackend(
   won
 ) {
 
+  console.log({
+  betId: currentBet.betId,
+  finalPrice: hargawisfix,
+  won: didWin
+});
+
   const response =
     await fetch(
       `${BACKEND_URL}/api/settle-bet`,
@@ -1565,9 +1571,18 @@ async function endGame() {
   //userWon
 //);
 
+console.log(
+  "SETTLING WITH:",
+  {
+    betId: currentBet.betId,
+    price: hargawisfix,
+    didWin
+  }
+);
+
 await settleBetBackend(
   currentBet.betId,
-  endPrice,
+  hargawisfix,
   userWon
 );
 
