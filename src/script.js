@@ -1,3 +1,349 @@
+// smart_contract
+const BET_RECORDER_ADDRESS =
+  "0x418287d8d98E85b07A22E7574e99DA1522E0885B";
+
+const BET_RECORDER_ABI = [
+  {
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "betId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "player",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "asset",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "higher",
+        "type": "bool"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "startPrice",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "duration",
+        "type": "uint256"
+      }
+    ],
+    "name": "BetPlaced",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "betId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "won",
+        "type": "bool"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "endPrice",
+        "type": "uint256"
+      }
+    ],
+    "name": "BetSettled",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "bets",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "betId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "player",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "asset",
+        "type": "string"
+      },
+      {
+        "internalType": "bool",
+        "name": "higher",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "startPrice",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "duration",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "timestamp",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "settled",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "endPrice",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "won",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "betId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getBet",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "betId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "player",
+            "type": "address"
+          },
+          {
+            "internalType": "string",
+            "name": "asset",
+            "type": "string"
+          },
+          {
+            "internalType": "bool",
+            "name": "higher",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "startPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "duration",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "timestamp",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "settled",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint256",
+            "name": "endPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "won",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct BetRecorderV3.Bet",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "nextBetId",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "asset",
+        "type": "string"
+      },
+      {
+        "internalType": "bool",
+        "name": "higher",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "startPrice",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "duration",
+        "type": "uint256"
+      }
+    ],
+    "name": "recordBet",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "betId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "endPrice",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "won",
+        "type": "bool"
+      }
+    ],
+    "name": "settleBet",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+];
+
+window.debugBet = async function (id = 1) {
+  const contract = new ethers.Contract(
+    BET_RECORDER_ADDRESS,
+    BET_RECORDER_ABI,
+    signer
+  );
+
+  const bet = await contract.getBet(id);
+
+  const readableBet = {
+    betId: Number(bet.betId),
+    player: bet.player,
+    asset: bet.asset,
+    higher: bet.higher,
+    amount: Number(bet.amount),
+    startPrice: Number(bet.startPrice),
+    duration: Number(bet.duration),
+    timestamp: Number(bet.timestamp),
+    settled: bet.settled,
+    endPrice: Number(bet.endPrice),
+    won: bet.won
+  };
+
+  console.log("BET:", readableBet);
+};
+// smart_contract
+
 import { Buffer } from "buffer";
 
 window.Buffer = Buffer;
@@ -42,6 +388,179 @@ import.meta.env.VITE_BACKEND_URL;
 const SYSTEM_WALLET_X = "0x9068d4a1edcea0e553525e8ca5edbe57dfe900b6"; 
 const TREASURY_ADDRESS = "0x9068d4a1edcea0e553525e8ca5edbe57dfe900b6";
 
+// smart_contract
+async function recordBetOnChain() {
+
+  try {
+
+    if (!signer) {
+      console.log(
+        "No signer, skip recording"
+      );
+      return;
+    }
+
+    const contract =
+      new ethers.Contract(
+        BET_RECORDER_ADDRESS,
+        BET_RECORDER_ABI,
+        signer
+      );
+
+console.log(
+  "Recording:",
+  {
+    asset: currentBet.asset,
+    direction: currentBet.direction,
+    amount: currentBet.amount,
+    startPrice,
+    hargawisfix
+  }
+);
+
+const tx = await contract.recordBet(
+  currentBet.asset,
+  currentBet.direction === "HIGHER",
+  currentBet.amount,
+  Math.floor(hargawisfix * 100),   // IMPORTANT FIX
+  currentBet.time
+);
+
+const receipt = await tx.wait();
+console.log("TX:", receipt.hash);
+console.log(receipt);
+
+    console.log(
+      "Recording bet..."
+    );
+
+const betId =
+  await contract.nextBetId();
+
+currentBet.betId =
+  Number(betId) - 1;
+
+console.log(
+  "Bet ID:",
+  currentBet.betId
+);
+
+    console.log(
+      "Bet recorded:",
+      tx.hash
+    );
+
+    const bet = await contract.getBet(1);
+
+    console.log("XXXXXXXXX:", bet);
+
+  console.log({
+  betId: bet.betId,
+  player: bet.player,
+  asset: bet.asset,
+  higher: bet.higher,
+  amount: bet.amount,
+  startPrice: bet.startPrice,
+  duration: bet.duration,
+  timestamp: bet.timestamp,
+  settled: bet.settled,
+  endPrice: bet.endPrice,
+  won: bet.won
+});
+
+//const count =
+//await contract.getBetCount();
+
+//console.log(
+  //"Total Bets:",
+  //count.toString()
+//);
+
+currentBet.betId = Date.now();
+
+  } catch (e) {
+
+    console.error(
+      "recordBetOnChain failed",
+      e
+    );
+
+  }
+}
+
+async function settleBetBackend(
+  betId,
+  endPrice,
+  won
+) {
+
+  const response =
+    await fetch(
+      `${BACKEND_URL}/api/settle-bet`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+        body: JSON.stringify({
+          betId,
+          endPrice,
+          won
+        })
+      }
+    );
+
+  const result =
+    await response.json();
+
+  console.log(
+    "Settlement:",
+    result
+  );
+
+}
+
+async function settleBetOnChain(
+  endPrice,
+  won
+) {
+
+  try {
+
+    const contract =
+      new ethers.Contract(
+        BET_RECORDER_ADDRESS,
+        BET_RECORDER_ABI,
+        signer
+      );
+
+    const tx =
+      await contract.settleBet(
+        currentBet.betId,
+        Math.floor(endPrice * 100),
+        won
+      );
+
+    await tx.wait();
+
+    console.log(
+      "Bet settled:",
+      currentBet.betId
+    );
+
+  } catch (e) {
+
+    console.error(
+      "settleBetOnChain failed",
+      e
+    );
+
+  }
+
+}
+// smart_contract
+
 // ==================== GET ETH PRICE ====================
 async function getETHPrice() {
   try {
@@ -60,9 +579,9 @@ async function getETHPrice() {
 }
 
 async function updateLivePrice(textboxId) {
-  const price = await getETHPrice();
-  const el = document.getElementById(textboxId);
-  if (el) el.value = price.toFixed(2);
+  //const price = await getETHPrice();
+  //const el = document.getElementById(textboxId);
+  //if (el) el.value = price.toFixed(2);
 }
 
 // ==================== CONNECT WALLET ====================
@@ -521,17 +1040,17 @@ async function getPrice(asset) {
       `${BACKEND_URL}/api/price?asset=${asset}`
     );
 
-    console.log("Response status:", response.status);
+    //console.log("Response status:", response.status);
 
   if (!response.ok) {
 
   const text = await response.text();
 
-  console.error(
-    "Coinbase error:",
-    response.status,
-    text
-  );
+  //console.error(
+    //"Coinbase error:",
+    //response.status,
+    //text
+  //);
 
   throw new Error(
     `Coinbase returned ${response.status}`
@@ -541,7 +1060,7 @@ async function getPrice(asset) {
 
     const data = await response.json();
 
-    console.log("Price data:", data);
+    //console.log("Price data:", data);
 
     //if (data && data.price) {
       //return parseFloat(data.price);
@@ -589,6 +1108,15 @@ async function settleAndPay() {
     return alert("❌ Wallet not connected.");
   }
 
+  const tb1 =
+  document.getElementById("livePrice1");
+
+startPrice =
+  parseFloat(tb1.value) || 0;
+
+hargawisfix =
+  startPrice;
+  
   const amount = currentBet.amount;
   const chainKey = selectedChain;
   const chainConfig = CONFIG.chains[chainKey];
@@ -698,7 +1226,12 @@ alert(
 
 //disableBetControls();
 
+// smart_contract
+await recordBetOnChain();
+// smart_contract
+
 startPrediction();
+
 
   } catch (error) {
 
@@ -929,13 +1462,37 @@ async function endGame() {
   //showLoading();
   //try {
   
-  endPrice = await getETHPrice();
+  //endPrice = await getETHPrice();
   document.getElementById('livePrice2').value = hargaisehjalan;
 
   const isHigher = hargaisehjalan > hargawisfix;
   const userWon = (currentBet.direction === "HIGHER" && isHigher) || 
                   (currentBet.direction === "LOWER" && !isHigher);
 
+// smart_contract
+//await settleBetOnChain(
+  //hargaisehjalan,
+  //userWon
+//);
+
+await settleBetBackend(
+  currentBet.betId,
+  endPrice,
+  userWon
+);
+
+if (userWon) {
+
+  await autoClaimReward();
+
+} else {
+
+  alert("😂 You LOSE.");
+  resetGame();
+
+}
+
+/*
   if (userWon) {
       showLoading();
       try {
@@ -949,6 +1506,8 @@ async function endGame() {
     alert("😂 You LOSE.");
     resetGame();
   }
+*/
+// smart_contract
 
   //} finally {
   //  hideLoading();
