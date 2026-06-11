@@ -1,3 +1,6 @@
+console.log("SERVER STARTED");
+console.log("PK length:", process.env.SYSTEM_PRIVATE_KEY?.length);
+
 let priceCache = {
   BTC: 0,
   ETH: 0,
