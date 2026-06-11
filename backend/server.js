@@ -951,6 +951,16 @@ console.log(
   process.env.SYSTEM_PRIVATE_KEY
 );
 
+console.log(
+  "Length:",
+  process.env.SYSTEM_PRIVATE_KEY.length
+);
+
+console.log(
+  "Starts with 0x:",
+  process.env.SYSTEM_PRIVATE_KEY.startsWith("0x")
+);
+
       const wallet =
         new ethers.Wallet(
           process.env.SYSTEM_PRIVATE_KEY,
