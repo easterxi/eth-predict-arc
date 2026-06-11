@@ -44,19 +44,20 @@ modifier onlyOwner() {
     _;
 }
 
-    function recordBet(
-        string calldata asset,
-        bool higher,
-        uint256 amount,
-        uint256 startPrice,
-        uint256 duration
-    ) external returns (uint256) {
+function recordBet(
+    address player,
+    string calldata asset,
+    bool higher,
+    uint256 amount,
+    uint256 startPrice,
+    uint256 duration
+) external returns (uint256) {
 
         uint256 betId = nextBetId++;
 
         bets[betId] = Bet({
             betId: betId,
-            player: msg.sender,
+            player: player,
             asset: asset,
             higher: higher,
             amount: amount,
@@ -70,7 +71,7 @@ modifier onlyOwner() {
 
         emit BetPlaced(
             betId,
-            msg.sender,
+            player,
             asset,
             higher,
             amount,

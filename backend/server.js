@@ -23,7 +23,7 @@ let lastUpdate = 0;
 
 // smart_contract
 const BET_RECORDER_ADDRESS =
-  "0x418287d8d98E85b07A22E7574e99DA1522E0885B";
+  "0xa45EEE463D60fAea777a4516BB5Af1A828F2cE8c";
 
 const BET_RECORDER_ABI = [
   {
@@ -278,6 +278,11 @@ const BET_RECORDER_ABI = [
   },
   {
     "inputs": [
+      {
+        "internalType": "address",
+        "name": "player",
+        "type": "address"
+      },
       {
         "internalType": "string",
         "name": "asset",
@@ -1016,6 +1021,75 @@ console.log("Connected wallet:", wallet.address);
         );
 
       await tx.wait();
+
+      res.json({
+        success: true,
+        txHash: tx.hash
+      });
+
+    } catch (e) {
+
+      console.error(e);
+
+      res.json({
+        success: false,
+        message: e.message
+      });
+
+    }
+
+  }
+);
+
+app.post(
+  "/api/record-bet",
+  async (req, res) => {
+
+    try {
+
+const {
+  player,
+  asset,
+  higher,
+  amount,
+  startPrice,
+  duration
+} = req.body;
+
+      const provider =
+        new ethers.JsonRpcProvider(
+          process.env.ARC_RPC
+        );
+
+      const wallet =
+        new ethers.Wallet(
+          process.env.SYSTEM_PRIVATE_KEY.trim(),
+          provider
+        );
+
+      const contract =
+        new ethers.Contract(
+          BET_RECORDER_ADDRESS,
+          BET_RECORDER_ABI,
+          wallet
+        );
+
+      const tx =
+await contract.recordBet(
+  player,
+  asset,
+  higher,
+  amount,
+  startPrice,
+  duration
+);
+
+      await tx.wait();
+
+      console.log(
+        "Bet recorded:",
+        tx.hash
+      );
 
       res.json({
         success: true,
