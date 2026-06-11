@@ -1,3 +1,4 @@
+/*
 console.log("SERVER STARTED");
 console.log("PK length:", process.env.SYSTEM_PRIVATE_KEY?.length);
 
@@ -10,6 +11,7 @@ console.log(
   "Hex only:",
   /^0x[0-9a-fA-F]{64}$/.test(pk)
 );
+*/
 
 let priceCache = {
   BTC: 0,
@@ -956,11 +958,7 @@ app.post(
           "https://rpc.testnet.arc.network"
         );
 
-console.log(
-  "PK:",
-  process.env.SYSTEM_PRIVATE_KEY
-);
-
+/*
 console.log(
   "Length:",
   process.env.SYSTEM_PRIVATE_KEY.length
@@ -970,25 +968,26 @@ console.log(
   "Starts with 0x:",
   process.env.SYSTEM_PRIVATE_KEY.startsWith("0x")
 );
+*/
 
-      //const wallet =
-        //new ethers.Wallet(
-          //process.env.SYSTEM_PRIVATE_KEY,
-          //provider
-        //);
+      const wallet =
+        new ethers.Wallet(
+          process.env.SYSTEM_PRIVATE_KEY.trim(),
+          provider
+        );
 
-const pk = process.env.SYSTEM_PRIVATE_KEY.trim();
+//const pk = process.env.SYSTEM_PRIVATE_KEY.trim();
 
-console.log("Creating wallet...");
+//console.log("Creating wallet...");
 
-const wallet = new ethers.Wallet(pk);
+//const wallet = new ethers.Wallet(pk);
 
-console.log("Wallet address:", wallet.address);
+//console.log("Wallet address:", wallet.address);
 
-const connectedWallet =
-  wallet.connect(provider);
+//const connectedWallet =
+  //wallet.connect(provider);
 
-console.log("Connected wallet:", connectedWallet.address);
+console.log("Connected wallet:", wallet.address);
 
       const contract =
         new ethers.Contract(
