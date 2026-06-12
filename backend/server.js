@@ -1348,6 +1348,133 @@ app.get("/api/user-balance", async (req, res) => {
 
 });
 
+/* smart-contract*/
+app.get("/api/leaderboard", async (req, res) => {
+
+  try {
+
+    const provider =
+      new ethers.JsonRpcProvider(
+        process.env.ARC_RPC
+      );
+
+    const contract =
+      new ethers.Contract(
+        BET_RECORDER_ADDRESS,
+        BET_RECORDER_ABI,
+        provider
+      );
+
+    const nextBetId =
+      Number(
+        await contract.nextBetId()
+      );
+
+    const players = {};
+
+    for (
+      let i = 0;
+      i < nextBetId;
+      i++
+    ) {
+
+      const bet =
+        await contract.getBet(i);
+
+      const wallet =
+        bet.player.toLowerCase();
+
+      if (!players[wallet]) {
+
+        players[wallet] = {
+
+          wallet,
+
+          pnl: 0,
+
+          totalVolume: 0,
+
+          totalWins: 0,
+
+          totalBets: 0
+
+        };
+
+      }
+
+      const p =
+        players[wallet];
+
+      const amount =
+        Number(bet.amount);
+
+      p.totalVolume += amount;
+
+      p.totalBets += 1;
+
+      if (bet.won) {
+
+        p.totalWins += 1;
+
+        p.pnl += amount * 0.9;
+
+      } else {
+
+        p.pnl -= amount;
+
+      }
+
+    }
+
+    const leaderboard =
+      Object.values(players)
+      .sort(
+        (a, b) =>
+          b.pnl - a.pnl
+      )
+      .map((row, index) => ({
+
+        rank:
+          index + 1,
+
+        wallet:
+          row.wallet,
+
+        pnl:
+          Number(
+            row.pnl.toFixed(2)
+          ),
+
+        totalVolume:
+          row.totalVolume,
+
+        totalWins:
+          row.totalWins,
+
+        totalBets:
+          row.totalBets
+
+      }));
+
+    res.json({
+      success: true,
+      leaderboard
+    });
+
+  } catch (e) {
+
+    console.error(e);
+
+    res.status(500).json({
+      success: false,
+      message: e.message
+    });
+
+  }
+
+});
+/* smart-contract*/
+
 app.get('/ping', (req, res) => {
 res.json(
   jsonBigInt({
