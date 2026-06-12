@@ -1426,8 +1426,30 @@ app.get("/api/leaderboard", async (req, res) => {
 
     }
 
+  const TREASURY =
+  process.env.ARC_TREASURY;
+
     const leaderboard =
-      Object.values(players)
+      Object.values(players).filter(row => {
+
+      const wallet =
+        row.wallet.toLowerCase();
+
+      // remove treasury
+      if (wallet === TREASURY)
+        return false;
+
+      // remove zero address
+      if (
+        wallet ===
+        "0x0000000000000000000000000000000000000000"
+      )
+        return false;
+
+      return true;
+
+    })
+
       .sort(
         (a, b) =>
           b.pnl - a.pnl
