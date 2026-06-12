@@ -211,6 +211,43 @@ h2 { font-size: 1.25rem; margin: 12px 0 6px; font-weight: bold; }
   color: rgb(0, 100, 200);
 }
 
+.btn_smol_ns {
+  background: #FF8800;
+  color: rgb(255, 255, 255);
+  /*
+  text-shadow: 1px 1px 2px black, 0 0 1px black, 0 0 1px black;
+  color: rgb(255, 255, 255);
+  text-shadow: 1px 2px rgba(0, 0, 0, 0.5);
+  border: none;
+  */
+  /* border: none; */
+
+  border: 3px solid transparent;
+  border-radius: 3px;
+  background: 
+    linear-gradient(#FF8800, #FF8800) padding-box, /* Inner background color */
+    linear-gradient(to right, #FF8800, #ffffff) border-box; /* Border gradient */
+
+  padding: 6px 12px;
+  font-size: 0.95rem;
+  font-weight: bold;
+  text-transform: none;
+  border-radius: 8px;
+  cursor: pointer;
+  /* width: 100%; */
+  margin: 8px 0;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+.btn_smol_ns:hover {box-shadow: 0 8px 16px 0 rgba(0, 255, 255, 0.6);}
+.btn_smol_ns.disabledbtn {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.btn_smol_ns:active {
+  transform: scale(1.01);
+}
+
 .btn_smol {
   background: #FF8800;
   color: rgb(255, 255, 255);
@@ -246,6 +283,60 @@ h2 { font-size: 1.25rem; margin: 12px 0 6px; font-weight: bold; }
 }
 .btn_smol:active {
   transform: scale(1.01);
+}
+
+.btn_smol_M {
+  background: #FF8800;
+  color: rgb(255, 255, 255);
+  text-shadow: 1px 1px 2px black, 0 0 1px black, 0 0 1px black;
+  /*
+  color: rgb(255, 255, 255);
+  text-shadow: 1px 2px rgba(0, 0, 0, 0.5);
+  border: none;
+  */
+  /* border: none; */
+
+  border: 3px solid transparent;
+  background: 
+    linear-gradient(#FF8800, #FF8800) padding-box, /* Inner background color */
+    linear-gradient(to right, #FF8800, #ffffff) border-box; /* Border gradient */
+
+  padding: 6px 12px;
+  font-size: 0.95rem;
+  font-weight: bold;
+  text-transform: none;
+  cursor: pointer;
+  /* width: 100%; */
+  margin: 8px 0;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+
+  width: 64px;                /* Define only one dimension */
+  aspect-ratio: 1 / 1;        /* Forces a perfect 1:1 square */
+  border-radius: 50%;         /* Morphs the square into a circle */
+  
+  display: grid;              /* Centers content (text or icon) */
+  place-items: center;        /* Perfect vertical and horizontal alignment */
+              
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.btn_smol_M:hover {box-shadow: 0 8px 16px 0 rgba(0, 255, 255, 0.6);}
+.btn_smol_M.disabledbtn {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.btn_smol_M:active {
+  transform: translateX(-50%) scale(1.01);
+}
+
+.leaderboard-center-btn {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
 }
 
 .btn-grad {
@@ -673,7 +764,7 @@ select.rounded-select:hover {
   flex-wrap: wrap;
 }
 
-.btn, .btn-grad, .option-btn, .option-btn.active, .btn_rev, .btn_smol, .btn_green, .btn_red {
+.btn, .btn-grad, .option-btn, .option-btn.active, .btn_rev, .btn_smol, .btn_smol_ns, .btn_green, .btn_red {
   border-radius: 9999px;   /* Fully rounded */
 }
 

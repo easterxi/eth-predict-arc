@@ -127,3 +127,38 @@ function showScreen1() {
       <div class="flex-row" style="justify-content:center; display:flex; gap:12px; margin-bottom:20px; width:100%; align-items:center; margin:0 auto;">
 <div style="height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:0px;background:transparent;padding:0px"; padding-top:40px>
    
+
+
+
+
+   .btn_smol_M {
+  background: #FF8800;
+  color: rgb(255, 255, 255);
+  text-shadow: 1px 1px 2px black, 0 0 1px black, 0 0 1px black;
+  /*
+  color: rgb(255, 255, 255);
+  text-shadow: 1px 2px rgba(0, 0, 0, 0.5);
+  border: none;
+  */
+  /* border: none; */
+
+  border: 3px solid transparent;
+  border-radius: 3px;
+  background: 
+    linear-gradient(#FF8800, #FF8800) padding-box, /* Inner background color */
+    linear-gradient(to right, #FF8800, #ffffff) border-box; /* Border gradient */
+
+  padding: 6px 12px;
+  font-size: 0.95rem;
+  font-weight: bold;
+  text-transform: none;
+  border-radius: 8px;
+  cursor: pointer;
+  /* width: 100%; */
+  margin: 8px 0;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}

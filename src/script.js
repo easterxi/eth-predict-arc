@@ -373,6 +373,7 @@ let endPrice = 0;
 let countdownInterval = null;
 
 let hargawisfix = 0;
+let hargawisfixtenanan = 0;
 let hargaisehjalan = 0;
 
 let selectedChain = CONFIG.defaultChain;
@@ -749,13 +750,13 @@ function showScreen1() {
           revoke
         </button>
 
-  <button
-  class="btn_rev"
-  onclick="showLeaderboard()"
-  style="padding:22px 60px;font-size:1.8rem;"
-  >
-  leaderboard
-  </button>
+  <!-- <button -->
+  <!-- class="btn_rev" -->
+  <!-- onclick="showLeaderboard()" -->
+  <!-- style="padding:22px 60px;font-size:1.8rem;" -->
+  <!-- > -->
+  <!-- leaderboard -->
+  <!-- </button> -->
 
       </div>
 
@@ -845,8 +846,15 @@ async function showScreen2() {
 
   document.getElementById('root').innerHTML = `
     <div class="container">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <div style="margin:0" class="readonly33">arcDicted</div>
+      <div style="display:flex;justify-content:flex-start;gap:8px;align-items:center;margin-bottom:8px">
+        <div style="margin:0" class="readonly33">
+         <img src="/logo/logo_kacamata.png"
+         width="128"
+         style="position: relative; top: 0px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));"></div>
+        <div onclick="showLeaderboard()" class="btn_smol_ns">
+        🌟
+        </div>
+
         <div onclick="disconnectWallet()" class="btn_smol">
           ${shortAddress}
         </div>
@@ -1571,6 +1579,12 @@ function disableAllControls() {
 }
 
 async function endGame() {
+
+    if (livePriceInterval) {
+    clearInterval(livePriceInterval);
+    livePriceInterval = null;
+    }
+    
   //showLoading();
   //try {
   
@@ -1580,7 +1594,7 @@ async function endGame() {
   const isHigher = hargaisehjalan > hargawisfix;
   const userWon = (currentBet.direction === "HIGHER" && isHigher) || 
                   (currentBet.direction === "LOWER" && !isHigher);
-
+  
 // smart_contract
 //await settleBetOnChain(
   //hargaisehjalan,
@@ -1919,7 +1933,7 @@ async function updateBalances() {
 }
 
 async function autoClaimReward() {
-  alert("🎉 You WON.\n\n⏳ Processing reward now...\n*This reward are charged with 10% reward fee.");
+  alert("🎉 You WON.\n\n⏳ Processing reward now...\n*This reward are charged with 5% reward fee.");
 
   try {
     console.log("Sending to backend:", {
@@ -2031,31 +2045,31 @@ async function showLeaderboard() {
   let data =
     [...result.leaderboard];
 
-  if (userAddress) {
+  // remove treasury wallet
+data = data.filter(
+  row =>
+    row.wallet.toLowerCase() !==
+    process.env.ARC_TREASURY
+);
 
-    const myIndex =
-      data.findIndex(
-        x =>
-          x.wallet.toLowerCase() ===
-          userAddress.toLowerCase()
-      );
+// remove 0x0000... wallet
+data = data.filter(
+  row =>
+    row.wallet.toLowerCase() !==
+    "0x0000000000000000000000000000000000000000"
+);
 
-    if (myIndex >= 0) {
+  let myRow = null;
 
-      const mine =
-        data.splice(
-          myIndex,
-          1
-        )[0];
+if (userAddress) {
 
-      mine.actualRank =
-        mine.rank;
+  myRow = data.find(
+    x =>
+      x.wallet.toLowerCase() ===
+      userAddress.toLowerCase()
+  );
 
-      data.unshift(mine);
-
-    }
-
-  }
+}
 
   const rows =
     data.map((row, idx) => {
@@ -2074,56 +2088,79 @@ async function showLeaderboard() {
       if (actualRank === 1) {
 
         rankDisplay =
-          `<img src="/logo/rank1.png" width="28">`;
+          '🌟' //`<img src="/logo/arc_logo_small2_opaq2.png" width="28">`
 
       } else if (
         actualRank === 2
       ) {
 
         rankDisplay =
-          `<img src="/logo/rank2.png" width="28">`;
+          `⭐`;
 
       } else if (
         actualRank === 3
       ) {
 
         rankDisplay =
-          `<img src="/logo/rank3.png" width="28">`;
+          `✨`;
+
+      }
+      else if (
+        actualRank > 999
+      ) {
+
+        rankDisplay =
+          "...";
 
       } else {
 
         rankDisplay =
-          actualRank;
+          ""+ actualRank;
 
       }
+
+let rankHtml;
+
+if (actualRank === 1 || actualRank === 2 || actualRank === 3) {
+  rankHtml = `
+    <div style="width:40px;margin-left:0px;margin-right:22px;text-align:right;transform:translateX(7px);">
+      ${rankDisplay}
+    </div>
+  `;
+} else {
+  rankHtml = `
+    <div style="width:40px;margin-left:0px;margin-right:22px;text-align:right;">
+      ${rankDisplay}
+    </div>
+  `;
+}
 
       return `
 
       <div
+        class="readonly2"
         style="
           display:flex;
           justify-content:space-between;
           align-items:center;
           padding:10px;
           margin-bottom:6px;
-          border-radius:10px;
-          background:${
+          border-radius:9999px;
+          color:${
             isMe
-            ? "#223d2f"
-            : "#181818"
+            ? "rgb(255, 0, 0)"
+            : "rgb(0, 100, 200)"
           };
         "
       >
 
-        <div style="width:50px;">
-          ${rankDisplay}
-        </div>
+ ${rankHtml}
 
         <div style="flex:1;">
           ${shortWallet(row.wallet)}
           ${
             isMe
-            ? " <b>(you)</b>"
+            ? " <b> • yours</b>"
             : ""
           }
         </div>
@@ -2140,7 +2177,7 @@ async function showLeaderboard() {
           ${row.totalWins}
         </div>
 
-        <div style="width:60px;text-align:right;">
+        <div style="width:60px;text-align:right;margin-right:12px;">
           ${row.totalBets}
         </div>
 
@@ -2163,10 +2200,11 @@ async function showLeaderboard() {
           margin-bottom:15px;
         "
       >
-        Leaderboard
+        leaderboard
       </div>
 
       <div
+        class="readonly2"
         style="
           display:flex;
           justify-content:space-between;
@@ -2174,13 +2212,61 @@ async function showLeaderboard() {
           font-weight:bold;
         "
       >
-        <div style="width:50px;">#</div>
-        <div style="flex:1;">Wallet</div>
-        <div style="width:80px;text-align:right;">PNL</div>
-        <div style="width:70px;text-align:right;">Vol</div>
-        <div style="width:60px;text-align:right;">Win</div>
-        <div style="width:60px;text-align:right;">Bet</div>
+        <div style="width:40px;margin-left:0px;margin-right:22px;text-align:right;">#</div>
+        <div style="flex:1;">wallet</div>
+        <div style="width:80px;text-align:right;">pnl</div>
+        <div style="width:70px;text-align:right;">vol</div>
+        <div style="width:60px;text-align:right;">win</div>
+        <div style="width:60px;text-align:right;margin-right:12px;">bet</div>
       </div>
+
+      ${myRow ? `
+
+<div
+  class="readonly2"
+  style="
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px;
+    margin-bottom:15px;
+    border-radius:9999px;
+    color:rgb(0, 100, 200);
+  "
+>
+
+  <div style="width:40px;margin-left:0px;margin-right:22px;text-align:right;">
+    ${myRow.rank}
+  </div>
+
+  <div style="flex:1;">
+    ${shortWallet(myRow.wallet)}
+    <b></b>
+  </div>
+
+  <div style="width:80px;text-align:right;">
+    ${myRow.pnl}
+  </div>
+
+  <div style="width:70px;text-align:right;">
+    ${myRow.totalVolume}
+  </div>
+
+  <div style="width:60px;text-align:right;">
+    ${myRow.totalWins}
+  </div>
+
+  <div style="width:60px;text-align:right;margin-right:12px;">
+    ${myRow.totalBets}
+  </div>
+
+</div>
+
+` : ""}
+
+
+
+<hr>
 
       ${rows}
 
@@ -2188,7 +2274,7 @@ async function showLeaderboard() {
 
       <button
         class="btn"
-        onclick="showScreen1()"
+        onclick="showScreen2()"
       >
         back
       </button>
@@ -2202,8 +2288,8 @@ async function showLeaderboard() {
 window.showLeaderboard =
   showLeaderboard;
 
-window.showScreen1 =
-  showScreen1;
-  
+window.showScreen2 =
+  showScreen2;
+
 //console.log("System Wallet Address:", 
   //new ethers.Wallet("0x123456789123456789123456789123456789123456789123456789").address);
