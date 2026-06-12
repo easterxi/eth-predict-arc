@@ -748,6 +748,15 @@ function showScreen1() {
                 style="padding:22px 60px;font-size:1.8rem;">
           revoke
         </button>
+
+  <button
+  class="btn_rev"
+  onclick="showLeaderboard()"
+  style="padding:22px 60px;font-size:1.8rem;"
+  >
+  leaderboard
+  </button>
+
       </div>
 
       <div style="height:0px;"></div>
@@ -1992,5 +2001,209 @@ window.readBet = async function(betId) {
 
 };
 
+function shortWallet(addr) {
+
+  return (
+    addr.slice(0,4) +
+    "..." +
+    addr.slice(-4)
+  );
+
+}
+
+async function showLeaderboard() {
+
+  const response =
+    await fetch(
+      `${BACKEND_URL}/api/leaderboard`
+    );
+
+  const result =
+    await response.json();
+
+  if (!result.success) {
+
+    alert("Failed to load leaderboard.");
+
+    return;
+  }
+
+  let data =
+    [...result.leaderboard];
+
+  if (userAddress) {
+
+    const myIndex =
+      data.findIndex(
+        x =>
+          x.wallet.toLowerCase() ===
+          userAddress.toLowerCase()
+      );
+
+    if (myIndex >= 0) {
+
+      const mine =
+        data.splice(
+          myIndex,
+          1
+        )[0];
+
+      mine.actualRank =
+        mine.rank;
+
+      data.unshift(mine);
+
+    }
+
+  }
+
+  const rows =
+    data.map((row, idx) => {
+
+      const isMe =
+        userAddress &&
+        row.wallet.toLowerCase() ===
+        userAddress.toLowerCase();
+
+      let rankDisplay;
+
+      const actualRank =
+        row.actualRank ||
+        row.rank;
+
+      if (actualRank === 1) {
+
+        rankDisplay =
+          `<img src="/logo/rank1.png" width="28">`;
+
+      } else if (
+        actualRank === 2
+      ) {
+
+        rankDisplay =
+          `<img src="/logo/rank2.png" width="28">`;
+
+      } else if (
+        actualRank === 3
+      ) {
+
+        rankDisplay =
+          `<img src="/logo/rank3.png" width="28">`;
+
+      } else {
+
+        rankDisplay =
+          actualRank;
+
+      }
+
+      return `
+
+      <div
+        style="
+          display:flex;
+          justify-content:space-between;
+          align-items:center;
+          padding:10px;
+          margin-bottom:6px;
+          border-radius:10px;
+          background:${
+            isMe
+            ? "#223d2f"
+            : "#181818"
+          };
+        "
+      >
+
+        <div style="width:50px;">
+          ${rankDisplay}
+        </div>
+
+        <div style="flex:1;">
+          ${shortWallet(row.wallet)}
+          ${
+            isMe
+            ? " <b>(you)</b>"
+            : ""
+          }
+        </div>
+
+        <div style="width:80px;text-align:right;">
+          ${row.pnl}
+        </div>
+
+        <div style="width:70px;text-align:right;">
+          ${row.totalVolume}
+        </div>
+
+        <div style="width:60px;text-align:right;">
+          ${row.totalWins}
+        </div>
+
+        <div style="width:60px;text-align:right;">
+          ${row.totalBets}
+        </div>
+
+      </div>
+
+      `;
+
+    }).join("");
+
+  document.getElementById(
+    "root"
+  ).innerHTML = `
+
+    <div class="container">
+
+      <div
+        class="readonly33"
+        style="
+          text-align:center;
+          margin-bottom:15px;
+        "
+      >
+        Leaderboard
+      </div>
+
+      <div
+        style="
+          display:flex;
+          justify-content:space-between;
+          padding:8px;
+          font-weight:bold;
+        "
+      >
+        <div style="width:50px;">#</div>
+        <div style="flex:1;">Wallet</div>
+        <div style="width:80px;text-align:right;">PNL</div>
+        <div style="width:70px;text-align:right;">Vol</div>
+        <div style="width:60px;text-align:right;">Win</div>
+        <div style="width:60px;text-align:right;">Bet</div>
+      </div>
+
+      ${rows}
+
+      <div style="height:20px"></div>
+
+      <button
+        class="btn"
+        onclick="showScreen1()"
+      >
+        back
+      </button>
+
+    </div>
+
+  `;
+
+}
+
+window.showLeaderboard =
+  showLeaderboard;
+
+window.showScreen1 =
+  showScreen1;
+  
 //console.log("System Wallet Address:", 
   //new ethers.Wallet("0x123456789123456789123456789123456789123456789123456789").address);
