@@ -2304,7 +2304,7 @@ async function claimReward() {
     0
     );
     showToast(
-    `Tx: ${result.txHash}`,
+    `Tx: ${result.txHash.slice(0,6)}...${result.txHash.slice(-4)}`,
     3000,
     1000
     );
@@ -2460,7 +2460,7 @@ async function autoClaimReward() {
     1000
     );
     showToast(
-    "*This reward are charged with 5% reward fee.",
+    "*5% reward fee applied.",
     3000,
     2000
     );
@@ -2501,7 +2501,7 @@ async function autoClaimReward() {
     //1000
     //);
     showToast(
-    `Tx: ${result.txHash}`,
+    `Tx: ${result.txHash.slice(0,6)}...${result.txHash.slice(-4)}`,
     3000,
     1000
     );
