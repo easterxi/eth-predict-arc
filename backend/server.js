@@ -867,6 +867,36 @@ app.post('/api/bridge-to-arc', async (req, res) => {
 
     });
 
+
+    
+if (result.state === "error") {
+
+  const failedStep = result.steps.find(
+    s => s.state === "error"
+  );
+
+  if (
+    failedStep?.error?.recoverability === "RETRYABLE"
+  ) {
+
+    console.log("Retrying bridge...");
+
+    const retryResult = await kit.retryBridge(
+      result,
+      {
+        from: adapter,
+        to: adapter
+      }
+    );
+
+    console.log("Retry Result:", retryResult);
+
+    return retryResult;
+  }
+}
+
+
+
     console.log("BRIDGE SUCCESS");
     console.dir(result, { depth: null });
 
@@ -1230,6 +1260,36 @@ if (chain === "arc-testnet") {
       token: "USDC"
 
     });
+
+
+
+if (result.state === "error") {
+
+  const failedStep = result.steps.find(
+    s => s.state === "error"
+  );
+
+  if (
+    failedStep?.error?.recoverability === "RETRYABLE"
+  ) {
+
+    console.log("Retrying bridge...");
+
+    const retryResult = await kit.retryBridge(
+      result,
+      {
+        from: adapter,
+        to: adapter
+      }
+    );
+
+    console.log("Retry Result:", retryResult);
+
+    return retryResult;
+  }
+}
+
+
 
 res.send(
   JSON.stringify(

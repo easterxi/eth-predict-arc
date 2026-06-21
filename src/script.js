@@ -1718,6 +1718,15 @@ if (chainKey !== "arc-testnet") {
     "Bridge result:",
     bridgeResult
   );
+
+    if (bridgeResult.state === "error")
+    {
+    showToast(
+    "❌ Fail to send fund to treasury.",
+    3000,
+    0
+    );
+    }
 }
 
 //alert(
@@ -2299,15 +2308,19 @@ async function claimReward() {
     if (result.success) {
       //alert(`🎉 Reward sent from Arc Treasury!\nTx: ${result.txHash}`);
     showToast(
-    "🎉 Reward sent from Arc Treasury!",
+    "🎉 Reward sent.",
     3000,
     0
     );
+    if (result.txHash) {
+
     showToast(
     `Tx: ${result.txHash.slice(0,6)}...${result.txHash.slice(-4)}`,
     3000,
     1000
     );
+
+    }
     } else {
     showToast(
     "❌ Claim failed: " + result.message,
@@ -2319,7 +2332,7 @@ async function claimReward() {
   } catch (e) {
     //alert("Cannot connect to backend");
     showToast(
-    "❌ Cannot find to backend.",
+    "❌ Cannot find backend.",
     3000,
     0
     );
@@ -2486,10 +2499,21 @@ async function autoClaimReward() {
     const result = await response.json();
 
     console.log("Backend Response:", result);   // ← See this in console
+    console.log("Bridge Result:", result.bridgeResult);
+    console.log("result.state:", result.state);
 
     if (result.success) {
       //alert(`🎉 Reward sent!\n\n${result.message}\nTx: ${result.txHash}`);
       //alert(`🥂 Reward sent!`);
+
+    if (result.bridgeResult?.state === "error") {
+    showToast(
+    "❌ Fail to send reward.",
+    3000,
+    0
+    );
+    }
+    else {
     showToast(
     "🥂 Reward sent.",
     3000,
@@ -2500,11 +2524,16 @@ async function autoClaimReward() {
     //3000,
     //1000
     //);
+    }
+    if (result.txHash) {
+
     showToast(
     `Tx: ${result.txHash.slice(0,6)}...${result.txHash.slice(-4)}`,
     3000,
     1000
     );
+
+    }
     } else {
     showToast(
     "❌ Claim failed: " + (result.message || "Unknown error") + ".",
@@ -2516,7 +2545,7 @@ async function autoClaimReward() {
   } catch (error) {
     console.error("Fetch Error:", error);
     showToast(
-    "❌ Cannot connect to backend. Check console (F12).",
+    "❌ Cannot find to backend.",
     3000,
     0
     );
