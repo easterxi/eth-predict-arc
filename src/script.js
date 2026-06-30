@@ -971,16 +971,26 @@ function showScreen1() {
       <div style="height:0px;"></div>
 
 <!-- GitHub Icon - Centered at the very bottom -->
-      <a href="https://github.com/kaduanganu/eth-predict-arc" 
-         target="_blank"
-         style="position:absolute; bottom:35px; left:50%; transform:translateX(-50%); 
-                color:#555; text-decoration:none; font-size:0.9rem; 
-                display:flex; align-items:center; gap:8px;">
-      <img src="https://github.githubassets.com/favicons/favicon.png" 
-              width="32" height="32" 
-              style="vertical-align:middle; 
-                     filter: brightness(0.9) saturate(2) hue-rotate(200deg);">
-      </a>
+<div style="text-align:center; margin-top:20px;">
+  <a href="https://github.com/kaduanganu/eth-predict-arc-lama"
+     target="_blank"
+     style="
+       color:#555;
+       text-decoration:none;
+       font-size:0.9rem;
+       display:inline-flex;
+       align-items:center;
+       gap:8px;
+     ">
+    <img src="https://github.githubassets.com/favicons/favicon.png"
+         width="32"
+         height="32"
+         style="
+           vertical-align:middle;
+           filter: brightness(0.9) saturate(2) hue-rotate(200deg);
+         ">
+  </a>
+</div>
     </div>
   `;
 }
