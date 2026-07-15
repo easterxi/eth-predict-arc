@@ -2589,7 +2589,7 @@ async function autoClaimReward() {
   } catch (error) {
     console.error("Fetch Error:", error);
     showToast(
-    "❌ Cannot find to backend.",
+    "❌ Cannot find backend.",
     3000,
     0
     );
