@@ -2682,6 +2682,7 @@ async function showLeaderboard() {
   if (!result.success) {
 
     //alert("Failed to load leaderboard.");
+    hideLoading();
     showToast(
     "❌ Leaderboard fail to load.",
     3000,
