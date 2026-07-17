@@ -944,8 +944,8 @@ async function connectWallet() {
 function showScreen1() {
   document.getElementById('root').innerHTML = `
     <div class="container" style="display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:0px;background:transparent;padding:0px"; padding-top:40px>
-      <img src="/logo/arc_mascot_title333_fit.png"
-           alt="arcdicted_mascot" 
+      <img src="/logo/n_mascot1_fit.png"
+           alt="addicted_mascot" 
            style="margin-top:40px; margin-bottom:30px; max-width:480px; width:90%; height:auto;">
       
       <div style="display:flex;flex-direction:column;gap:0px;width:100%;max-width:320px;margin-top:0px">
@@ -1068,7 +1068,7 @@ async function showScreen2() {
   const systemBal = await getSystemBalance();
 
   const chainLogo = {
-  "arc-testnet": "/logo/arc_logo_small2_opaq2.png",
+  "arc-testnet": "/logo/n_arc_logo_small2.png",
   "base-sepolia": "/logo/base_logo_small.png",
   "ink-sepolia": "/logo/ink_logo_small.png",
   "arbitrum-sepolia": "/logo/arb_logo_small.png",
@@ -1084,7 +1084,7 @@ async function showScreen2() {
     <div class="container">
       <div style="display:flex;justify-content:flex-start;gap:8px;align-items:center;margin-bottom:8px;">
         <div style="margin:0" class="readonly33">
-         <img src="/logo/logo_judul_333_fit.png"
+         <img src="/logo/n_judul1_fit.png"
          style="width:${logoWidth}; height:auto; position: relative; top: 0px;"></div>
         <div onclick="showLeaderboard()" class="btn_smol_ns">
         🌟
@@ -1164,7 +1164,7 @@ async function showScreen2() {
         class="option-btn-circle ${selectedChain==='arc-testnet' ? 'active' : ''}"
         onclick="changeChainAndClose('arc-testnet')"
       >
-        <img src="/logo/arc_logo_small2_opaq2.png" width="32" style="position: relative; top: 1px;">
+        <img src="/logo/n_arc_logo_small2.png" width="32" style="position: relative; top: 1px;">
       </div>
 
       <div
@@ -1243,7 +1243,7 @@ async function showScreen2() {
     class="option-btn-circle ${selectedChain==='arc-testnet' ? 'active' : ''}"
     onclick="changeChain('arc-testnet')"
   >
-    <img src="/logo/arc_logo_small2_opaq2.png"
+    <img src="/logo/n_arc_logo_small2.png"
          width="32"
          style="position: relative; top: 1px;">
   </div>
@@ -2402,7 +2402,7 @@ async function disconnectWallet() {
 }
 
 async function revokeAllConnections() {
-  //if (!confirm("⚠️ Doing this will revoke your wallet connection from arcDicted.\n\nContinue?")) {
+  //if (!confirm("⚠️ Doing this will revoke your wallet connection from adDicted.\n\nContinue?")) {
     //return;
   //}
 
@@ -2430,9 +2430,9 @@ async function revokeAllConnections() {
     if (livePriceInterval) clearInterval(livePriceInterval);
     if (balanceInterval) clearInterval(balanceInterval);
 
-    //alert("✅ Wallet revoked from arcDicted.");
+    //alert("✅ Wallet revoked from adDicted.");
     showToast(
-    "✅ Wallet revoked from arcDicted.",
+    "✅ Wallet revoked from adDicted.",
     3000,
     0
     );
@@ -2737,7 +2737,7 @@ if (userAddress) {
       if (actualRank === 1) {
 
         rankDisplay =
-          '🌟' //`<img src="/logo/arc_logo_small2_opaq2.png" width="28">`
+          '🌟' //`<img src="/logo/n_arc_logo_small2.png" width="28">`
 
       } else if (
         actualRank === 2
