@@ -1362,6 +1362,7 @@ async function showScreen2() {
 
       <input type="text" id="livePrice2" class="readonly_txt" value="Loading..." readonly style="display:none;">
 
+      <div style="height:20px;"></div>
 <hr>
 
       <div class="readonly2"">
