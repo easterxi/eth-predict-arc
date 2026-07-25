@@ -1362,7 +1362,7 @@ async function showScreen2() {
 
       <input type="text" id="livePrice2" class="readonly_txt" value="Loading..." readonly style="display:none;">
 
-      <div style="height:20px;"></div>
+      <div id="livePrice2Ganjel" style="height:10px; display:none;"></div>
 <hr>
 
       <div class="readonly2"">
@@ -1856,7 +1856,8 @@ function startPrediction() {
   // Show textbox 2
   const tb2 = document.getElementById('livePrice2');
   tb2.style.display = 'block';
-
+  const tbganjel = document.getElementById('livePrice2Ganjel');
+  tbganjel.style.display = 'block';
   disableBetControls();
 
   let timeLeft = currentBet.time;
