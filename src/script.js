@@ -2363,7 +2363,7 @@ async function claimReward() {
     showToast(
     `Tx: ${result.txHash.slice(0,6)}...${result.txHash.slice(-4)}`,
     3000,
-    1000
+    2000
     );
 
     }
