@@ -2471,12 +2471,14 @@ async function revokeAllConnections() {
 function resetGame() {
   // Keep the last chosen asset (don't reset it)
   const previousAsset = currentBet.asset || "BTC";
+  const previousAmount = currentBet.amount || "1";
+  const previousTime = currentBet.time || "10";
 
   // Reset only bet amount, time, and direction
   currentBet = { 
     asset: previousAsset,        // ← Keep last choice
-    amount: 1, 
-    time: 10, 
+    amount: previousAmount, 
+    time: previousTime, 
     direction: "HIGHER" 
   };
   
