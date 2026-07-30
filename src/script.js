@@ -1099,6 +1099,26 @@ async function showScreen2() {
         🔵 choose your prefered chain.</span>
       </div>
 
+<div class="readonly3"
+     style="display:flex; align-items:center; justify-content:space-between; width:100%;">
+
+    <span>â—‹ on chain â€¢</span>
+
+    <div style="display:flex; align-items:center; gap:8px;">
+        <span>â—</span>
+
+        <img
+            id="cheeeinlogo"
+            src="${chainLogo[selectedChain]}"
+            style="width:48px; height:48px; object-fit:contain; display:block;"
+        >
+
+        <span>â—</span>
+    </div>
+
+</div>
+
+<!--
 <div
   style="
     width:100%;
@@ -1109,19 +1129,20 @@ async function showScreen2() {
   "
 >
       <div class="readonly2X" style="font-size:1.8rem;">
-        ●</span>
+        â—</span>
       </div>
-  <img
+  <img id="cheeeinlogo"
     src="${chainLogo[selectedChain]}"
-    width="64"
+    width="48"
     height=auto
   >
       <div class="readonly2" style="font-size:1.8rem;">
-        ●</span>
+        â—</span>
       </div>
 </div>
 
 <div style="height:20px;"></div>
+-->
 
 
 
