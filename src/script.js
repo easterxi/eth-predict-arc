@@ -1105,7 +1105,7 @@ async function showScreen2() {
     <span>○ active chain •</span>
 
     <div style="display:flex; align-items:center; gap:8px;">
-        <span>●</span>
+        <span>●</span>
 
         <img
             id="cheeeinlogo"
@@ -1113,7 +1113,7 @@ async function showScreen2() {
             style="width:48px; height:48px; object-fit:contain; display:block;"
         >
 
-        <span>●</span>
+        <span>●</span>
     </div>
 
 </div>
@@ -1137,7 +1137,7 @@ async function showScreen2() {
     height=auto
   >
       <div class="readonly2" style="font-size:1.8rem;">
-        ●</span>
+        ●</span>
       </div>
 </div>
 
@@ -1329,18 +1329,18 @@ async function showScreen2() {
         🔵 for how many ● USDC?</span>
       </div>
       <div class="flex-row">
-        <div class="option-btn style="font-size:1.1rem;" ${currentBet.amount===1?'active':''}" onclick="selectAmount(1)">1 ● USDC</div>
-        <div class="option-btn style="font-size:1.1rem;" ${currentBet.amount===5?'active':''}" onclick="selectAmount(5)">5 ● USDC</div>
-        <div class="option-btn style="font-size:1.1rem;" ${currentBet.amount===10?'active':''}" onclick="selectAmount(10)">10 ● USDC</div>
+        <div class="option-btn ${currentBet.amount===1?'active':''}" onclick="selectAmount(1)">1 ● USDC</div>
+        <div class="option-btn ${currentBet.amount===5?'active':''}" onclick="selectAmount(5)">5 ● USDC</div>
+        <div class="option-btn ${currentBet.amount===10?'active':''}" onclick="selectAmount(10)">10 ● USDC</div>
       </div>
 
       <div class="readonly2"">
         🔵 set your bet time frame.</span>
       </div>
       <div class="flex-row">
-        <div class="option-btn style="font-size:1.1rem;" ${currentBet.time===10?'active':''}" onclick="selectTime(10)">10 seconds</div>
-        <div class="option-btn style="font-size:1.1rem;" ${currentBet.time===30?'active':''}" onclick="selectTime(30)">30 seconds</div>
-        <div class="option-btn style="font-size:1.1rem;" ${currentBet.time===60?'active':''}" onclick="selectTime(60)">60 seconds</div>
+        <div class="option-btn ${currentBet.time===10?'active':''}" onclick="selectTime(10)">10 seconds</div>
+        <div class="option-btn ${currentBet.time===30?'active':''}" onclick="selectTime(30)">30 seconds</div>
+        <div class="option-btn ${currentBet.time===60?'active':''}" onclick="selectTime(60)">60 seconds</div>
       </div>
 
       <div style="display:none; class="readonly2"">
