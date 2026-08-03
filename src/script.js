@@ -2514,7 +2514,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     showScreen2();
 	//alert(`? Wallet connected: ${userAddress.slice(0,6)}...${userAddress.slice(-4)}.`);
     showToast(
-    `? Wallet reconnected: ${userAddress.slice(0,6)}...${userAddress.slice(-4)}`,
+    `✅ Wallet reconnected: ${userAddress.slice(0,6)}...${userAddress.slice(-4)}`,
     3000,
     0
     );
