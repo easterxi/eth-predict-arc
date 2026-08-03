@@ -1003,6 +1003,56 @@ window.selectAsset = (asset) => {
   showScreen2();   // This will restart everything cleanly
 };
 
+window.changeChain2 = async function(chainKey) {
+
+  selectedChain = chainKey;
+
+  const chain = CONFIG.chains[chainKey];
+
+  try {
+
+    // Add chain to wallet if needed
+    await window.ethereum.request({
+      method: "wallet_addEthereumChain",
+      params: [{
+        chainId: chain.chainId,
+        chainName: chain.name,
+        rpcUrls: [chain.rpcUrl],
+        nativeCurrency: {
+          name: "ETH",
+          symbol: "ETH",
+          decimals: 18
+        },
+        blockExplorerUrls: [chain.explorer]
+      }]
+    });
+
+    // Switch wallet to selected chain
+    await window.ethereum.request({
+      method: "wallet_switchEthereumChain",
+      params: [{ chainId: chain.chainId }]
+    });
+
+    // Refresh ethers provider
+    provider = new ethers.BrowserProvider(window.ethereum);
+    signer = await provider.getSigner();
+
+    jenengechain = chain.name;
+    //alert(`✅ Switched to ${chain.name}.`);
+
+    //showScreen2();
+
+  } catch (err) {
+    console.error(err);
+    //alert("❌ Chain switch failed.");
+    showToast(
+    "❌ Chain switch failed.",
+    3000,
+    0
+    );
+  }
+};
+
 window.changeChain = async function(chainKey) {
 
   selectedChain = chainKey;
@@ -1682,7 +1732,7 @@ hargawisfix =
   const chainKey = selectedChain;
   const chainConfig = CONFIG.chains[chainKey];
 
-  changeChain(selectedChain)
+  changeChain2(selectedChain);
 
   try {
 
@@ -1843,7 +1893,7 @@ startPrediction();
     console.error(error);
 
   } finally {
-    //hideLoading();
+    hideLoading();
   }
 
 }
@@ -2361,7 +2411,7 @@ async function claimReward() {
     );
     //alert("Wallet not connected");
 
-  changeChain(selectedChain)
+  changeChain2(selectedChain)
 
   try {
     const response = await fetch(`${BACKEND_URL}/api/claim`, {
@@ -2508,7 +2558,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             userAddress = accounts[0];
 
-            changeChain('arc-testnet')
+            changeChain2('arc-testnet')
 
             provider = new ethers.BrowserProvider(window.ethereum);
             signer = await provider.getSigner();
