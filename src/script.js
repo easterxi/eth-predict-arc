@@ -2492,7 +2492,40 @@ function resetGame() {
 }
 
 // ==================== INIT ====================
-document.addEventListener('DOMContentLoaded', showScreen1);
+document.addEventListener("DOMContentLoaded", async () => {
+
+    if (window.ethereum) {
+
+        const accounts = await window.ethereum.request({
+            method: "eth_accounts"
+        });
+
+        if (accounts.length > 0) {
+
+            userAddress = accounts[0];
+
+            provider = new ethers.BrowserProvider(window.ethereum);
+            signer = await provider.getSigner();
+
+            arcAdapter = await getArcAdapter();
+
+    console.log("Arc Adapter:", arcAdapter);
+
+    showScreen2();
+	//alert(`? Wallet connected: ${userAddress.slice(0,6)}...${userAddress.slice(-4)}.`);
+    showToast(
+    `? Wallet reconnected: ${userAddress.slice(0,6)}...${userAddress.slice(-4)}`,
+    3000,
+    0
+    );
+            
+            return;
+        }
+    }
+
+    showScreen1();
+
+});
 
 window.connectWallet = connectWallet;
 window.disconnectWallet = disconnectWallet;
