@@ -1682,6 +1682,8 @@ hargawisfix =
   const chainKey = selectedChain;
   const chainConfig = CONFIG.chains[chainKey];
 
+  changeChain(selectedChain)
+
   try {
 
     const usdc = new ethers.Contract(
@@ -2359,6 +2361,8 @@ async function claimReward() {
     );
     //alert("Wallet not connected");
 
+  changeChain(selectedChain)
+
   try {
     const response = await fetch(`${BACKEND_URL}/api/claim`, {
       method: 'POST',
@@ -2503,6 +2507,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (accounts.length > 0) {
 
             userAddress = accounts[0];
+
+            changeChain('arc-testnet')
 
             provider = new ethers.BrowserProvider(window.ethereum);
             signer = await provider.getSigner();
