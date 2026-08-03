@@ -1843,7 +1843,7 @@ startPrediction();
     console.error(error);
 
   } finally {
-    hideLoading();
+    //hideLoading();
   }
 
 }
