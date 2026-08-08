@@ -1887,14 +1887,12 @@ startPrediction();
        ) {
 
         hideLoading();
-                  return showToast(
-
-            "❌ RPC failed.",
-
-            3000,
-
-            0
-        );
+    showToast(
+    "❌ RPC failed.",
+    3000,
+    0
+    );
+        return;
 
     }
 
