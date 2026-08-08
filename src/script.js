@@ -1866,6 +1866,9 @@ startPrediction();
 
   enableBetControls();
 
+  alert(error.message);
+  alert(error.code);
+
   if (
     error.code === 4001 ||
     error.message?.toLowerCase().includes("user rejected") ||
