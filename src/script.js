@@ -1246,8 +1246,8 @@ async function showScreen2() {
       </div>
 
       <div
-        class="option-btn-circle-unsupported ${selectedChain==='eth-sepolia' ? 'active' : ''}"
-        onclick="event.stopPropagation(); gekunsupported();"
+        class="option-btn-circle ${selectedChain==='eth-sepolia' ? 'active' : ''}"
+        onclick="changeChainAndClose('eth-sepolia')"
       >
         <img src="/logo/eth_logo_small.png" width="32" style="position: relative; top: 1px;">
       </div>
@@ -1274,15 +1274,15 @@ async function showScreen2() {
       </div>
 
       <div
-        class="option-btn-circle ${selectedChain==='hyperevm-testnet' ? 'active' : ''}"
-        onclick="changeChainAndClose('hyperevm-testnet')"
+        class="option-btn-circle-unsupported ${selectedChain==='hyperevm-testnet' ? 'active' : ''}"
+        onclick="event.stopPropagation(); gekunsupported();"
       >
         <img src="/logo/hype_logo_small.png" width="32" style="position: relative; top: 1px;">
       </div>
 
       <div
-        class="option-btn-circle ${selectedChain==='ink-sepolia' ? 'active' : ''}"
-        onclick="changeChainAndClose('ink-sepolia')"
+        class="option-btn-circle-unsupported ${selectedChain==='ink-sepolia' ? 'active' : ''}"
+        onclick="event.stopPropagation(); gekunsupported();"
       >
         <img src="/logo/ink_logo_small.png" width="32" style="position: relative; top: 1px;">
       </div>
@@ -1876,6 +1876,22 @@ startPrediction();
 
     return;
   }
+    if (
+            error.message?.toLowerCase().includes("404") ||
+            error.message?.toLowerCase().includes("eth_blockNumber")
+       ) {
+
+        hideLoading();
+                  return showToast(
+
+            "❌ RPC failed.",
+
+            3000,
+
+            0
+        );
+
+    }
 
     //alert(
       //"❌ Bet failed: " + error.message + "."
