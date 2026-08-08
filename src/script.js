@@ -1881,7 +1881,9 @@ startPrediction();
   }
     if (
             error.message?.toLowerCase().includes("404") ||
-            error.message?.toLowerCase().includes("eth_blockNumber")
+            error.message?.toLowerCase().includes("eth_blockNumber") ||
+            error.code === CALL_EXCEPTION ||
+            error.message?.toLowerCase().includes("missing revert data")
        ) {
 
         hideLoading();
