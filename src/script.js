@@ -1869,6 +1869,12 @@ startPrediction();
   //alert(error.message);
   //alert(error.code);
 
+        const msg =
+        error?.error?.data?.originalError?.message ||
+        error?.error?.message ||
+        error?.message ||
+        "";
+
   if (
     error.code === 4001 ||
     error.message?.toLowerCase().includes("user rejected") ||
@@ -1880,10 +1886,10 @@ startPrediction();
     return;
   }
     if (
-            error.message?.toLowerCase().includes("404") ||
-            error.message?.toLowerCase().includes("eth_blockNumber") ||
+            msg.message?.toLowerCase().includes("404") ||
+            msg.message?.toLowerCase().includes("eth_blockNumber") //||
             //error.code === CALL_EXCEPTION ||
-            error.message?.toLowerCase().includes("missing revert data")
+            //error.message?.toLowerCase().includes("missing revert data")
        ) {
 
         hideLoading();
