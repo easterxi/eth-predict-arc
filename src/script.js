@@ -1890,9 +1890,7 @@ startPrediction();
     if (
             msg.message?.toLowerCase().includes("404") ||
             msg.message?.toLowerCase().includes("eth_blockNumber") ||
-            msg.message?.toLowerCase().includes === ("call_exception") ||
-            msg.message?.toLowerCase().includes === ("CALL_EXCEPTION") ||
-            msg.message?.toLowerCase().includes("missing revert data")
+            error.code === ("CALL_EXCEPTION")
        ) {
 
         hideLoading();
