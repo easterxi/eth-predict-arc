@@ -1875,7 +1875,7 @@ startPrediction();
         error?.message ||
         "";
 
-  alert(error.message);
+  alert(msg);
 
   if (
     error.code === 4001 ||
@@ -1889,9 +1889,10 @@ startPrediction();
   }
     if (
             msg.message?.toLowerCase().includes("404") ||
-            msg.message?.toLowerCase().includes("eth_blockNumber") //||
-            //error.code === CALL_EXCEPTION ||
-            //error.message?.toLowerCase().includes("missing revert data")
+            msg.message?.toLowerCase().includes("eth_blockNumber") ||
+            msg.message?.toLowerCase().includes === ("call_exception") ||
+            msg.message?.toLowerCase().includes === ("CALL_EXCEPTION") ||
+            msg.message?.toLowerCase().includes("missing revert data")
        ) {
 
         hideLoading();
