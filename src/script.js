@@ -1866,14 +1866,16 @@ startPrediction();
 
   enableBetControls();
 
-  //alert(error.message);
-  //alert(error.code);
+  alert(error.message);
+  alert(error.code);
 
         const msg =
         error?.error?.data?.originalError?.message ||
         error?.error?.message ||
         error?.message ||
         "";
+
+  alert(error.message);
 
   if (
     error.code === 4001 ||
