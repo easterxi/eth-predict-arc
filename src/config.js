@@ -13,74 +13,76 @@ const CONFIG = {
   
   chains: {
 
-    "arc-testnet": {
-      chainId: "0x4cef52",
-      rpcUrl: "https://arc-testnet.g.alchemy.com/v2/alch_zi9KNxI-lf_brQVJMD-Dq",
-      name: "ARC Testnet",
-      explorer: "https://testnet.arcscan.app",
-      usdcAddress: "0x3600000000000000000000000000000000000000"
-    },
-
-    "base-sepolia": {
-      chainId: "0x14a34",
-      rpcUrl: "https://base-sepolia.g.alchemy.com/v2/alch_zi9KNxI-lf_brQVJMD-Dq",
-      name: "Base Sepolia",
-      explorer: "https://sepolia.basescan.org",
-      usdcAddress: "0x036CbD53842c5426634e7929541eC2318f3dCF7e"
-    },
-
-    "base-mainnet": {
-      chainId: "0x2105",
-      rpcUrl: "https://mainnet.base.org",
-      name: "Base Mainnet",
-      explorer: "https://basescan.org",
-      usdcAddress: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
-    },
-
-    "eth-sepolia": {
-      chainId: "0xaa36a7",
-      rpcUrl: "https://eth-sepolia.g.alchemy.com/v2/alch_zi9KNxI-lf_brQVJMD-Dq",
-      name: "Ethereum Sepolia",
-      explorer: "https://sepolia.etherscan.io",
-      usdcAddress: "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238"
-    },
-
-"ink-sepolia": {
-  chainId: "763373", //"0xba5ed", // 763373 decimal
-  rpcUrl: "https://ink-sepolia.g.alchemy.com/v2/alch_zi9KNxI-lf_brQVJMD-Dq",
-  name: "Ink Sepolia",
-  explorer: "https://explorer-sepolia.inkonchain.com",
-  usdcAddress: "0xFabab97dCE620294D2B0b0e46C68964e326300Ac"
+"arc-testnet": {
+  chainId: "0x13b2",
+  rpcUrl: "https://arc-mainnet.g.alchemy.com/v2/alch_zi9KNxI-lf_brQVJMD-Dq",
+  name: "ARC Mainnet",
+  explorer: "https://explorer.arc.io",
+  usdcAddress: "0x3600000000000000000000000000000000000000"
 },
 
-    "arbitrum-sepolia": {
-      chainId: "0x66eee",
-      rpcUrl: "https://arb-sepolia.g.alchemy.com/v2/alch_zi9KNxI-lf_brQVJMD-Dq",
-      name: "Arbitrum Sepolia",
-      explorer: "https://sepolia.arbiscan.io",
-      usdcAddress: "0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d"
-    },
+"eth-sepolia": {
+  chainId: "0x1",
+  rpcUrl: "https://eth-mainnet.g.alchemy.com/v2/alch_zi9KNxI-lf_brQVJMD-Dq,
+  name: "Ethereum Mainnet",
+  explorer: "https://etherscan.io",
+  usdcAddress: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
+},
+
+"arbitrum-sepolia": {
+  chainId: "0xa4b1",
+  rpcUrl: "https://arb-mainnet.g.alchemy.com/v2/alch_zi9KNxI-lf_brQVJMD-Dq",
+  name: "Arbitrum One",
+  explorer: "https://arbiscan.io",
+  usdcAddress: "0xaf88d065e77c8cC2239327C5EDb3A432268e5831"
+},
+
+"base-sepolia": {
+  chainId: "0x2105",
+  rpcUrl: "https://base-mainnet.g.alchemy.com/v2/alch_zi9KNxI-lf_brQVJMD-Dq",
+  name: "Base Mainnet",
+  explorer: "https://basescan.org",
+  usdcAddress: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+},
+
+"base-mainnet": {
+  chainId: "0x2105",
+  rpcUrl: "https://base-mainnet.g.alchemy.com/v2/alch_zi9KNxI-lf_brQVJMD-Dq",
+  name: "Base Mainnet",
+  explorer: "https://basescan.org",
+  usdcAddress: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+},
 
 "avalanche-fuji": {
-  chainId: "43113",
-  rpcUrl: "https://avax-fuji.g.alchemy.com/v2/alch_zi9KNxI-lf_brQVJMD-Dq",
-  name: "Avalanche Fuji",
-  explorer: "https://testnet.snowtrace.io",
-  usdcAddress: "0x5425890298aed601595a70AB815c96711a31Bc65"
+  chainId: "0xa86a",
+  rpcUrl: "https://avax-mainnet.g.alchemy.com/v2/alch_zi9KNxI-lf_brQVJMD-Dq",
+  name: "Avalanche C-Chain",
+  explorer: "https://explorer.avax.network/c-chain",
+  usdcAddress: "0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E"
 },
+
 "hyperevm-testnet": {
-  chainId: "998",
-  rpcUrl: "https://hyperliquid-testnet.g.alchemy.com/v2/alch_zi9KNxI-lf_brQVJMD-Dq",
-  name: "HyperEVM Testnet",
-  explorer: "https://app.hyperliquid-testnet.xyz/explorer",
-  usdcAddress: "0x2B3370eE501B4a559b57D449569354196457D8Ab"
+  chainId: "0x3e7",
+  rpcUrl: "https://hyperliquid-mainnet.g.alchemy.com/v2/alch_zi9KNxI-lf_brQVJMD-Dq",
+  name: "HyperEVM Mainnet",
+  explorer: "https://hyperevmscan.io",
+  usdcAddress: "0xb88339CB7199b77E23DB6E890353E22632Ba630f"
 },
+
 "unichain-sepolia": {
-  chainId: "1301",
-  rpcUrl: "https://unichain-sepolia.g.alchemy.com/v2/alch_zi9KNxI-lf_brQVJMD-Dq",
-  name: "Unichain Sepolia",
-  explorer: "https://sepolia.uniscan.xyz",
-  usdcAddress: "0x31d0220469e10c4E71834a79b1f276d740d3768F"
+  chainId: "0x82",
+  rpcUrl: "https://unichain-mainnet.g.alchemy.com/v2/alch_zi9KNxI-lf_brQVJMD-Dq",
+  name: "Unichain Mainnet",
+  explorer: "https://uniscan.xyz",
+  usdcAddress: "0x078D782b760474a361dDA0AF3839290b0EF57AD6"
+},
+
+"ink-sepolia": {
+  chainId: "0xdef1",
+  rpcUrl: "https://ink-mainnet.g.alchemy.com/v2/alch_zi9KNxI-lf_brQVJMD-Dq",
+  name: "Ink Mainnet",
+  explorer: "https://explorer.inkonchain.com",
+  usdcAddress: "0x2D270e6886d130D724215A266106e6832161EAEd"
 }
   },
 

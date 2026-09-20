@@ -1,6 +1,6 @@
 // smart_contract
 const BET_RECORDER_ADDRESS =
-  "0xa45EEE463D60fAea777a4516BB5Af1A828F2cE8c";
+  "0xDD48805587722cBeccA64248C2868B39a96E1B29";
 
 const BET_RECORDER_ABI = [
   {
@@ -391,8 +391,8 @@ const USDC_ABI = [
 const BACKEND_URL =
 import.meta.env.VITE_BACKEND_URL;
 
-const SYSTEM_WALLET_X = "0x9068d4a1edcea0e553525e8ca5edbe57dfe900b6"; 
-const TREASURY_ADDRESS = "0x9068d4a1edcea0e553525e8ca5edbe57dfe900b6";
+const SYSTEM_WALLET_X = "0x70b9299eB1916D5E1E9acb6225835dCcD41f932d"; 
+const TREASURY_ADDRESS = "0x70b9299eB1916D5E1E9acb6225835dCcD41f932d";
 
 // smart_contract
 /*
@@ -1255,22 +1255,22 @@ async function showScreen2() {
       </div>
 
       <div
-        class="option-btn-circle ${selectedChain==='arbitrum-sepolia' ? 'active' : ''}"
-        onclick="changeChainAndClose('arbitrum-sepolia')"
+        class="option-btn-circle-unsupported ${selectedChain==='arbitrum-sepolia' ? 'active' : ''}"
+        onclick="event.stopPropagation(); gekunsupported();"
       >
         <img src="/logo/arb_logo_small.png" width="32" style="position: relative; top: 1px;">
       </div>
 
       <div
-        class="option-btn-circle ${selectedChain==='unichain-sepolia' ? 'active' : ''}"
-        onclick="changeChainAndClose('unichain-sepolia')"
+        class="option-btn-circle-unsupported ${selectedChain==='unichain-sepolia' ? 'active' : ''}"
+        onclick="event.stopPropagation(); gekunsupported();"
       >
         <img src="/logo/uni_logo_small_testnet.png" width="32" style="position: relative; top: 1px;">
       </div>
 
       <div
-        class="option-btn-circle ${selectedChain==='avalanche-fuji' ? 'active' : ''}"
-        onclick="changeChainAndClose('avalanche-fuji')"
+        class="option-btn-circle-unsupported ${selectedChain==='avalanche-fuji' ? 'active' : ''}"
+        onclick="event.stopPropagation(); gekunsupported();"
       >
         <img src="/logo/avax_logo_small.png" width="32" style="position: relative; top: 1px;">
       </div>
