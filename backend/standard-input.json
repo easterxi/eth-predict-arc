@@ -1,0 +1,18 @@
+{
+  "language": "Solidity",
+  "sources": {
+    "./contracts/BetRecorderV3.sol": {
+      "content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.20;\n\ncontract BetRecorderV3 {\n\n    address public owner;\n    uint256 public nextBetId = 1;\n\n    struct Bet {\n        uint256 betId;\n        address player;\n        string asset;\n        bool higher;\n        uint256 amount;\n        uint256 startPrice;\n        uint256 duration;\n        uint256 timestamp;\n        bool settled;\n        uint256 endPrice;\n        bool won;\n    }\n\n    mapping(uint256 => Bet) public bets;\n\n    event BetPlaced(\n        uint256 indexed betId,\n        address indexed player,\n        string asset,\n        bool higher,\n        uint256 amount,\n        uint256 startPrice,\n        uint256 duration\n    );\n\nconstructor() {\n    owner = msg.sender;\n}\n\nmodifier onlyOwner() {\n    require(\n        msg.sender == owner,\n        \"Not owner\"\n    );\n    _;\n}\n\nfunction recordBet(\n    address player,\n    string calldata asset,\n    bool higher,\n    uint256 amount,\n    uint256 startPrice,\n    uint256 duration\n) external returns (uint256) {\n\n        uint256 betId = nextBetId++;\n\n        bets[betId] = Bet({\n            betId: betId,\n            player: player,\n            asset: asset,\n            higher: higher,\n            amount: amount,\n            startPrice: startPrice,\n            duration: duration,\n            timestamp: block.timestamp,\n            settled: false,\n            endPrice: 0,\n            won: false\n        });\n\n        emit BetPlaced(\n            betId,\n            player,\n            asset,\n            higher,\n            amount,\n            startPrice,\n            duration\n        );\n\n        return betId;\n    }\n\n    function getBet(uint256 betId) external view returns (Bet memory) {\n        return bets[betId];\n    }\n    \nevent BetSettled(\n    uint256 indexed betId,\n    bool won,\n    uint256 endPrice\n);\n\nfunction settleBet(\n    uint256 betId,\n    uint256 endPrice,\n    bool won\n)\n    external\n    onlyOwner\n{\n    Bet storage bet = bets[betId];\n\n    require(\n        !bet.settled,\n        \"Already settled\"\n    );\n\n    bet.settled = true;\n    bet.endPrice = endPrice;\n    bet.won = won;\n\n    emit BetSettled(\n        betId,\n        won,\n        endPrice\n    );\n}\n\n}"
+    }
+  },
+  "settings": {
+    "outputSelection": {
+      "*": {
+        "*": [
+          "abi",
+          "evm.bytecode"
+        ]
+      }
+    }
+  }
+}
