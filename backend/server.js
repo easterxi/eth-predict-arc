@@ -437,7 +437,7 @@ const CHAIN_CONFIG = {
 
 "eth-sepolia": {
   chainId: "0x1",
-  rpcUrl: "https://eth-mainnet.g.alchemy.com/v2/alch_zi9KNxI-lf_brQVJMD-Dq,
+  rpcUrl: "https://eth-mainnet.g.alchemy.com/v2/alch_zi9KNxI-lf_brQVJMD-Dq",
   name: "Ethereum Mainnet",
   explorer: "https://etherscan.io",
   usdcAddress: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
