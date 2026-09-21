@@ -520,7 +520,7 @@ const RPCS = {
     Ink_Sepolia: process.env.INK_SEPOLIA_RPC,
     Avalanche_Fuji: process.env.AVAX_FUJI_RPC,
     HyperEVM_Testnet: process.env.HYPE_TESTNET_RPC,
-    Unichain_Sepolia: process.env.UNI_SEPOLIA_RPC
+    Unichain_Sepolia: process.env.UNI_SEPOLIA_RPC,
 
     Arc: process.env.ARC_RPC,
     Base: process.env.BASE_SEPOLIA_RPC,
